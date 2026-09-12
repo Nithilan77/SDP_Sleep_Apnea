@@ -1,0 +1,21 @@
+# Virtual environment (machine-specific, ~1GB)
+venv/
+
+# PhysioNet Apnea-ECG dataset -- large (~580MB), public, downloadable.
+# See CLAUDE.md / README.md for the source; not committed here.
+data/physionet/
+
+# Our own SensorTile recordings -- human-subject data, never committed
+# (project rule: validation-only, never even used for training).
+data/recordings/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Claude Code local session config
+.claude/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db

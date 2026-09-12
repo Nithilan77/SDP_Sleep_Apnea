@@ -1,0 +1,103 @@
+=== Variant A: 2-channel (RR + R-amplitude), DEFAULT weighting (1.0x) ===
+  [A: 2ch/1.0x] fold  1/35: held out a01 (488 minutes, 55.6s)
+  [A: 2ch/1.0x] fold  2/35: held out a02 (527 minutes, 52.3s)
+  [A: 2ch/1.0x] fold  3/35: held out a03 (518 minutes, 86.2s)
+  [A: 2ch/1.0x] fold  4/35: held out a04 (491 minutes, 78.8s)
+  [A: 2ch/1.0x] fold  5/35: held out a05 (453 minutes, 85.1s)
+  [A: 2ch/1.0x] fold  6/35: held out a06 (509 minutes, 85.5s)
+  [A: 2ch/1.0x] fold  7/35: held out a07 (510 minutes, 82.4s)
+  [A: 2ch/1.0x] fold  8/35: held out a08 (500 minutes, 83.7s)
+  [A: 2ch/1.0x] fold  9/35: held out a09 (494 minutes, 85.8s)
+  [A: 2ch/1.0x] fold 10/35: held out a10 (516 minutes, 81.1s)
+  [A: 2ch/1.0x] fold 11/35: held out a11 (465 minutes, 76.1s)
+  [A: 2ch/1.0x] fold 12/35: held out a12 (576 minutes, 84.2s)
+  [A: 2ch/1.0x] fold 13/35: held out a13 (494 minutes, 87.9s)
+  [A: 2ch/1.0x] fold 14/35: held out a14 (508 minutes, 82.4s)
+  [A: 2ch/1.0x] fold 15/35: held out a15 (509 minutes, 87.8s)
+  [A: 2ch/1.0x] fold 16/35: held out a16 (481 minutes, 86.8s)
+  [A: 2ch/1.0x] fold 17/35: held out a17 (482 minutes, 82.7s)
+  [A: 2ch/1.0x] fold 18/35: held out a18 (488 minutes, 87.7s)
+  [A: 2ch/1.0x] fold 19/35: held out a19 (501 minutes, 85.9s)
+  [A: 2ch/1.0x] fold 20/35: held out a20 (509 minutes, 91.9s)
+  [A: 2ch/1.0x] fold 21/35: held out b01 (486 minutes, 80.7s)
+  [A: 2ch/1.0x] fold 22/35: held out b02 (516 minutes, 86.3s)
+  [A: 2ch/1.0x] fold 23/35: held out b03 (440 minutes, 88.7s)
+  [A: 2ch/1.0x] fold 24/35: held out b04 (423 minutes, 86.7s)
+  [A: 2ch/1.0x] fold 25/35: held out b05 (432 minutes, 91.7s)
+  [A: 2ch/1.0x] fold 26/35: held out c01 (474 minutes, 87.0s)
+  [A: 2ch/1.0x] fold 27/35: held out c02 (492 minutes, 80.3s)
+  [A: 2ch/1.0x] fold 28/35: held out c03 (453 minutes, 82.9s)
+  [A: 2ch/1.0x] fold 29/35: held out c04 (464 minutes, 86.2s)
+  [A: 2ch/1.0x] fold 30/35: held out c05 (465 minutes, 84.7s)
+  [A: 2ch/1.0x] fold 31/35: held out c06 (467 minutes, 82.7s)
+  [A: 2ch/1.0x] fold 32/35: held out c07 (428 minutes, 91.1s)
+  [A: 2ch/1.0x] fold 33/35: held out c08 (512 minutes, 86.0s)
+  [A: 2ch/1.0x] fold 34/35: held out c09 (455 minutes, 89.6s)
+  [A: 2ch/1.0x] fold 35/35: held out c10 (423 minutes, 84.9s)
+  [A: 2ch/1.0x] total LOSO time: 48.7 min
+
+=== Variant B: 1-channel (RRI only), 1.5x weighting ===
+  [B: 1ch/1.5x] fold  1/35: held out a01 (488 minutes, 91.0s)
+  [B: 1ch/1.5x] fold  2/35: held out a02 (527 minutes, 85.5s)
+  [B: 1ch/1.5x] fold  3/35: held out a03 (518 minutes, 82.6s)
+  [B: 1ch/1.5x] fold  4/35: held out a04 (491 minutes, 87.9s)
+  [B: 1ch/1.5x] fold  5/35: held out a05 (453 minutes, 84.1s)
+  [B: 1ch/1.5x] fold  6/35: held out a06 (509 minutes, 88.2s)
+  [B: 1ch/1.5x] fold  7/35: held out a07 (510 minutes, 88.0s)
+  [B: 1ch/1.5x] fold  8/35: held out a08 (500 minutes, 84.9s)
+  [B: 1ch/1.5x] fold  9/35: held out a09 (494 minutes, 81.2s)
+  [B: 1ch/1.5x] fold 10/35: held out a10 (516 minutes, 81.6s)
+  [B: 1ch/1.5x] fold 11/35: held out a11 (465 minutes, 83.9s)
+  [B: 1ch/1.5x] fold 12/35: held out a12 (576 minutes, 86.7s)
+  [B: 1ch/1.5x] fold 13/35: held out a13 (494 minutes, 85.9s)
+  [B: 1ch/1.5x] fold 14/35: held out a14 (508 minutes, 77.8s)
+  [B: 1ch/1.5x] fold 15/35: held out a15 (509 minutes, 91.1s)
+  [B: 1ch/1.5x] fold 16/35: held out a16 (481 minutes, 86.8s)
+  [B: 1ch/1.5x] fold 17/35: held out a17 (482 minutes, 80.7s)
+  [B: 1ch/1.5x] fold 18/35: held out a18 (488 minutes, 94.6s)
+  [B: 1ch/1.5x] fold 19/35: held out a19 (501 minutes, 92.7s)
+  [B: 1ch/1.5x] fold 20/35: held out a20 (509 minutes, 95.3s)
+  [B: 1ch/1.5x] fold 21/35: held out b01 (486 minutes, 77.8s)
+  [B: 1ch/1.5x] fold 22/35: held out b02 (516 minutes, 56.1s)
+  [B: 1ch/1.5x] fold 23/35: held out b03 (440 minutes, 56.9s)
+  [B: 1ch/1.5x] fold 24/35: held out b04 (423 minutes, 53.2s)
+  [B: 1ch/1.5x] fold 25/35: held out b05 (432 minutes, 53.8s)
+  [B: 1ch/1.5x] fold 26/35: held out c01 (474 minutes, 50.9s)
+  [B: 1ch/1.5x] fold 27/35: held out c02 (492 minutes, 56.6s)
+  [B: 1ch/1.5x] fold 28/35: held out c03 (453 minutes, 54.9s)
+  [B: 1ch/1.5x] fold 29/35: held out c04 (464 minutes, 53.7s)
+  [B: 1ch/1.5x] fold 30/35: held out c05 (465 minutes, 53.0s)
+  [B: 1ch/1.5x] fold 31/35: held out c06 (467 minutes, 53.2s)
+  [B: 1ch/1.5x] fold 32/35: held out c07 (428 minutes, 53.6s)
+  [B: 1ch/1.5x] fold 33/35: held out c08 (512 minutes, 52.8s)
+  [B: 1ch/1.5x] fold 34/35: held out c09 (455 minutes, 52.8s)
+  [B: 1ch/1.5x] fold 35/35: held out c10 (423 minutes, 53.5s)
+  [B: 1ch/1.5x] total LOSO time: 42.7 min
+
+=== Ablation summary (per-minute, LOSO, same 16,949 minutes) ===
+v1  (1ch, 1.0x weight):        n=16949  acc=0.775  sens=0.653  spec=0.851  prec=0.732  f1=0.691
+A   (2ch, 1.0x weight):        n=16949  acc=0.812  sens=0.756  spec=0.846  prec=0.754  f1=0.755
+B   (1ch, 1.5x weight):        n=16949  acc=0.758  sens=0.715  spec=0.786  prec=0.675  f1=0.694
+v2  (2ch, 1.5x weight):        n=16949  acc=0.798  sens=0.754  spec=0.825  prec=0.729  f1=0.741
+
+A (2ch, default weight) vs v1:
+  accuracy:    +0.036  (0.775 -> 0.812)
+  sensitivity: +0.103  (0.653 -> 0.756)
+  specificity: -0.005  (0.851 -> 0.846)
+
+B (1ch, 1.5x weight) vs v1:
+  accuracy:    -0.017  (0.775 -> 0.758)
+  sensitivity: +0.061  (0.653 -> 0.715)
+  specificity: -0.065  (0.851 -> 0.786)
+
+A (2ch, default weight) vs v2:
+  accuracy:    +0.014  (0.798 -> 0.812)
+  sensitivity: +0.002  (0.754 -> 0.756)
+  specificity: +0.021  (0.825 -> 0.846)
+
+B (1ch, 1.5x weight) vs v2:
+  accuracy:    -0.040  (0.798 -> 0.758)
+  sensitivity: -0.039  (0.754 -> 0.715)
+  specificity: -0.040  (0.825 -> 0.786)
+
+Results saved to results\phase3_cnn_ablation/

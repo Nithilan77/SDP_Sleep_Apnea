@@ -1,0 +1,92 @@
+Building per-minute RR-interval sequences for all 35 labelled records...
+  35 labelled records found
+  a01: 489 minutes
+  a02: 528 minutes
+  a03: 519 minutes
+  a04: 492 minutes
+  a05: 454 minutes
+  a06: 510 minutes
+  a07: 511 minutes
+  a08: 501 minutes
+  a09: 495 minutes
+  a10: 517 minutes
+  a11: 466 minutes
+  a12: 577 minutes
+  a13: 495 minutes
+  a14: 509 minutes
+  a15: 510 minutes
+  a16: 482 minutes
+  a17: 484 minutes
+  a18: 489 minutes
+  a19: 502 minutes
+  a20: 510 minutes
+  b01: 487 minutes
+  b02: 517 minutes
+  b03: 441 minutes
+  b04: 425 minutes
+  b05: 433 minutes
+  c01: 476 minutes
+  c02: 494 minutes
+  c03: 454 minutes
+  c04: 466 minutes
+  c05: 466 minutes
+  c06: 468 minutes
+  c07: 429 minutes
+  c08: 513 minutes
+  c09: 457 minutes
+  c10: 425 minutes
+  cached to results\phase3_cnn\sequences.npz
+Restricting to Phase 2's evaluated minutes: 16949 of 16991 (Phase 2 had 16949)
+
+Running LOSO CNN training: 30 epochs/fold, 35 folds
+=== Running leave-one-subject-out cross-validation ===
+  fold  1/35: held out a01 (488 minutes, 19.2s)
+  fold  2/35: held out a02 (527 minutes, 18.3s)
+  fold  3/35: held out a03 (518 minutes, 20.7s)
+  fold  4/35: held out a04 (491 minutes, 19.1s)
+  fold  5/35: held out a05 (453 minutes, 35.1s)
+  fold  6/35: held out a06 (509 minutes, 40.1s)
+  fold  7/35: held out a07 (510 minutes, 20.5s)
+  fold  8/35: held out a08 (500 minutes, 20.5s)
+  fold  9/35: held out a09 (494 minutes, 21.2s)
+  fold 10/35: held out a10 (516 minutes, 20.0s)
+  fold 11/35: held out a11 (465 minutes, 20.2s)
+  fold 12/35: held out a12 (576 minutes, 20.0s)
+  fold 13/35: held out a13 (494 minutes, 38.5s)
+  fold 14/35: held out a14 (508 minutes, 20.0s)
+  fold 15/35: held out a15 (509 minutes, 21.0s)
+  fold 16/35: held out a16 (481 minutes, 20.5s)
+  fold 17/35: held out a17 (482 minutes, 20.9s)
+  fold 18/35: held out a18 (488 minutes, 20.8s)
+  fold 19/35: held out a19 (501 minutes, 20.4s)
+  fold 20/35: held out a20 (509 minutes, 20.3s)
+  fold 21/35: held out b01 (486 minutes, 26.3s)
+  fold 22/35: held out b02 (516 minutes, 23.4s)
+  fold 23/35: held out b03 (440 minutes, 20.6s)
+  fold 24/35: held out b04 (423 minutes, 21.0s)
+  fold 25/35: held out b05 (432 minutes, 20.5s)
+  fold 26/35: held out c01 (474 minutes, 21.0s)
+  fold 27/35: held out c02 (492 minutes, 22.7s)
+  fold 28/35: held out c03 (453 minutes, 35.5s)
+  fold 29/35: held out c04 (464 minutes, 20.8s)
+  fold 30/35: held out c05 (465 minutes, 40.3s)
+  fold 31/35: held out c06 (467 minutes, 36.7s)
+  fold 32/35: held out c07 (428 minutes, 16.8s)
+  fold 33/35: held out c08 (512 minutes, 19.5s)
+  fold 34/35: held out c09 (455 minutes, 20.3s)
+  fold 35/35: held out c10 (423 minutes, 20.1s)
+  total LOSO time: 13.7 min
+
+=== Per-minute results (subject-independent, LOSO, all 35 records) ===
+CNN:      n=16949  acc=0.775  sens=0.653  spec=0.851  prec=0.732  f1=0.691
+Baseline: n=16949  acc=0.711  sens=0.637  spec=0.758  prec=0.621  f1=0.629
+
+Delta over Phase 2 classical CVHR baseline:
+  accuracy:    +0.775  (0.711 -> 0.775)
+  sensitivity: +0.653  (0.637 -> 0.653)
+  specificity: +0.851  (0.758 -> 0.851)
+
+=== Per-recording results (apnea group a/b vs control group c) ===
+record-level accuracy: 28/35 = 0.800
+
+Results saved to results\phase3_cnn/

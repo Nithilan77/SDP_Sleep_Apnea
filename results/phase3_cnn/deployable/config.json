@@ -1,0 +1,17 @@
+{
+  "architecture": "RRCNN",
+  "seq_len": 60,
+  "n_channels": 2,
+  "pos_weight_factor": 1.0,
+  "epochs": 30,
+  "seed": 0,
+  "trained_on": "all 35 labelled PhysioNet Apnea-ECG records (a01-a20, b01-b05, c01-c10)",
+  "n_minutes_trained_on": 16949,
+  "training_set_fit_accuracy": 0.8335005015045135,
+  "expected_generalization_performance": {
+    "source": "Phase 3 LOSO evaluation (results/phase3_cnn/README.md), NOT measured on this exact model",
+    "accuracy": 0.812,
+    "sensitivity": 0.756,
+    "specificity": 0.846
+  }
+}

@@ -1,0 +1,63 @@
+Loading cached 2-channel RR+amplitude sequences from results\phase3_cnn_v2\sequences.npz
+Restricting to Phase 2's evaluated minutes: 16949 of 16991 (Phase 2 had 16949)
+
+Running LOSO CNN-v2 training: 30 epochs/fold, pos_weight_factor=1.5, 2 input channels (RR, R-amplitude), 35 folds
+=== Running leave-one-subject-out cross-validation ===
+  fold  1/35: held out a01 (488 minutes, 91.1s)
+  fold  2/35: held out a02 (527 minutes, 84.5s)
+  fold  3/35: held out a03 (518 minutes, 79.2s)
+  fold  4/35: held out a04 (491 minutes, 84.1s)
+  fold  5/35: held out a05 (453 minutes, 84.4s)
+  fold  6/35: held out a06 (509 minutes, 82.3s)
+  fold  7/35: held out a07 (510 minutes, 82.9s)
+  fold  8/35: held out a08 (500 minutes, 84.2s)
+  fold  9/35: held out a09 (494 minutes, 90.4s)
+  fold 10/35: held out a10 (516 minutes, 79.1s)
+  fold 11/35: held out a11 (465 minutes, 85.6s)
+  fold 12/35: held out a12 (576 minutes, 83.7s)
+  fold 13/35: held out a13 (494 minutes, 78.8s)
+  fold 14/35: held out a14 (508 minutes, 84.7s)
+  fold 15/35: held out a15 (509 minutes, 82.7s)
+  fold 16/35: held out a16 (481 minutes, 54.6s)
+  fold 17/35: held out a17 (482 minutes, 51.7s)
+  fold 18/35: held out a18 (488 minutes, 51.8s)
+  fold 19/35: held out a19 (501 minutes, 52.2s)
+  fold 20/35: held out a20 (509 minutes, 54.2s)
+  fold 21/35: held out b01 (486 minutes, 54.3s)
+  fold 22/35: held out b02 (516 minutes, 51.6s)
+  fold 23/35: held out b03 (440 minutes, 51.9s)
+  fold 24/35: held out b04 (423 minutes, 52.2s)
+  fold 25/35: held out b05 (432 minutes, 52.1s)
+  fold 26/35: held out c01 (474 minutes, 52.0s)
+  fold 27/35: held out c02 (492 minutes, 52.0s)
+  fold 28/35: held out c03 (453 minutes, 52.6s)
+  fold 29/35: held out c04 (464 minutes, 52.0s)
+  fold 30/35: held out c05 (465 minutes, 51.8s)
+  fold 31/35: held out c06 (467 minutes, 52.2s)
+  fold 32/35: held out c07 (428 minutes, 52.3s)
+  fold 33/35: held out c08 (512 minutes, 51.9s)
+  fold 34/35: held out c09 (455 minutes, 52.1s)
+  fold 35/35: held out c10 (423 minutes, 52.5s)
+  total LOSO time: 38.4 min
+
+=== Per-minute results (subject-independent, LOSO, all 35 records) ===
+CNN v2 (2ch + weighted loss): n=16949  acc=0.798  sens=0.754  spec=0.825  prec=0.729  f1=0.741
+Phase 2 classical baseline:    n=16949  acc=0.711  sens=0.637  spec=0.758  prec=0.621  f1=0.629
+Phase 3 v1 CNN (RRI only):      n=16949  acc=0.775  sens=0.653  spec=0.851  prec=0.732  f1=0.691
+
+Delta vs Phase 2 classical baseline (71.1% acc):
+  accuracy:    +0.087  (0.711 -> 0.798)
+  sensitivity: +0.117  (0.637 -> 0.754)
+  specificity: +0.068  (0.758 -> 0.825)
+
+Delta vs Phase 3 v1 CNN (77.5% acc):
+  accuracy:    +0.023  (0.775 -> 0.798)
+  sensitivity: +0.101  (0.653 -> 0.754)
+  specificity: -0.026  (0.851 -> 0.825)
+
+Sensitivity IMPROVED as targeted: 0.653 -> 0.754.
+
+=== Per-recording results (apnea group a/b vs control group c) ===
+record-level accuracy: 28/35 = 0.800
+
+Results saved to results\phase3_cnn_v2/
