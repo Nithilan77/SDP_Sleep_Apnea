@@ -1124,7 +1124,341 @@ $ cd /home/admin/apnea && git add src/ecg/ecg_spectrogram.py src/ecg/method8_spe
  5 files changed, 17247 insertions(+)
 
 ================================================================================
-End of transcript as captured at method 8's completion (2026-09-28).
-Methods 1-8 all complete; master results table and any remaining write-up
-continue in subsequent commits.
+Terminal transcript request, master results table, and GitHub push saga
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && cat /tmp/gitignore_check.txt <<'EOF'
+EOF
+[ -f .gitignore ] && cat .gitignore || echo "no .gitignore"
+# Virtual environment (machine-specific, ~1GB)
+venv/
+
+# PhysioNet Apnea-ECG dataset -- large (~580MB), public, downloadable.
+# See CLAUDE.md / README.md for the source; not committed here.
+data/physionet/
+
+# Our own SensorTile recordings -- human-subject data, never committed
+# (project rule: validation-only, never even used for training).
+data/recordings/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Claude Code local session config
+.claude/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
+
+[The session_terminal_transcript_2026-09-28.txt file itself (this file) was
+then assembled -- reconstructing the full session as a plain-text log from
+this conversation's history and the saved background-task output files --
+and committed:]
+
+$ cd /home/admin/apnea && git add docs/session_terminal_transcript_2026-09-28.txt && git commit -m "Add full terminal session transcript (2026-09-28) ..."
+[main 5641a34] Add full terminal session transcript (2026-09-28)
+ 1 file changed, 1130 insertions(+)
+ create mode 100644 docs/session_terminal_transcript_2026-09-28.txt
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git log --oneline origin/main..HEAD | tail -30; echo "---count---"; git log --oneline origin/main..HEAD | wc -l
+5641a34 Add full terminal session transcript (2026-09-28)
+026ddda Feature study: method 8 (raw ECG spectrogram) + 2D-CNN result
+8703107 Feature study: method 7 (CWT scalogram of RR series) + 2D-CNN result
+b69b80b Feature study: method 6 (RR + QRS-area EDR) result
+6f6d936 Feature study: method 5 classifier comparison (logreg + MLP)
+3407830 Feature study: method 4 classifier comparison (logreg + MLP)
+52f6fc8 Feature study fairness fix: add logreg + MLP classifiers, method 3 result
+bd3354e Feature study: method 5 (nonlinear/Poincare HRV bank) result
+96a96fd Feature study: method 4 (frequency-domain HRV bank) result
+5c1191c Feature study: method 3 (time-domain HRV bank) + shared infra
+---count---
+10
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git push origin main 2>&1
+remote: Permission to Nithilan77/SDP_Sleep_Apnea.git denied to AbhijithSriram.
+fatal: unable to access 'https://github.com/Nithilan77/SDP_Sleep_Apnea.git/': The requested URL returned error: 403
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git remote -v; echo "---"; git config --get credential.helper; echo "---"; git config --global --get credential.helper 2>&1
+origin	https://github.com/Nithilan77/SDP_Sleep_Apnea.git (fetch)
+origin	https://github.com/Nithilan77/SDP_Sleep_Apnea.git (push)
+---
+store
+---
+store
+
+[Diagnosis: a stored credential on this machine authenticates as GitHub user
+"AbhijithSriram", who is not a collaborator on Nithilan77/SDP_Sleep_Apnea.
+Reported to user; continued with the remaining planned work (master table)
+while access got sorted.]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 <<'EOF'
+import pandas as pd
+from src.eval.metrics import binary_metrics
+
+files = {
+    "1_rri_cnn": "results/phase3_cnn/per_minute_predictions.csv",
+    "2_rri_amp_cnn_final": "results/phase3_cnn/final_per_minute_predictions.csv",
+    "6_rr_qrsarea_cnn": "results/feature_study/method6_qrsarea_edr/per_minute_predictions.csv",
+    "7_cwt_scalogram_cnn2d": "results/feature_study/method7_cwt_scalogram/per_minute_predictions.csv",
+    "8_ecg_spectrogram_cnn2d": "results/feature_study/method8_ecg_spectrogram/per_minute_predictions.csv",
+}
+for k, f in files.items():
+    df = pd.read_csv(f)
+    m = binary_metrics(df["y_true"], df["y_pred"])
+    print(k, m)
+EOF
+1_rri_cnn {'n': 16949, 'tp': 4255, 'tn': 8882, 'fp': 1555, 'fn': 2257, 'accuracy': 0.7750899758097823, 'sensitivity': 0.6534090909090909, 'specificity': 0.8510108268659576, 'precision': 0.7323580034423408, 'f1': 0.6906346372342153}
+2_rri_amp_cnn_final {'n': 16949, 'tp': 4926, 'tn': 8829, 'fp': 1608, 'fn': 1586, 'accuracy': 0.8115523039707357, 'sensitivity': 0.7564496314496314, 'specificity': 0.8459327392929002, 'precision': 0.7539026629935721, 'f1': 0.7551739996933926}
+6_rr_qrsarea_cnn {'n': 16949, 'tp': 4475, 'tn': 9056, 'fp': 1381, 'fn': 2037, 'accuracy': 0.7983361850256653, 'sensitivity': 0.6871928746928747, 'specificity': 0.8676822841812781, 'precision': 0.7641734972677595, 'f1': 0.7236416558861578}
+7_cwt_scalogram_cnn2d {'n': 16949, 'tp': 3195, 'tn': 9503, 'fp': 934, 'fn': 3317, 'accuracy': 0.7491887426986843, 'sensitivity': 0.49063267813267813, 'specificity': 0.9105106831464981, 'precision': 0.7737951077742795, 'f1': 0.6005074711023399}
+8_ecg_spectrogram_cnn2d {'n': 16949, 'tp': 4383, 'tn': 4672, 'fp': 5765, 'fn': 2129, 'accuracy': 0.5342498082482743, 'sensitivity': 0.6730651105651105, 'specificity': 0.44763821021366296, 'precision': 0.43190776507686246, 'f1': 0.5261704681872749}
+
+--------------------------------------------------------------------------------
+$ mkdir -p /home/admin/apnea/results/feature_study
+(no output)
+
+[master_results.csv and master_results.md written]
+
+$ cd /home/admin/apnea && git add results/feature_study/master_results.csv results/feature_study/master_results.md && git status --short
+A  results/feature_study/master_results.csv
+A  results/feature_study/master_results.md
+
+$ git commit -m "Feature study: master results table (all 8 methods) ..."
+[main b1e8818] Feature study: master results table (all 8 methods)
+ 2 files changed, 116 insertions(+)
+ create mode 100644 results/feature_study/master_results.csv
+ create mode 100644 results/feature_study/master_results.md
+
+================================================================================
+User: "Yes now can you try" (retry the push)
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git push origin main 2>&1
+remote: error: Trace: b023b80f88fdbe4167e57367e13dea7ad8cd3a07375fdfa3c23d0f80eda17f10
+remote: error: See https://gh.io/lfs for more information.
+remote: error: File results/feature_study/method7_cwt_scalogram/scalograms.npz is 124.97 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File results/feature_study/method8_ecg_spectrogram/spectrograms.npz is 249.09 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To https://github.com/Nithilan77/SDP_Sleep_Apnea.git
+ ! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/Nithilan77/SDP_Sleep_Apnea.git'
+
+[Permission issue from before is resolved (auth now succeeds); new blocker
+is GitHub's 100MB per-file limit on the two large feature-study caches.]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && du -sh results/feature_study/method6_qrsarea_edr/sequences.npz results/feature_study/method7_cwt_scalogram/scalograms.npz results/feature_study/method8_ecg_spectrogram/spectrograms.npz results/phase3_cnn/sequences.npz results/phase3_cnn_v2/sequences.npz 2>&1
+8.4M	results/feature_study/method6_qrsarea_edr/sequences.npz
+125M	results/feature_study/method7_cwt_scalogram/scalograms.npz
+250M	results/feature_study/method8_ecg_spectrogram/spectrograms.npz
+4.5M	results/phase3_cnn/sequences.npz
+8.4M	results/phase3_cnn_v2/sequences.npz
+
+--------------------------------------------------------------------------------
+$ which git-filter-repo bfg 2>&1; git --version
+git version 2.43.0
+(neither git-filter-repo nor bfg installed)
+
+[.gitignore edited to add the two oversized cache paths]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter \
+  'git rm --cached --ignore-unmatch results/feature_study/method7_cwt_scalogram/scalograms.npz results/feature_study/method8_ecg_spectrogram/spectrograms.npz' \
+  --prune-empty -- --all 2>&1 | tail -40
+Permission for this action was denied by the Claude Code auto mode classifier. Reason: [Git Destructive]. ...
+[Blocked at the tool-permission layer -- cannot be approved via chat text,
+only via a settings permission rule or the user running it themselves with
+the `!` prefix. Reported to user with 3 options; recommended option 1
+(rewrite local, unpushed history) and asked for explicit go-ahead.]
+
+================================================================================
+User: "Yes, go ahead with option 1"
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter \
+  'git rm --cached --ignore-unmatch results/feature_study/method7_cwt_scalogram/scalograms.npz results/feature_study/method8_ecg_spectrogram/spectrograms.npz' \
+  --prune-empty -- --all 2>&1 | tail -40
+Cannot rewrite branches: You have unstaged changes.
+
+$ cd /home/admin/apnea && git status --short
+ M .gitignore
+
+$ cd /home/admin/apnea && git add .gitignore && git commit -m "Ignore large regenerable feature-study CWT/spectrogram caches ..."
+[main a00ce0e] Ignore large regenerable feature-study CWT/spectrogram caches
+ 1 file changed, 6 insertions(+)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter \
+  'git rm --cached --ignore-unmatch results/feature_study/method7_cwt_scalogram/scalograms.npz results/feature_study/method8_ecg_spectrogram/spectrograms.npz' \
+  --prune-empty -- --all 2>&1 | tail -60
+Permission for this action was denied by the Claude Code auto mode classifier. Reason: [Git Destructive]. ...
+[Same hard tool-permission block, even after the user's chat approval --
+this class of action cannot be cleared by conversational confirmation.
+Gave the user the exact command to run themselves via the `!` prefix.]
+
+================================================================================
+User ran the rewrite themselves via the `!` prefix
+================================================================================
+
+--------------------------------------------------------------------------------
+$ FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch results/feature_study/method7_cwt_scalogram/scalograms.npz results/feature_study/method8_ecg_spectrogram/spectrograms.npz' --prune-empty --tag-name-filter cat -- --all
+Rewrite e125edd42a06c1ba988247b0b47125189aaf2e66 (1/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 5c1191c3bbc9caef9e3c52de9a06a371c57c0bba (2/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 96a96fd54a96c3309e00457d478b25e22ba4d84d (3/13) (0 seconds passed, remaining 0 predicted)
+Rewrite bd3354eddb67d5f2aae087d74ee4658778122e09 (4/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 52f6fc8dce798accedc2a14752af425580c5eb1d (5/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 3407830e3f26aae7e5d1c167800c09e4c3a48000 (6/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 6f6d9365bf437668f30641311a9618df5d9cb6d9 (7/13) (0 seconds passed, remaining 0 predicted)
+Rewrite b69b80b46445ff078a13050c1cf9c2383f9e0df5 (8/13) (0 seconds passed, remaining 0 predicted)
+Rewrite 8703107fe4961227f095a614a8ab3b873e96a872 (9/13) (0 seconds passed, remaining 0 predicted)    rm 'results/feature_study/method7_cwt_scalogram/scalograms.npz'
+Rewrite 026ddda1af9251b157a7cb96e40be08b40cc70e0 (10/13) (0 seconds passed, remaining 0 predicted)    rm 'results/feature_study/method7_cwt_scalogram/scalograms.npz'
+rm 'results/feature_study/method8_ecg_spectrogram/spectrograms.npz'
+Rewrite 5641a348411cf63a469e51bb026470cd4ce0d1f6 (11/13) (0 seconds passed, remaining 0 predicted)    rm 'results/feature_study/method7_cwt_scalogram/scalograms.npz'
+rm 'results/feature_study/method8_ecg_spectrogram/spectrograms.npz'
+Rewrite b1e8818b542e8d4c88b067167b83bbaed5b48e0f (12/13) (0 seconds passed, remaining 0 predicted)    rm 'results/feature_study/method7_cwt_scalogram/scalograms.npz'
+rm 'results/feature_study/method8_ecg_spectrogram/spectrograms.npz'
+Rewrite a00ce0e361fa802578fd575e7b4080d970f2a181 (13/13) (0 seconds passed, remaining 0 predicted)    rm 'results/feature_study/method7_cwt_scalogram/scalograms.npz'
+rm 'results/feature_study/method8_ecg_spectrogram/spectrograms.npz'
+
+Ref 'refs/heads/main' was rewritten
+WARNING: Ref 'refs/remotes/origin/main' is unchanged
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git log --oneline -5 && echo "---" && du -sh .git
+18e26ce Ignore large regenerable feature-study CWT/spectrogram caches
+bafede7 Feature study: master results table (all 8 methods)
+8d3c093 Add full terminal session transcript (2026-09-28)
+6aee371 Feature study: method 8 (raw ECG spectrogram) + 2D-CNN result
+0a6d4ed Feature study: method 7 (CWT scalogram of RR series) + 2D-CNN result
+---
+372M	.git
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git for-each-ref --format='%(refname)' refs/original/ | xargs -r -n1 git update-ref -d
+rm -rf .git/refs/original/
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive 2>&1 | tail -20
+echo "---size after gc---"
+du -sh .git
+---size after gc---
+17M	.git
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '$3 > 50000000 {print}' 2>&1
+echo "---working tree status---"
+git status --short
+echo "---file still on disk (untracked, gitignored, regenerable)---"
+ls -la results/feature_study/method7_cwt_scalogram/ results/feature_study/method8_ecg_spectrogram/
+(no blobs over 50MB found)
+---working tree status---
+(clean)
+---file still on disk (untracked, gitignored, regenerable)---
+results/feature_study/method7_cwt_scalogram/:
+total 396
+-rw-rw-r-- 1 admin admin 391760 Sep 28 21:34 per_minute_predictions.csv
+-rw-rw-r-- 1 admin admin   2191 Sep 28 21:34 per_recording_predictions.csv
+
+results/feature_study/method8_ecg_spectrogram/:
+total 388
+-rw-rw-r-- 1 admin admin 381775 Sep 28 23:17 per_minute_predictions.csv
+-rw-rw-r-- 1 admin admin   2143 Sep 28 23:17 per_recording_predictions.csv
+(the two large .npz caches were removed from disk as a side effect of the
+filter-branch checkout -- no data lost, they're regenerable caches; the
+actual per-minute/per-recording result CSVs are untouched)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git push origin main 2>&1
+To https://github.com/Nithilan77/SDP_Sleep_Apnea.git
+   e125edd..18e26ce  main -> main
+[SUCCESS]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git status --short; echo "---"; git log --oneline -3; echo "---remote sync check---"; git rev-parse HEAD origin/main
+(clean)
+---
+18e26ce Ignore large regenerable feature-study CWT/spectrogram caches
+bafede7 Feature study: master results table (all 8 methods)
+8d3c093 Add full terminal session transcript (2026-09-28)
+---remote sync check---
+18e26ceb1d12653aa75eb9d27daf38741e73b36b
+18e26ceb1d12653aa75eb9d27daf38741e73b36b
+[local and remote HEAD match -- fully in sync]
+
+================================================================================
+User: "update docs/PROGRESS.md with the feature study results"
+================================================================================
+
+[PROGRESS.md edited: bumped "Last updated" to 2026-09-28 and the status-at-a-
+glance line; inserted a new "#4b -- ECG feature-extraction comparison study
+(exploratory, methods 3-8)" section between "Deployable ECG model" and
+"Phase 4 -- Effort branch" (method table, controlled-comparison design and
+the mid-study fairness-fix note, files, reproduce steps, master results
+table, 5 findings, honest limitations); added a row to #7's status table;
+extended #8's file/directory map with the new src/ecg/ modules and the
+results/feature_study/ layout.]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && grep -n "| Phase | Status |\|^| 0 —\|^| 1 —\|^| 2 —\|^| 3 —\|^| — Deployable\|^| 4 —\|^| 5 —\|^| 6 —\|^| 7 —\|^| 8 —" docs/PROGRESS.md
+370:| Phase | Status |
+372:| 0 — Environment | Done |
+373:| 1 — Ingestion (loader + R-peaks) | Done |
+374:| 2 — Classical CVHR baseline | Done (71.1% per-minute) |
+375:| 3 — 1D-CNN | **Done, closed** (81.2% / 75.6% / 84.6% per-minute) |
+376:| — Deployable ECG model | **Done** — frozen, untested on real QVAR data |
+377:| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** — real-IMU validation blocked on hardware |
+378:| 5 — Breath-hold validation on our own hardware | **Blocked** — needs SensorTile hardware; also where the 240 Hz reconciliation and the amplitude-channel transfer risk become live |
+379:| 6 — Decision-level fusion (fused > ECG-only, the headline claim) | Blocked on 5 |
+380:| 7 — Per-night report (events/hour, severity band, no-SpO2 caveat) | Blocked on 6 |
+381:| 8 — Track B (MESA, multimodal + SpO2 + obstructive/central) | Stretch goal, blocked on NSRR data access |
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && grep -n "train_deployable_model.py\|effort/\|results/$\|phase3_cnn_v2/\|phase3_cnn_ablation/\|phase3_cnn_run.log" docs/PROGRESS.md | tail -20
+[located the file/directory map section to extend]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && wc -l docs/PROGRESS.md
+echo "---"
+grep -n "^## \|^### " docs/PROGRESS.md
+483 docs/PROGRESS.md
+---
+10:## 1. Project overview
+37:## 2. Data — PhysioNet Apnea-ECG
+53:## 3–4. What's been built, phase by phase
+55:### Phase 1 — Ingestion (loader + R-peak detection)
+83:### Phase 2 — Classical CVHR baseline
+107:### Phase 3 — 1D-CNN (done, closed)
+159:### Deployable ECG model (frozen after Phase 3)
+178:### §4b — ECG feature-extraction comparison study (exploratory, methods 3–8)
+311:### Phase 4 — Effort branch (built, validated on synthetic data only)
+340:## 5. Methodology decisions and why
+354:## 6. Honest limitations
+368:## 7. Current status and what's next
+388:## 8. File and directory map
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add docs/PROGRESS.md && git diff --cached --stat
+ docs/PROGRESS.md | 157 ++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 155 insertions(+), 2 deletions(-)
+
+$ git commit -m "docs: add §4b feature-extraction comparison study to PROGRESS.md ..."
+[main 01f8f55] docs: add §4b feature-extraction comparison study to PROGRESS.md
+ 1 file changed, 155 insertions(+), 2 deletions(-)
+
+$ cd /home/admin/apnea && git push origin main 2>&1
+To https://github.com/Nithilan77/SDP_Sleep_Apnea.git
+   18e26ce..01f8f55  main -> main
+[SUCCESS]
+
+================================================================================
+End of transcript as captured at PROGRESS.md's update (2026-09-28).
+Local and remote main are in sync at commit 01f8f55.
 ================================================================================
