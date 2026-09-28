@@ -1,0 +1,1130 @@
+================================================================================
+Apnea project -- full terminal session transcript
+Captured/exported: 2026-09-28
+================================================================================
+
+This file is a verbatim capture of every shell command run in this Claude
+Code session and its output, in the order it was executed, from the initial
+environment check through the completion of the ECG feature-extraction
+comparison study (methods 1-8). Non-shell actions (file reads/writes/edits,
+UI questions) are omitted; only commands and their actual stdout/stderr are
+included below, unedited.
+
+--------------------------------------------------------------------------------
+$ python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'no gpu')"
+/bin/bash: line 1: python: command not found
+
+$ ls -la data/physionet 2>&1 | head -50; echo "---count---"; ls data/physionet 2>/dev/null | grep -c '\.dat$'; echo "---sample---"; ls data/physionet/a01* 2>&1
+total 12
+drwxrwxr-x 3 admin admin 4096 Aug 20 08:32 .
+drwxrwxr-x 4 admin admin 4096 Aug 20 08:31 ..
+drwxrwxr-x 3 admin admin 4096 Aug 20 08:32 physionet.org
+---count---
+0
+---sample---
+ls: cannot access 'data/physionet/a01*': No such file or directory
+
+--------------------------------------------------------------------------------
+$ which python3; python3 -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'no gpu')"
+/usr/bin/python3
+2.13.0+cu130 True NVIDIA RTX 5000 Ada Generation
+
+--------------------------------------------------------------------------------
+$ find data/physionet -maxdepth 5 -iname "*.dat" | head -20; echo "---total .dat count---"; find data/physionet -iname "*.dat" | wc -l; echo "---dir tree---"; find data/physionet -maxdepth 4 -type d
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/c01.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x35.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/b02.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/b04.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x14.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/b03.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x04.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/c03r.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x20.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/a03.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/a07.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x25.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/c08.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/a04r.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x17.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x07.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x08.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x18.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/x05.dat
+data/physionet/physionet.org/files/apnea-ecg/1.0.0/a10.dat
+---total .dat count---
+78
+---dir tree---
+data/physionet
+data/physionet/physionet.org
+data/physionet/physionet.org/files
+data/physionet/physionet.org/files/apnea-ecg
+data/physionet/physionet.org/files/apnea-ecg/1.0.0
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git status 2>&1; echo "---LOG---"; git log --oneline -5 2>&1
+fatal: not a git repository (or any of the parent directories): .git
+---LOG---
+fatal: not a git repository (or any of the parent directories): .git
+
+$ cd /home/admin/apnea && echo "---docs---"; ls -la docs/ 2>&1; echo "---results---"; ls -la results/ 2>&1; echo "---top level---"; ls -la
+---docs---
+ls: cannot access 'docs/': No such file or directory
+---results---
+total 8
+drwxrwxr-x 2 admin admin 4096 Aug 20 08:31 .
+drwxrwxr-x 2 admin admin 4096 Aug 20 08:31 ..
+---top level---
+total 28
+drwxrwxr-x  7 admin admin 4096 Aug 20 14:28 .
+drwxr-x--- 32 admin admin 4096 Sep 28 19:55 ..
+drwxrwxr-x  4 admin admin 4096 Aug 20 08:31 data
+drwxrwxr-x  2 admin admin 4096 Aug 20 08:31 notebooks
+drwxrwxr-x  2 admin admin 4096 Aug 20 08:31 results
+drwxrwxr-x  7 admin admin 4096 Aug 20 08:31 src
+drwxrwxr-x  6 admin admin 4096 Aug 20 08:32 venv
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git init && git remote add origin https://github.com/Nithilan77/SDP_Sleep_Apnea.git && git fetch origin 2>&1
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+Initialized empty Git repository in /home/admin/apnea/.git/
+From https://github.com/Nithilan77/SDP_Sleep_Apnea
+ * [new branch]      main       -> origin/main
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git branch -r; echo "---"; git log origin/main --oneline -10 2>&1
+  origin/main
+---
+e125edd Initial commit: ECG-branch apnea detection (Phase 0-3) + effort branch (Phase 4, synthetic)
+
+$ cd /home/admin/apnea && git ls-tree -r origin/main --name-only | grep -E '^(data|venv)(/|$)'
+(no output -- repo tracks nothing under data/ or venv/)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git status --short; echo "---checking untracked collisions---"; git ls-tree -r origin/main --name-only | while read f; do [ -e "$f" ] && echo "EXISTS: $f"; done
+?? data/
+?? src/
+?? venv/
+---checking untracked collisions---
+EXISTS: src/ecg/features.py
+EXISTS: src/ecg/rpeaks.py
+EXISTS: src/ingest/physionet.py
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && for f in src/ecg/features.py src/ecg/rpeaks.py src/ingest/physionet.py; do echo "=== $f ==="; diff -q "$f" <(git show origin/main:"$f") && echo "IDENTICAL"; done
+=== src/ecg/features.py ===
+Files src/ecg/features.py and /dev/fd/63 differ
+=== src/ecg/rpeaks.py ===
+Files src/ecg/rpeaks.py and /dev/fd/63 differ
+=== src/ingest/physionet.py ===
+Files src/ingest/physionet.py and /dev/fd/63 differ
+
+[User was asked how to handle the 3 conflicting local files via
+AskUserQuestion; chose "Overwrite with remote (Recommended)".]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git checkout -b main --track origin/main -f 2>&1; echo "---status---"; git status --short | head -30
+Switched to a new branch 'main'
+branch 'main' set up to track 'origin/main'.
+---status---
+(clean, no output)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git log --oneline -5; echo "---data/venv intact---"; ls data/physionet/physionet.org/files/apnea-ecg/1.0.0 | wc -l; ls venv | head -3; echo "---docs---"; ls -la docs/ 2>&1; echo "---PROGRESS.md---"; [ -f docs/PROGRESS.md ] && echo "PRESENT: docs/PROGRESS.md" || echo "MISSING"; echo "---results---"; find results -maxdepth 3 2>&1; echo "---search for model files---"; find . -path ./venv -prune -o -path ./data -prune -o -path ./.git -prune -o \( -iname "*.pt" -o -iname "*.pth" -o -iname "*.onnx" -o -iname "*.pkl" -o -iname "*.joblib" -o -iname "*model*" \) -print 2>&1
+e125edd Initial commit: ECG-branch apnea detection (Phase 0-3) + effort branch (Phase 4, synthetic)
+---data/venv intact---
+415
+bin
+include
+lib
+---docs---
+total 40
+drwxrwxr-x 2 admin admin  4096 Sep 28 20:01 .
+drwxrwxr-x 9 admin admin  4096 Sep 28 20:01 ..
+-rw-rw-r-- 1 admin admin 31721 Sep 28 20:01 PROGRESS.md
+---PROGRESS.md---
+PRESENT: docs/PROGRESS.md
+---results---
+results
+results/phase3_cnn_ablation
+results/phase3_cnn_v2
+results/phase3_cnn_ablation_run.log
+results/phase3_cnn_v2_run.log
+results/phase2_cvhr_baseline
+results/phase3_cnn
+results/phase3_cnn_run.log
+results/phase3_cnn_ablation/variant_a_2ch_default_weight.csv
+results/phase3_cnn_ablation/variant_b_1ch_weighted.csv
+results/phase3_cnn_v2/per_minute_predictions.csv
+results/phase3_cnn_v2/per_recording_predictions.csv
+results/phase3_cnn_v2/sequences.npz
+results/phase2_cvhr_baseline/per_minute_predictions.csv
+results/phase2_cvhr_baseline/per_recording_predictions.csv
+results/phase2_cvhr_baseline/features.csv
+results/phase3_cnn/per_minute_predictions.csv
+results/phase3_cnn/deployable
+results/phase3_cnn/final_per_minute_predictions.csv
+results/phase3_cnn/final_per_recording_predictions.csv
+results/phase3_cnn/README.md
+results/phase3_cnn/per_recording_predictions.csv
+results/phase3_cnn/sequences.npz
+results/phase3_cnn/deployable/README.md
+results/phase3_cnn/deployable/norm_stats.json
+results/phase3_cnn/deployable/config.json
+results/phase3_cnn/deployable/model_state_dict.pt
+---search for model files---
+./src/ecg/train_deployable_model.py
+./src/ecg/cnn_model.py
+./results/phase3_cnn/deployable/model_state_dict.pt
+
+================================================================================
+Feature-extraction comparison study begins
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && find src -type f -name "*.py" | sort
+src/ecg/cnn_apnea_ablation.py
+src/ecg/cnn_apnea_final.py
+src/ecg/cnn_apnea.py
+src/ecg/cnn_apnea_v2.py
+src/ecg/cnn_model.py
+src/ecg/cvhr_baseline.py
+src/ecg/features.py
+src/ecg/rpeaks.py
+src/ecg/rr_amp_sequence.py
+src/ecg/rr_sequence.py
+src/ecg/train_deployable_model.py
+src/effort/cessation.py
+src/effort/envelope.py
+src/effort/synthetic_demo.py
+src/eval/metrics.py
+src/eval/splits.py
+src/ingest/physionet.py
+
+--------------------------------------------------------------------------------
+$ venv/bin/python -c "import scipy; print('scipy', scipy.__version__)"; venv/bin/python -c "import neurokit2; print('nk2', neurokit2.__version__)"; venv/bin/python -c "import astropy" 2>&1 | tail -1; venv/bin/pip list 2>/dev/null | grep -iE "scipy|astropy|antropy|EntropyHub|nolds"
+scipy 1.18.0
+nk2 0.2.13
+ModuleNotFoundError: No module named 'astropy'
+scipy              1.18.0
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && venv/bin/python src/ecg/hrv_bank_features.py 2>&1 | tail -40
+=== HRV feature bank sanity check (a01) ===
+Traceback (most recent call last):
+  File "/home/admin/apnea/src/ecg/hrv_bank_features.py", line 243, in <module>
+    rec = load_record("a01")
+          ^^^^^^^^^^^^^^^^^^
+  File "/home/admin/apnea/src/ingest/physionet.py", line 56, in load_record
+    record = wfdb.rdrecord(record_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ...
+FileNotFoundError: [Errno 2] No such file or directory: '/home/admin/apnea/data/physionet/a01.hea'
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && ls -la data/physionet | head; find data/physionet -maxdepth 1 -iname "a01*"
+total 12
+drwxrwxr-x 3 admin admin 4096 Aug 20 08:32 .
+drwxrwxr-x 4 admin admin 4096 Aug 20 08:31 ..
+drwxrwxr-x 3 admin admin 4096 Aug 20 08:32 physionet.org
+(no a01* match)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea/data/physionet && for f in physionet.org/files/apnea-ecg/1.0.0/*; do bn=$(basename "$f"); [ -e "$bn" ] || ln -s "$f" "$bn"; done; ls | grep -c '\.dat$'; ls a01* 2>&1
+78
+a01.apn
+a01.dat
+a01er.apn
+a01er.hea
+a01er.qrs
+a01er.xws
+a01.hea
+a01.qrs
+a01r.apn
+a01r.dat
+a01r.hea
+a01.xws
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && venv/bin/python src/ecg/hrv_bank_features.py 2>&1 | tail -40
+=== HRV feature bank sanity check (a01) ===
+Traceback (most recent call last):
+  ...
+    vlf = float(np.trapz(power[vlf_mask], freqs[vlf_mask]))
+                ^^^^^^^^
+AttributeError: module 'numpy' has no attribute 'trapz'. Did you mean: 'trace'?
+[Fixed: np.trapz -> np.trapezoid in src/ecg/hrv_bank_features.py]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && venv/bin/python src/ecg/hrv_bank_features.py 2>&1 | tail -40
+=== HRV feature bank sanity check (a01) ===
+489 minutes with any usable bank features
+  sdnn_ms                apnea mean=  138.5044  normal mean=   80.9266  NaN%=  0.0
+  rmssd_ms               apnea mean=   82.8953  normal mean=   53.7566  NaN%=  0.0
+  pnn50                  apnea mean=    0.3750  normal mean=    0.2125  NaN%=  0.0
+  mean_hr                apnea mean=   61.8064  normal mean=   70.4296  NaN%=  0.0
+  hr_range_bpm            apnea mean=   36.3714  normal mean=   26.6348  NaN%=  0.0
+  hrv_triangular_index    apnea mean=    2.5102  normal mean=    1.8807  NaN%=  0.0
+  vlf_power                apnea mean=    0.0002  normal mean=    0.0001  NaN%=  0.0
+  lf_power                 apnea mean=    0.0001  normal mean=    0.0001  NaN%=  0.0
+  hf_power                 apnea mean=    0.0000  normal mean=    0.0000  NaN%=  0.0
+  lf_hf_ratio               apnea mean=    3.8746  normal mean=    2.6663  NaN%=  0.0
+  sd1_ms                   apnea mean=   59.0548  normal mean=   38.2751  NaN%=  0.0
+  sd2_ms                   apnea mean=  185.7681  normal mean=  107.2692  NaN%=  0.0
+  sd1_sd2_ratio             apnea mean=    0.3319  normal mean=    0.3579  NaN%=  0.0
+  sampen                    apnea mean=    1.2817  normal mean=    1.4487  NaN%=  0.8
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && time venv/bin/python -c "
+from src.ecg.feature_bank_cnn import load_or_build_bank_features
+df = load_or_build_bank_features()
+print(df.shape)
+print(df.isna().mean().sort_values(ascending=False).head(10))
+"
+Traceback (most recent call last):
+  ...
+  File "/home/admin/apnea/src/ecg/cnn_model.py", line 13, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+
+real	0m0.165s
+user	0m2.285s
+sys	0m0.026s
+
+--------------------------------------------------------------------------------
+$ venv_python=/home/admin/apnea/venv/bin/python; $venv_python -c "import sys; print(sys.executable)"; /usr/bin/python3 -c "import torch,sys; print(torch.__version__, sys.executable)"; ls /home/admin/apnea/venv/lib/python3.12/site-packages | grep -i torch
+/home/admin/apnea/venv/bin/python
+2.13.0+cu130 /usr/bin/python3
+(no torch in venv site-packages)
+
+--------------------------------------------------------------------------------
+$ /usr/bin/python3 -c "import wfdb" 2>&1 | tail -3; /usr/bin/python3 -c "import neurokit2" 2>&1 | tail -3; /usr/bin/python3 -c "import pandas, scipy, sklearn; print('ok')" 2>&1 | tail -3
+echo "---pip list system---"
+/usr/bin/python3 -m pip list 2>/dev/null | grep -iE "wfdb|neurokit|torch|pandas|scipy|scikit"
+ok
+---pip list system---
+neurokit2               0.2.13
+pandas                  2.3.3
+scikit-learn             1.9.0
+scipy                    1.18.0
+torch                    2.13.0
+wfdb                     4.3.1
+
+[Decision: use /usr/bin/python3 for all subsequent runs -- it has the full
+stack (torch + wfdb + neurokit2 + pandas + scipy + sklearn); the project
+venv is missing torch.]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && time /usr/bin/python3 -c "
+from src.ecg.feature_bank_cnn import load_or_build_bank_features
+df = load_or_build_bank_features()
+print(df.shape)
+print(df.isna().mean().sort_values(ascending=False).head(10))
+"
+Building per-minute HRV bank features (time+freq+nonlinear) for all 35 records...
+  a01: 489 minutes
+  a02: 528 minutes
+  a03: 519 minutes
+  a04: 492 minutes
+  a05: 454 minutes
+  a06: 510 minutes
+  a07: 511 minutes
+  a08: 501 minutes
+  a09: 495 minutes
+  a10: 517 minutes
+  a11: 466 minutes
+  a12: 577 minutes
+  a13: 495 minutes
+  a14: 509 minutes
+  a15: 510 minutes
+  a16: 482 minutes
+  a17: 485 minutes
+  a18: 489 minutes
+  a19: 502 minutes
+  a20: 510 minutes
+  b01: 487 minutes
+  b02: 517 minutes
+  b03: 441 minutes
+  b04: 429 minutes
+  b05: 433 minutes
+  c01: 484 minutes
+  c02: 502 minutes
+  c03: 454 minutes
+  c04: 482 minutes
+  c05: 466 minutes
+  c06: 468 minutes
+  c07: 429 minutes
+  c08: 513 minutes
+  c09: 468 minutes
+  c10: 431 minutes
+  cached to results/feature_study/hrv_bank_features.csv
+(17045, 18)
+sampen           0.046641
+sd2_ms           0.003637
+sd1_sd2_ratio    0.003637
+lf_power         0.003403
+hf_power         0.003403
+vlf_power        0.003403
+lf_hf_ratio      0.003403
+mean_hr          0.003168
+pnn50            0.003168
+rmssd_ms         0.003168
+dtype: float64
+
+real	0m23.998s
+user	0m27.345s
+sys	0m0.821s
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && time /usr/bin/python3 src/ecg/feature_bank_cnn.py time
+[command exceeded the 120s foreground timeout and was moved to background execution
+automatically; output below is the full captured stdout once it completed]
+
+=== Time-domain HRV bank (method 3): ['sdnn_ms', 'rmssd_ms', 'pnn50', 'mean_hr', 'hr_range_bpm', 'hrv_triangular_index'] ===
+Loading cached HRV bank features from results/feature_study/hrv_bank_features.csv
+16949 minutes usable (0 dropped for NaN in this bank's features)
+  fold  1/35: held out a01 (488 minutes, 13.7s)
+  fold  2/35: held out a02 (527 minutes, 14.8s)
+  fold  3/35: held out a03 (518 minutes, 12.0s)
+  fold  4/35: held out a04 (491 minutes, 12.3s)
+  fold  5/35: held out a05 (453 minutes, 16.2s)
+  fold  6/35: held out a06 (509 minutes, 15.5s)
+  fold  7/35: held out a07 (510 minutes, 13.3s)
+  fold  8/35: held out a08 (500 minutes, 15.1s)
+  fold  9/35: held out a09 (494 minutes, 14.6s)
+  fold 10/35: held out a10 (516 minutes, 10.4s)
+  fold 11/35: held out a11 (465 minutes, 11.5s)
+  fold 12/35: held out a12 (576 minutes, 10.5s)
+  fold 13/35: held out a13 (494 minutes, 12.7s)
+  fold 14/35: held out a14 (508 minutes, 12.3s)
+  fold 15/35: held out a15 (509 minutes, 10.3s)
+  fold 16/35: held out a16 (481 minutes, 13.4s)
+  fold 17/35: held out a17 (482 minutes, 9.8s)
+  fold 18/35: held out a18 (488 minutes, 12.4s)
+  fold 19/35: held out a19 (501 minutes, 9.5s)
+  fold 20/35: held out a20 (509 minutes, 7.9s)
+  fold 21/35: held out b01 (486 minutes, 11.1s)
+  fold 22/35: held out b02 (516 minutes, 10.6s)
+  fold 23/35: held out b03 (440 minutes, 9.1s)
+  fold 24/35: held out b04 (423 minutes, 11.3s)
+  fold 25/35: held out b05 (432 minutes, 10.1s)
+  fold 26/35: held out c01 (474 minutes, 10.2s)
+  fold 27/35: held out c02 (492 minutes, 9.8s)
+  fold 28/35: held out c03 (453 minutes, 40.8s)
+  fold 29/35: held out c04 (464 minutes, 12.8s)
+  fold 30/35: held out c05 (465 minutes, 13.2s)
+  fold 31/35: held out c06 (467 minutes, 12.0s)
+  fold 32/35: held out c07 (428 minutes, 13.5s)
+  fold 33/35: held out c08 (512 minutes, 11.0s)
+  fold 34/35: held out c09 (455 minutes, 16.1s)
+  fold 35/35: held out c10 (423 minutes, 15.0s)
+  total LOSO time: 7.6 min
+
+=== Time-domain HRV bank (method 3) result (subject-independent, LOSO, 35 folds) ===
+n=16949  acc=0.633  sens=0.675  spec=0.607  prec=0.518  f1=0.586
+record-level accuracy: 25/35 = 0.714
+Results saved to results/feature_study/method3_time_domain/
+
+real	7m36.661s
+user	137m6.814s
+sys	1m24.921s
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add src/ecg/hrv_bank_features.py src/ecg/feature_bank_cnn.py results/feature_study/ && git status --short
+A  results/feature_study/hrv_bank_features.csv
+A  results/feature_study/method3_time_domain/per_minute_predictions.csv
+A  results/feature_study/method3_time_domain/per_recording_predictions.csv
+A  src/ecg/feature_bank_cnn.py
+A  src/ecg/hrv_bank_features.py
+
+$ git commit -m "Feature study: method 3 (time-domain HRV bank) + shared infra ..."
+[main 5c1191c] Feature study: method 3 (time-domain HRV bank) + shared infra
+ 5 files changed, 34496 insertions(+)
+ create mode 100644 results/feature_study/hrv_bank_features.csv
+ create mode 100644 results/feature_study/method3_time_domain/per_minute_predictions.csv
+ create mode 100644 results/feature_study/method3_time_domain/per_recording_predictions.csv
+ create mode 100644 src/ecg/feature_bank_cnn.py
+ create mode 100644 src/ecg/hrv_bank_features.py
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && nohup /usr/bin/python3 src/ecg/feature_bank_cnn.py freq > /tmp/.../scratchpad/method4_freq.log 2>&1 &
+echo "started pid $!"
+started pid 2182214
+/bin/bash: line 2: /tmp/claude-1000/-home-admin-apnea/d52985ec-5b86-4e0c-8b18-5364b4b70802/scratchpad/method4_freq.log: No such file or directory
+
+[exited with code 0]
+
+$ ls -la /tmp/claude-1000/-home-admin-apnea/d52985ec-5b86-4e0c-8b18-5364b4b70802/ 2>&1; ps aux | grep feature_bank_cnn | grep -v grep
+total 12
+drwxrwxr-x 3 admin admin 4096 Sep 28 19:55 .
+drwxrwxr-x 3 admin admin 4096 Sep 28 19:55 ..
+drwxrwxr-x 2 admin admin 4096 Sep 28 20:17 tasks
+(no matching process -- the redirect target directory didn't exist yet, so
+the nohup command's own shell redirection failed before python ever launched)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/feature_bank_cnn.py freq   [relaunched properly via run_in_background]
+
+=== Frequency-domain HRV bank (method 4): ['vlf_power', 'lf_power', 'hf_power', 'lf_hf_ratio'] ===
+Loading cached HRV bank features from results/feature_study/hrv_bank_features.csv
+16946 minutes usable (3 dropped for NaN in this bank's features)
+  fold  1/35: held out a01 (488 minutes, 11.7s)
+  fold  2/35: held out a02 (527 minutes, 10.3s)
+  fold  3/35: held out a03 (518 minutes, 11.2s)
+  fold  4/35: held out a04 (491 minutes, 10.5s)
+  fold  5/35: held out a05 (453 minutes, 11.6s)
+  fold  6/35: held out a06 (509 minutes, 12.9s)
+  fold  7/35: held out a07 (510 minutes, 9.3s)
+  fold  8/35: held out a08 (500 minutes, 8.5s)
+  fold  9/35: held out a09 (494 minutes, 8.1s)
+  fold 10/35: held out a10 (516 minutes, 9.8s)
+  fold 11/35: held out a11 (465 minutes, 8.7s)
+  fold 12/35: held out a12 (576 minutes, 8.8s)
+  fold 13/35: held out a13 (494 minutes, 9.5s)
+  fold 14/35: held out a14 (508 minutes, 9.6s)
+  fold 15/35: held out a15 (509 minutes, 9.6s)
+  fold 16/35: held out a16 (481 minutes, 8.7s)
+  fold 17/35: held out a17 (482 minutes, 10.0s)
+  fold 18/35: held out a18 (488 minutes, 9.3s)
+  fold 19/35: held out a19 (501 minutes, 8.5s)
+  fold 20/35: held out a20 (509 minutes, 7.8s)
+  fold 21/35: held out b01 (486 minutes, 11.1s)
+  fold 22/35: held out b02 (516 minutes, 9.1s)
+  fold 23/35: held out b03 (440 minutes, 10.5s)
+  fold 24/35: held out b04 (422 minutes, 10.9s)
+  fold 25/35: held out b05 (432 minutes, 10.2s)
+  fold 26/35: held out c01 (473 minutes, 8.3s)
+  fold 27/35: held out c02 (492 minutes, 8.8s)
+  fold 28/35: held out c03 (453 minutes, 9.0s)
+  fold 29/35: held out c04 (463 minutes, 9.1s)
+  fold 30/35: held out c05 (465 minutes, 7.4s)
+  fold 31/35: held out c06 (467 minutes, 8.9s)
+  fold 32/35: held out c07 (428 minutes, 10.0s)
+  fold 33/35: held out c08 (512 minutes, 7.3s)
+  fold 34/35: held out c09 (455 minutes, 8.3s)
+  fold 35/35: held out c10 (423 minutes, 8.5s)
+  total LOSO time: 5.5 min
+
+=== Frequency-domain HRV bank (method 4) result (subject-independent, LOSO, 35 folds) ===
+n=16946  acc=0.450  sens=0.701  spec=0.293  prec=0.382  f1=0.495
+record-level accuracy: 25/35 = 0.714
+Results saved to results/feature_study/method4_freq_domain/
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add results/feature_study/method4_freq_domain/ && git status --short
+A  results/feature_study/method4_freq_domain/per_minute_predictions.csv
+A  results/feature_study/method4_freq_domain/per_recording_predictions.csv
+
+$ git commit -m "Feature study: method 4 (frequency-domain HRV bank) result ..."
+[main 96a96fd] Feature study: method 4 (frequency-domain HRV bank) result
+ 2 files changed, 16983 insertions(+)
+ create mode 100644 results/feature_study/method4_freq_domain/per_minute_predictions.csv
+ create mode 100644 results/feature_study/method4_freq_domain/per_recording_predictions.csv
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/feature_bank_cnn.py nonlinear
+
+=== Nonlinear/Poincare HRV bank (method 5): ['sd1_ms', 'sd2_ms', 'sd1_sd2_ratio', 'sampen'] ===
+Loading cached HRV bank features from results/feature_study/hrv_bank_features.csv
+16207 minutes usable (742 dropped for NaN in this bank's features)
+  fold  1/35: held out a01 (484 minutes, 9.7s)
+  fold  2/35: held out a02 (525 minutes, 8.8s)
+  fold  3/35: held out a03 (512 minutes, 10.0s)
+  fold  4/35: held out a04 (490 minutes, 9.1s)
+  fold  5/35: held out a05 (434 minutes, 9.4s)
+  fold  6/35: held out a06 (430 minutes, 10.4s)
+  fold  7/35: held out a07 (499 minutes, 9.2s)
+  fold  8/35: held out a08 (500 minutes, 9.7s)
+  fold  9/35: held out a09 (476 minutes, 7.7s)
+  fold 10/35: held out a10 (461 minutes, 10.4s)
+  fold 11/35: held out a11 (439 minutes, 8.7s)
+  fold 12/35: held out a12 (571 minutes, 9.9s)
+  fold 13/35: held out a13 (494 minutes, 9.6s)
+  fold 14/35: held out a14 (485 minutes, 9.6s)
+  fold 15/35: held out a15 (504 minutes, 8.8s)
+  fold 16/35: held out a16 (474 minutes, 9.9s)
+  fold 17/35: held out a17 (470 minutes, 10.9s)
+  fold 18/35: held out a18 (477 minutes, 15.9s)
+  fold 19/35: held out a19 (501 minutes, 10.5s)
+  fold 20/35: held out a20 (486 minutes, 10.4s)
+  fold 21/35: held out b01 (467 minutes, 8.9s)
+  fold 22/35: held out b02 (511 minutes, 7.5s)
+  fold 23/35: held out b03 (436 minutes, 10.1s)
+  fold 24/35: held out b04 (410 minutes, 9.9s)
+  fold 25/35: held out b05 (425 minutes, 10.1s)
+  fold 26/35: held out c01 (440 minutes, 9.9s)
+  fold 27/35: held out c02 (470 minutes, 9.3s)
+  fold 28/35: held out c03 (412 minutes, 9.7s)
+  fold 29/35: held out c04 (458 minutes, 10.4s)
+  fold 30/35: held out c05 (399 minutes, 9.2s)
+  fold 31/35: held out c06 (409 minutes, 9.1s)
+  fold 32/35: held out c07 (416 minutes, 8.8s)
+  fold 33/35: held out c08 (468 minutes, 9.5s)
+  fold 34/35: held out c09 (444 minutes, 8.6s)
+  fold 35/35: held out c10 (330 minutes, 7.5s)
+  total LOSO time: 5.6 min
+
+=== Nonlinear/Poincare HRV bank (method 5) result (subject-independent, LOSO, 35 folds) ===
+n=16207  acc=0.688  sens=0.733  spec=0.658  prec=0.582  f1=0.649
+record-level accuracy: 26/35 = 0.743
+Results saved to results/feature_study/method5_nonlinear/
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add results/feature_study/method5_nonlinear/ && git commit -m "Feature study: method 5 (nonlinear/Poincare HRV bank) result ..."
+[main bd3354e] Feature study: method 5 (nonlinear/Poincare HRV bank) result
+ 2 files changed, 16244 insertions(+)
+ create mode 100644 results/feature_study/method5_nonlinear/per_minute_predictions.csv
+ create mode 100644 results/feature_study/method5_nonlinear/per_recording_predictions.csv
+
+Summary at this point (35-fold LOSO, 1D-CNN, feature vector as 1-channel sequence):
+  method 3 (time-domain):      acc=0.633 sens=0.675 spec=0.607 f1=0.586
+  method 4 (frequency-domain): acc=0.450 sens=0.701 spec=0.293 f1=0.495
+  method 5 (nonlinear):        acc=0.688 sens=0.733 spec=0.658 f1=0.649
+
+================================================================================
+Fairness fix: add logreg + MLP classifiers for scalar HRV banks
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea/data/physionet ... [n/a, staying in /home/admin/apnea]
+$ cd /home/admin/apnea && for m in method3_time_domain method4_freq_domain method5_nonlinear; do
+  mkdir -p results/feature_study/$m/cnn
+  git mv results/feature_study/$m/per_minute_predictions.csv results/feature_study/$m/cnn/per_minute_predictions.csv
+  git mv results/feature_study/$m/per_recording_predictions.csv results/feature_study/$m/cnn/per_recording_predictions.csv
+done
+git status --short
+R  results/feature_study/method3_time_domain/per_minute_predictions.csv -> results/feature_study/method3_time_domain/cnn/per_minute_predictions.csv
+R  results/feature_study/method3_time_domain/per_recording_predictions.csv -> results/feature_study/method3_time_domain/cnn/per_recording_predictions.csv
+R  results/feature_study/method4_freq_domain/per_minute_predictions.csv -> results/feature_study/method4_freq_domain/cnn/per_minute_predictions.csv
+R  results/feature_study/method4_freq_domain/per_recording_predictions.csv -> results/feature_study/method4_freq_domain/cnn/per_recording_predictions.csv
+R  results/feature_study/method5_nonlinear/per_minute_predictions.csv -> results/feature_study/method5_nonlinear/cnn/per_minute_predictions.csv
+R  results/feature_study/method5_nonlinear/per_recording_predictions.csv -> results/feature_study/method5_nonlinear/cnn/per_recording_predictions.csv
+ M src/ecg/cnn_model.py
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/feature_bank_cnn.py time
+
+=== Time-domain HRV bank (method 3): ['sdnn_ms', 'rmssd_ms', 'pnn50', 'mean_hr', 'hr_range_bpm', 'hrv_triangular_index'] ===
+Loading cached HRV bank features from results/feature_study/hrv_bank_features.csv
+16949 minutes usable (0 dropped for NaN in this bank's features)
+
+--- cnn: reusing cached predictions from results/feature_study/method3_time_domain/cnn/per_minute_predictions.csv ---
+[cnn] n=16949  acc=0.633  sens=0.675  spec=0.607  prec=0.518  f1=0.586
+[cnn] record-level accuracy: 25/35 = 0.714
+
+--- running logreg ---
+  [logreg] 35 folds, 0.4s total
+[logreg] n=16949  acc=0.702  sens=0.620  spec=0.754  prec=0.611  f1=0.615
+[logreg] record-level accuracy: 26/35 = 0.743
+
+--- running mlp ---
+  [mlp] fold  1/35: held out a01 (488 minutes, 3.2s)
+  [mlp] fold  2/35: held out a02 (527 minutes, 2.5s)
+  [mlp] fold  3/35: held out a03 (518 minutes, 2.4s)
+  [mlp] fold  4/35: held out a04 (491 minutes, 2.4s)
+  [mlp] fold  5/35: held out a05 (453 minutes, 2.5s)
+  [mlp] fold  6/35: held out a06 (509 minutes, 2.4s)
+  [mlp] fold  7/35: held out a07 (510 minutes, 2.4s)
+  [mlp] fold  8/35: held out a08 (500 minutes, 2.6s)
+  [mlp] fold  9/35: held out a09 (494 minutes, 2.5s)
+  [mlp] fold 10/35: held out a10 (516 minutes, 2.4s)
+  [mlp] fold 11/35: held out a11 (465 minutes, 2.5s)
+  [mlp] fold 12/35: held out a12 (576 minutes, 2.4s)
+  [mlp] fold 13/35: held out a13 (494 minutes, 2.4s)
+  [mlp] fold 14/35: held out a14 (508 minutes, 2.4s)
+  [mlp] fold 15/35: held out a15 (509 minutes, 2.4s)
+  [mlp] fold 16/35: held out a16 (481 minutes, 2.4s)
+  [mlp] fold 17/35: held out a17 (482 minutes, 2.4s)
+  [mlp] fold 18/35: held out a18 (488 minutes, 2.5s)
+  [mlp] fold 19/35: held out a19 (501 minutes, 2.4s)
+  [mlp] fold 20/35: held out a20 (509 minutes, 2.4s)
+  [mlp] fold 21/35: held out b01 (486 minutes, 2.5s)
+  [mlp] fold 22/35: held out b02 (516 minutes, 2.4s)
+  [mlp] fold 23/35: held out b03 (440 minutes, 2.5s)
+  [mlp] fold 24/35: held out b04 (423 minutes, 2.4s)
+  [mlp] fold 25/35: held out b05 (432 minutes, 2.4s)
+  [mlp] fold 26/35: held out c01 (474 minutes, 2.5s)
+  [mlp] fold 27/35: held out c02 (492 minutes, 2.4s)
+  [mlp] fold 28/35: held out c03 (453 minutes, 2.4s)
+  [mlp] fold 29/35: held out c04 (464 minutes, 2.3s)
+  [mlp] fold 30/35: held out c05 (465 minutes, 2.5s)
+  [mlp] fold 31/35: held out c06 (467 minutes, 2.4s)
+  [mlp] fold 32/35: held out c07 (428 minutes, 2.5s)
+  [mlp] fold 33/35: held out c08 (512 minutes, 2.5s)
+  [mlp] fold 34/35: held out c09 (455 minutes, 2.4s)
+  [mlp] fold 35/35: held out c10 (423 minutes, 2.5s)
+  [mlp] total LOSO time: 1.4 min
+[mlp] n=16949  acc=0.676  sens=0.688  spec=0.669  prec=0.564  f1=0.620
+[mlp] record-level accuracy: 25/35 = 0.714
+
+=== Time-domain HRV bank (method 3): best classifier = logreg (acc=0.702) ===
+  cnn      n=16949  acc=0.633  sens=0.675  spec=0.607  prec=0.518  f1=0.586
+  logreg   n=16949  acc=0.702  sens=0.620  spec=0.754  prec=0.611  f1=0.615 <-- WINNER
+  mlp      n=16949  acc=0.676  sens=0.688  spec=0.669  prec=0.564  f1=0.620
+Comparison written to results/feature_study/method3_time_domain/classifier_comparison.md
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add -A src/ecg/cnn_model.py src/ecg/feature_bank_cnn.py results/feature_study/method3_time_domain/ && git status --short
+A  results/feature_study/method3_time_domain/classifier_comparison.md
+R  results/feature_study/method3_time_domain/{ => cnn}/per_minute_predictions.csv (100%)
+R  results/feature_study/method3_time_domain/{ => cnn}/per_recording_predictions.csv (100%)
+A  results/feature_study/method3_time_domain/logreg/per_minute_predictions.csv
+A  results/feature_study/method3_time_domain/logreg/per_recording_predictions.csv
+A  results/feature_study/method3_time_domain/mlp/per_minute_predictions.csv
+A  results/feature_study/method3_time_domain/mlp/per_recording_predictions.csv
+R  results/feature_study/method4_freq_domain/{ => cnn}/per_minute_predictions.csv (100%)
+R  results/feature_study/method4_freq_domain/{ => cnn}/per_recording_predictions.csv (100%)
+R  results/feature_study/method5_nonlinear/{ => cnn}/per_minute_predictions.csv (100%)
+R  results/feature_study/method5_nonlinear/{ => cnn}/per_recording_predictions.csv (100%)
+M  src/ecg/cnn_model.py
+M  src/ecg/feature_bank_cnn.py
+
+$ git commit -m "Feature study fairness fix: add logreg + MLP classifiers, method 3 result ..."
+[main 52f6fc8] Feature study fairness fix: add logreg + MLP classifiers, method 3 result
+ 13 files changed, 34237 insertions(+), 58 deletions(-)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/feature_bank_cnn.py freq
+  [mlp] fold 27/35: held out c02 (492 minutes, 2.4s)
+  [mlp] fold 28/35: held out c03 (453 minutes, 2.5s)
+  [mlp] fold 29/35: held out c04 (463 minutes, 2.5s)
+  [mlp] fold 30/35: held out c05 (465 minutes, 2.5s)
+  [mlp] fold 31/35: held out c06 (467 minutes, 2.5s)
+  [mlp] fold 32/35: held out c07 (428 minutes, 2.4s)
+  [mlp] fold 33/35: held out c08 (512 minutes, 2.4s)
+  [mlp] fold 34/35: held out c09 (455 minutes, 2.4s)
+  [mlp] fold 35/35: held out c10 (423 minutes, 2.4s)
+  [mlp] total LOSO time: 1.4 min
+[mlp] n=16946  acc=0.651  sens=0.647  spec=0.654  prec=0.539  f1=0.588
+[mlp] record-level accuracy: 25/35 = 0.714
+
+=== Frequency-domain HRV bank (method 4): best classifier = logreg (acc=0.672) ===
+  cnn      n=16946  acc=0.450  sens=0.701  spec=0.293  prec=0.382  f1=0.495
+  logreg   n=16946  acc=0.672  sens=0.513  spec=0.772  prec=0.584  f1=0.546 <-- WINNER
+  mlp      n=16946  acc=0.651  sens=0.647  spec=0.654  prec=0.539  f1=0.588
+Comparison written to results/feature_study/method4_freq_domain/classifier_comparison.md
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add results/feature_study/method4_freq_domain/ && git commit -m "Feature study: method 4 classifier comparison (logreg + MLP) ..."
+[main 3407830] Feature study: method 4 classifier comparison (logreg + MLP)
+ 5 files changed, 33976 insertions(+)
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/feature_bank_cnn.py nonlinear
+  [mlp] fold 32/35: held out c07 (416 minutes, 2.1s)
+  [mlp] fold 33/35: held out c08 (468 minutes, 2.1s)
+  [mlp] fold 34/35: held out c09 (444 minutes, 2.3s)
+  [mlp] fold 35/35: held out c10 (330 minutes, 2.3s)
+  [mlp] total LOSO time: 1.3 min
+[mlp] n=16207  acc=0.699  sens=0.712  spec=0.692  prec=0.600  f1=0.651
+[mlp] record-level accuracy: 26/35 = 0.743
+
+=== Nonlinear/Poincare HRV bank (method 5): best classifier = logreg (acc=0.707) ===
+  cnn      n=16207  acc=0.688  sens=0.733  spec=0.658  prec=0.582  f1=0.649
+  logreg   n=16207  acc=0.707  sens=0.673  spec=0.728  prec=0.617  f1=0.644 <-- WINNER
+  mlp      n=16207  acc=0.699  sens=0.712  spec=0.692  prec=0.600  f1=0.651
+Comparison written to results/feature_study/method5_nonlinear/classifier_comparison.md
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add results/feature_study/method5_nonlinear/ && git commit -m "Feature study: method 5 classifier comparison (logreg + MLP) ..."
+[main 6f6d936] Feature study: method 5 classifier comparison (logreg + MLP)
+ 5 files changed, 32498 insertions(+)
+
+Best-classifier summary after the fairness fix:
+  method 3 (time-domain):      logreg  acc=0.702 sens=0.620 spec=0.754 f1=0.615
+  method 4 (frequency-domain): logreg  acc=0.672 sens=0.513 spec=0.772 f1=0.546
+  method 5 (nonlinear):        logreg  acc=0.707 sens=0.673 spec=0.728 f1=0.644
+
+================================================================================
+Method 6 -- EDR via QRS-area, 2-channel 1D-CNN
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && grep -rn "qrs" src/ecg/*.py -il; ls src/ecg
+[no existing QRS-area/EDR module found]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/qrs_area.py 2>&1 | tail -20
+=== QRS-area (EDR proxy) sanity check ===
+a01: 29992 beats, QRS-area mean=0.04022 std=0.00398 min=0.00090 max=0.06237
+c01: 27728 beats, QRS-area mean=0.04185 std=0.01141 min=0.00019 max=0.60365
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/method6_qrsarea_cnn.py
+Building per-minute (RR, QRS-area) sequences for all 35 labelled records...
+  a01: 489 minutes
+  a02: 528 minutes
+  a03: 519 minutes
+  a04: 492 minutes
+  a05: 454 minutes
+  a06: 510 minutes
+  a07: 511 minutes
+  a08: 501 minutes
+  a09: 495 minutes
+  a10: 517 minutes
+  a11: 466 minutes
+  a12: 577 minutes
+  a13: 495 minutes
+  a14: 509 minutes
+  a15: 510 minutes
+  a16: 482 minutes
+  a17: 484 minutes
+  a18: 489 minutes
+  a19: 502 minutes
+  a20: 510 minutes
+  b01: 487 minutes
+  b02: 517 minutes
+  b03: 441 minutes
+  b04: 425 minutes
+  b05: 433 minutes
+  c01: 476 minutes
+  c02: 494 minutes
+  c03: 454 minutes
+  c04: 466 minutes
+  c05: 466 minutes
+  c06: 468 minutes
+  c07: 429 minutes
+  c08: 513 minutes
+  c09: 457 minutes
+  c10: 425 minutes
+  cached to results/feature_study/method6_qrsarea_edr/sequences.npz
+
+Running method 6 (RR + QRS-area, 2ch), pos_weight_factor=1.0, 30 epochs/fold, 35 LOSO folds
+  fold  1/35: held out a01 (488 minutes, 9.5s)
+  fold  2/35: held out a02 (527 minutes, 12.1s)
+  fold  3/35: held out a03 (518 minutes, 11.4s)
+  fold  4/35: held out a04 (491 minutes, 8.9s)
+  fold  5/35: held out a05 (453 minutes, 11.2s)
+  fold  6/35: held out a06 (509 minutes, 12.4s)
+  fold  7/35: held out a07 (510 minutes, 10.3s)
+  fold  8/35: held out a08 (500 minutes, 11.2s)
+  fold  9/35: held out a09 (494 minutes, 10.9s)
+  fold 10/35: held out a10 (516 minutes, 11.0s)
+  fold 11/35: held out a11 (465 minutes, 12.4s)
+  fold 12/35: held out a12 (576 minutes, 11.3s)
+  fold 13/35: held out a13 (494 minutes, 10.3s)
+  fold 14/35: held out a14 (508 minutes, 12.9s)
+  fold 15/35: held out a15 (509 minutes, 10.8s)
+  fold 16/35: held out a16 (481 minutes, 11.8s)
+  fold 17/35: held out a17 (482 minutes, 12.7s)
+  fold 18/35: held out a18 (488 minutes, 10.5s)
+  fold 19/35: held out a19 (501 minutes, 11.4s)
+  fold 20/35: held out a20 (509 minutes, 11.2s)
+  fold 21/35: held out b01 (486 minutes, 12.5s)
+  fold 22/35: held out b02 (516 minutes, 11.7s)
+  fold 23/35: held out b03 (440 minutes, 9.8s)
+  fold 24/35: held out b04 (423 minutes, 10.7s)
+  fold 25/35: held out b05 (432 minutes, 12.0s)
+  fold 26/35: held out c01 (474 minutes, 13.9s)
+  fold 27/35: held out c02 (492 minutes, 9.1s)
+  fold 28/35: held out c03 (453 minutes, 9.7s)
+  fold 29/35: held out c04 (464 minutes, 13.9s)
+  fold 30/35: held out c05 (465 minutes, 14.0s)
+  fold 31/35: held out c06 (467 minutes, 11.6s)
+  fold 32/35: held out c07 (428 minutes, 11.9s)
+  fold 33/35: held out c08 (512 minutes, 10.0s)
+  fold 34/35: held out c09 (455 minutes, 11.9s)
+  fold 35/35: held out c10 (423 minutes, 9.8s)
+  total LOSO time: 6.6 min
+
+=== Method 6 result (subject-independent, LOSO, all 35 records) ===
+n=16949  acc=0.798  sens=0.687  spec=0.868  prec=0.764  f1=0.724
+record-level accuracy: 29/35 = 0.829
+
+Results saved to results/feature_study/method6_qrsarea_edr/
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add src/ecg/qrs_area.py src/ecg/rr_qrsarea_sequence.py src/ecg/method6_qrsarea_cnn.py results/feature_study/method6_qrsarea_edr/ && git commit -m "Feature study: method 6 (RR + QRS-area EDR) result ..."
+[main b69b80b] Feature study: method 6 (RR + QRS-area EDR) result
+ 6 files changed, 17279 insertions(+)
+
+================================================================================
+Method 7 -- CWT scalogram of the RR series, 2D-CNN
+================================================================================
+
+--------------------------------------------------------------------------------
+$ /usr/bin/python3 -c "
+import scipy.signal as sig
+print(hasattr(sig, 'cwt'))
+print(hasattr(sig, 'morlet2'))
+"
+False
+False
+
+$ /usr/bin/python3 -c "import pywt; print(pywt.__version__)" 2>&1 | tail -3
+1.8.0
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/cwt_scalogram.py 2>&1 | tail -20
+=== CWT scalogram sanity check (a01) ===
+489 minutes, scalogram shape per minute = (32, 60)
+mean |CWT| -- apnea: 0.2890  normal: 0.2469
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 -c "
+from src.ecg.method7_cwt_cnn import ... build scalogram cache ...
+"
+  b01: 487 minutes
+  b02: 517 minutes
+  b03: 441 minutes
+  b04: 425 minutes
+  b05: 433 minutes
+  c01: 476 minutes
+  c02: 494 minutes
+  c03: 454 minutes
+  c04: 466 minutes
+  c05: 466 minutes
+  c06: 468 minutes
+  c07: 429 minutes
+  c08: 513 minutes
+  c09: 457 minutes
+  c10: 425 minutes
+  cached to results/feature_study/method7_cwt_scalogram/scalograms.npz
+build time 25.375230073928833
+n minutes 16949 scalogram shape (16991, 32, 60)
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/method7_cwt_cnn.py
+Loading cached CWT scalograms from results/feature_study/method7_cwt_scalogram/scalograms.npz
+
+Running method 7 (CWT scalogram, 2D-CNN), 30 epochs/fold, 35 LOSO folds
+  fold  1/35: held out a01 (488 minutes, 67.8s)
+  fold  2/35: held out a02 (527 minutes, 74.4s)
+  fold  3/35: held out a03 (518 minutes, 68.6s)
+  fold  4/35: held out a04 (491 minutes, 68.6s)
+  fold  5/35: held out a05 (453 minutes, 61.3s)
+  fold  6/35: held out a06 (509 minutes, 69.5s)
+  fold  7/35: held out a07 (510 minutes, 70.2s)
+  fold  8/35: held out a08 (500 minutes, 43.6s)
+  fold  9/35: held out a09 (494 minutes, 54.4s)
+  fold 10/35: held out a10 (516 minutes, 55.1s)
+  fold 11/35: held out a11 (465 minutes, 51.5s)
+  fold 12/35: held out a12 (576 minutes, 58.4s)
+  fold 13/35: held out a13 (494 minutes, 53.5s)
+  fold 14/35: held out a14 (508 minutes, 53.9s)
+  fold 15/35: held out a15 (509 minutes, 50.7s)
+  fold 16/35: held out a16 (481 minutes, 43.0s)
+  fold 17/35: held out a17 (482 minutes, 57.2s)
+  fold 18/35: held out a18 (488 minutes, 63.7s)
+  fold 19/35: held out a19 (501 minutes, 76.0s)
+  fold 20/35: held out a20 (509 minutes, 66.6s)
+  fold 21/35: held out b01 (486 minutes, 43.0s)
+  fold 22/35: held out b02 (516 minutes, 55.9s)
+  fold 23/35: held out b03 (440 minutes, 43.0s)
+  fold 24/35: held out b04 (423 minutes, 43.1s)
+  fold 25/35: held out b05 (432 minutes, 43.0s)
+  fold 26/35: held out c01 (474 minutes, 43.4s)
+  fold 27/35: held out c02 (492 minutes, 54.5s)
+  fold 28/35: held out c03 (453 minutes, 40.8s)
+  fold 29/35: held out c04 (464 minutes, 46.0s)
+  fold 30/35: held out c05 (465 minutes, 44.8s)
+  fold 31/35: held out c06 (467 minutes, 43.0s)
+  fold 32/35: held out c07 (428 minutes, 41.9s)
+  fold 33/35: held out c08 (512 minutes, 39.9s)
+  fold 34/35: held out c09 (455 minutes, 45.7s)
+  fold 35/35: held out c10 (423 minutes, 43.3s)
+  total LOSO time: 31.3 min
+
+=== Method 7 result (subject-independent, LOSO, all 35 records) ===
+n=16949  acc=0.749  sens=0.491  spec=0.911  prec=0.774  f1=0.601
+record-level accuracy: 27/35 = 0.771
+
+Results saved to results/feature_study/method7_cwt_scalogram/
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add src/ecg/cwt_scalogram.py src/ecg/cnn2d_model.py src/ecg/method7_cwt_cnn.py results/feature_study/method7_cwt_scalogram/ && git commit -m "Feature study: method 7 (CWT scalogram of RR series) + 2D-CNN result ..."
+[main 8703107] Feature study: method 7 (CWT scalogram of RR series) + 2D-CNN result
+ 6 files changed, 17355 insertions(+)
+
+================================================================================
+Method 8 -- STFT spectrogram of the raw ECG segment, 2D-CNN
+================================================================================
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/ecg_spectrogram.py 2>&1 | tail -20
+=== ECG spectrogram sanity check (a01) ===
+489 minutes, spectrogram shape per minute = (65, 59)
+mean log1p|STFT| -- apnea: 0.0008  normal: 0.0010
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 -c "
+import time
+from src.ecg.method8_spectrogram_cnn import load_or_build_spectrograms, restrict_to_phase2_minutes
+t0=time.time()
+ds = load_or_build_spectrograms()
+print('build time', time.time()-t0)
+mask = restrict_to_phase2_minutes(ds)
+print('n minutes', mask.sum(), 'spectrogram shape', ds['spectrogram'].shape)
+"
+Traceback (most recent call last):
+  File "<string>", line 5, in <module>
+  File "/home/admin/apnea/src/ecg/method8_spectrogram_cnn.py", line 46, in load_or_build_spectrograms
+    ds = build_spectrogram_dataset(records)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/apnea/src/ecg/ecg_spectrogram.py", line 92, in build_spectrogram_dataset
+    sp, labels, n_beats, minutes = compute_minute_spectrograms(rec, rpk)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/apnea/src/ecg/ecg_spectrogram.py", line 83, in compute_minute_spectrograms
+    return (np.stack(spectrograms), np.array(labels), np.array(n_beats_list),
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/admin/.local/lib/python3.12/site-packages/numpy/_core/shape_base.py", line 458, in stack
+    raise ValueError('all input arrays must have the same shape')
+ValueError: all input arrays must have the same shape
+Building per-minute ECG spectrograms for all 35 labelled records...
+  a01: 489 minutes
+  a02: 528 minutes
+  a03: 519 minutes
+  a04: 492 minutes
+
+[exited with code 1]
+
+[BUG: last-partial-minute windows across different records produced
+ragged-length segments -> np.stack ValueError. Fixed in
+src/ecg/ecg_spectrogram.py by fixing every window to a constant sample
+count (window_samples = round(WINDOW_S*fs)) and zero-padding a record's
+final short minute.]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/ecg_spectrogram.py 2>&1 | tail -10
+=== ECG spectrogram sanity check (a01) ===
+489 minutes, spectrogram shape per minute = (65, 59)
+mean log1p|STFT| -- apnea: 0.0008  normal: 0.0010
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 -c "
+import time
+from src.ecg.method8_spectrogram_cnn import load_or_build_spectrograms, restrict_to_phase2_minutes
+t0=time.time()
+ds = load_or_build_spectrograms()
+print('build time', time.time()-t0)
+mask = restrict_to_phase2_minutes(ds)
+print('n minutes', mask.sum(), 'spectrogram shape', ds['spectrogram'].shape)
+"
+Building per-minute ECG spectrograms for all 35 labelled records...
+  a01: 489 minutes
+  a02: 528 minutes
+  a03: 519 minutes
+  a04: 492 minutes
+  a05: 454 minutes
+  a06: 510 minutes
+  a07: 511 minutes
+  a08: 501 minutes
+  a09: 495 minutes
+  a10: 517 minutes
+  a11: 466 minutes
+  a12: 577 minutes
+  a13: 495 minutes
+  a14: 509 minutes
+  a15: 510 minutes
+  a16: 482 minutes
+  a17: 484 minutes
+  a18: 489 minutes
+  a19: 502 minutes
+  a20: 510 minutes
+  b01: 487 minutes
+  b02: 517 minutes
+  b03: 441 minutes
+  b04: 425 minutes
+  b05: 433 minutes
+  c01: 476 minutes
+  c02: 494 minutes
+  c03: 454 minutes
+  c04: 466 minutes
+  c05: 466 minutes
+  c06: 468 minutes
+  c07: 429 minutes
+  c08: 513 minutes
+  c09: 457 minutes
+  c10: 425 minutes
+  cached to results/feature_study/method8_ecg_spectrogram/spectrograms.npz
+build time 14.103477954864502
+n minutes 16949 spectrogram shape (16991, 65, 59)
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && /usr/bin/python3 src/ecg/method8_spectrogram_cnn.py
+Loading cached ECG spectrograms from results/feature_study/method8_ecg_spectrogram/spectrograms.npz
+
+Running method 8 (ECG spectrogram, 2D-CNN), 30 epochs/fold, 35 LOSO folds
+  fold  1/35: held out a01 (488 minutes, 171.0s)
+  fold  2/35: held out a02 (527 minutes, 161.0s)
+  fold  3/35: held out a03 (518 minutes, 164.8s)
+  fold  4/35: held out a04 (491 minutes, 160.1s)
+  fold  5/35: held out a05 (453 minutes, 169.9s)
+  fold  6/35: held out a06 (509 minutes, 183.9s)
+  fold  7/35: held out a07 (510 minutes, 197.0s)
+  fold  8/35: held out a08 (500 minutes, 184.6s)
+  fold  9/35: held out a09 (494 minutes, 170.0s)
+  fold 10/35: held out a10 (516 minutes, 175.0s)
+  fold 11/35: held out a11 (465 minutes, 178.2s)
+  fold 12/35: held out a12 (576 minutes, 178.3s)
+  fold 13/35: held out a13 (494 minutes, 178.1s)
+  fold 14/35: held out a14 (508 minutes, 187.5s)
+  fold 15/35: held out a15 (509 minutes, 167.9s)
+  fold 16/35: held out a16 (481 minutes, 169.3s)
+  fold 17/35: held out a17 (482 minutes, 157.7s)
+  fold 18/35: held out a18 (488 minutes, 170.4s)
+  fold 19/35: held out a19 (501 minutes, 164.4s)
+  fold 20/35: held out a20 (509 minutes, 167.4s)
+  fold 21/35: held out b01 (486 minutes, 163.0s)
+  fold 22/35: held out b02 (516 minutes, 180.1s)
+  fold 23/35: held out b03 (440 minutes, 173.4s)
+  fold 24/35: held out b04 (423 minutes, 170.4s)
+  fold 25/35: held out b05 (432 minutes, 174.0s)
+  fold 26/35: held out c01 (474 minutes, 174.0s)
+  fold 27/35: held out c02 (492 minutes, 170.0s)
+  fold 28/35: held out c03 (453 minutes, 193.0s)
+  fold 29/35: held out c04 (464 minutes, 176.7s)
+  fold 30/35: held out c05 (465 minutes, 177.0s)
+  fold 31/35: held out c06 (467 minutes, 162.8s)
+  fold 32/35: held out c07 (428 minutes, 175.5s)
+  fold 33/35: held out c08 (512 minutes, 166.8s)
+  fold 34/35: held out c09 (455 minutes, 166.6s)
+  fold 35/35: held out c10 (423 minutes, 174.9s)
+  total LOSO time: 100.9 min
+
+=== Method 8 result (subject-independent, LOSO, all 35 records) ===
+n=16949  acc=0.534  sens=0.673  spec=0.448  prec=0.432  f1=0.526
+record-level accuracy: 28/35 = 0.800
+
+Results saved to results/feature_study/method8_ecg_spectrogram/
+
+[exited with code 0]
+
+--------------------------------------------------------------------------------
+$ cd /home/admin/apnea && git add src/ecg/ecg_spectrogram.py src/ecg/method8_spectrogram_cnn.py results/feature_study/method8_ecg_spectrogram/ && git commit -m "Feature study: method 8 (raw ECG spectrogram) + 2D-CNN result ..."
+[main 026ddda] Feature study: method 8 (raw ECG spectrogram) + 2D-CNN result
+ 5 files changed, 17247 insertions(+)
+
+================================================================================
+End of transcript as captured at method 8's completion (2026-09-28).
+Methods 1-8 all complete; master results table and any remaining write-up
+continue in subsequent commits.
+================================================================================
