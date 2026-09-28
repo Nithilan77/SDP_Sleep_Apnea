@@ -16,6 +16,12 @@ __pycache__/
 # Claude Code local session config
 .claude/
 
+# Large regenerable feature-study caches (exceed GitHub's 100MB file limit;
+# rebuilt automatically by their runner scripts, e.g. method7_cwt_cnn.py /
+# method8_spectrogram_cnn.py, on first run -- see results/feature_study/master_results.md).
+results/feature_study/method7_cwt_scalogram/scalograms.npz
+results/feature_study/method8_ecg_spectrogram/spectrograms.npz
+
 # OS/editor cruft
 .DS_Store
 Thumbs.db
