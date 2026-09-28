@@ -1,7 +1,7 @@
 # Project Progress — Cardiorespiratory Sleep Apnea Detection
 
-**Last updated:** 2026-09-12
-**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. Phase 4 (effort/IMU branch) started against synthetic data only. Real-hardware validation and fusion (Phase 5+) blocked on SensorTile hardware.
+**Last updated:** 2026-09-28
+**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. An exploratory 8-method ECG feature-extraction comparison study (§4b) confirmed Phase 3's choice was sound and found one viable alternative (QRS-area EDR). Phase 4 (effort/IMU branch) started against synthetic data only. Real-hardware validation and fusion (Phase 5+) blocked on SensorTile hardware.
 
 This document is the state of the project: what exists, what the numbers actually are, how each result was produced, and what isn't done yet. For the full project rationale (motivation, team, hardware, constraints), see `CLAUDE.md` in the project root — this file assumes that context and focuses on **what has actually been built and measured**.
 
@@ -175,6 +175,139 @@ Outputs, all in `results/phase3_cnn/deployable/`:
 
 ---
 
+### §4b — ECG feature-extraction comparison study (exploratory, methods 3–8)
+
+**Goal:** Phase 3 closed with one adopted feature representation (RR-interval +
+R-peak amplitude, 2-channel 1D-CNN, 81.2%). This exploratory study asks
+whether other ECG-derived feature representations do better, worse, or about
+the same, under the identical evaluation protocol — not to reopen Phase 3
+(still closed, no further tuning), but to characterize the representation
+space before Phase 5's own-hardware work commits to one input format.
+
+**Method:** 8 feature representations, all derived from the same single-lead
+ECG, each evaluated with genuine 35-fold LOSO cross-validation on the same
+16,949-minute set (a few fewer where a method's own features are undefined —
+noted per method below):
+
+| # | Method | Classifier |
+|---|---|---|
+| 1 | RR-intervals (= Phase 3 v1) | 1D-CNN |
+| 2 | RR + R-peak amplitude (= Phase 3 **adopted final**) | 1D-CNN |
+| 3 | Time-domain HRV bank (SDNN, RMSSD, pNN50, mean HR, HR range, triangular index) | best of 1D-CNN / logistic regression / small MLP |
+| 4 | Frequency-domain HRV (VLF/LF/HF power, LF:HF ratio) | best of the same 3 classifiers |
+| 5 | Nonlinear/Poincaré (SD1, SD2, SD1:SD2, sample entropy) | best of the same 3 classifiers |
+| 6 | RR + QRS-area (whole-complex integral EDR proxy, vs. method 2's single-sample amplitude) | 1D-CNN |
+| 7 | CWT scalogram of the RR series | 2D-CNN |
+| 8 | Spectrogram of the raw ECG segment (the only method not derived from R-peaks at all) | 2D-CNN |
+
+**Controlled-comparison design, and a correction made mid-study:** methods
+1/2/6 share one 1D-CNN (`RRCNN`, unmodified from Phase 3) since they're
+genuine within-minute time series; methods 7/8 share one 2D-CNN
+(`ScalogramCNN`) since they're genuine images. Methods 3/4/5 are *scalar*
+per-minute feature vectors (no time axis) — the first pass forced them
+through `RRCNN` anyway (treating the vector as a 1-channel sequence) for a
+strict single-classifier comparison, but this was flagged as handicapping
+feature types that don't suit a convolutional architecture. Fixed by adding
+logistic regression and a small MLP as alternatives and keeping the best
+classifier per bank (logistic regression won all three, confirming the
+concern — e.g. method 4's specificity recovered from 0.293 under the CNN to
+0.772 under logistic regression). The master table reports each bank's best
+classifier, not the CNN's number, and names which classifier won.
+
+**Files:**
+- `src/ecg/hrv_bank_features.py` — per-minute time/frequency/nonlinear HRV
+  feature banks (methods 3/4/5), cached to `results/feature_study/hrv_bank_features.csv`.
+- `src/ecg/feature_bank_cnn.py` — LOSO runner for methods 3/4/5 across all
+  three classifiers (`cnn`/`logreg`/`mlp`); `cnn_model.py` gained
+  `FeatureMLP`/`train_mlp`/`predict_mlp` for the MLP option.
+- `src/ecg/qrs_area.py`, `rr_qrsarea_sequence.py`, `method6_qrsarea_cnn.py` — method 6.
+- `src/ecg/cwt_scalogram.py`, `cnn2d_model.py`, `method7_cwt_cnn.py` — method 7
+  (PyWavelets complex Morlet CWT; `scipy.signal.cwt`/`morlet2` were removed
+  in this project's scipy version).
+- `src/ecg/ecg_spectrogram.py`, `method8_spectrogram_cnn.py` — method 8
+  (scipy STFT, log-magnitude).
+
+**Reproduce:** each method has its own runner script (see the table above's
+file list); `python src/ecg/feature_bank_cnn.py <time|freq|nonlinear>` for
+methods 3–5. Each is a genuine 35-fold LOSO run — the 2D-CNN image methods
+(7, 8) are notably slower (~31 min and ~101 min wall-clock respectively on
+this machine's CPU) than the 1D methods (~5–8 min each).
+
+**Result — master table** (`results/feature_study/master_results.csv`/`.md`;
+per-minute, subject-independent LOSO):
+
+| # | Method | Family | Classifier | Acc | Sens | Spec | Prec | F1 | Rec-Acc |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | RR-intervals | time | 1D-CNN | 0.775 | 0.653 | 0.851 | 0.732 | 0.691 | 0.800 |
+| 2 | RR + R-amplitude (**adopted, Phase 3 final**) | time | 1D-CNN | **0.812** | 0.756 | 0.846 | 0.754 | 0.755 | 0.800 |
+| 3 | Time-domain HRV bank | time | logistic regression | 0.702 | 0.620 | 0.754 | 0.611 | 0.615 | 0.743 |
+| 4 | Frequency-domain HRV | frequency | logistic regression | 0.672 | 0.513 | 0.772 | 0.584 | 0.546 | 0.743 |
+| 5 | Nonlinear/Poincaré | nonlinear | logistic regression | 0.707 | 0.673 | 0.728 | 0.617 | 0.644 | 0.743 |
+| 6 | RR + QRS-area | time | 1D-CNN | 0.798 | 0.687 | 0.868 | 0.764 | 0.724 | **0.829** |
+| 7 | CWT scalogram of RR | image | 2D-CNN | 0.749 | 0.491 | 0.911 | 0.774 | 0.601 | 0.771 |
+| 8 | Raw ECG spectrogram | image | 2D-CNN | 0.534 | 0.673 | 0.448 | 0.432 | 0.526 | 0.800 |
+
+All 8 per-minute accuracies sit well under the project's 0.95
+leakage-suspicion threshold (§5) — none triggered it, including the
+lopsided sensitivity/specificity splits in methods 4, 7, 8, each of which
+has an identifiable, documented cause (below), not silent acceptance.
+
+**Findings:**
+1. **Real within-minute time series beats aggregated scalars, at any
+   classifier.** Methods 1/2/6 (genuine per-beat sequences into the CNN) are
+   the only ones over 0.79 accuracy; methods 3/4/5 (a minute collapsed to a
+   handful of numbers first) top out around 0.70 — close to Phase 2's
+   original classical floor (0.711) — regardless of which of the three
+   classifiers is used.
+2. **R-peak amplitude isn't uniquely special as an EDR proxy.** Method 6
+   (QRS-area, a whole-complex integral) comes within 1.4 accuracy points of
+   the adopted method 2 and posts the **best per-recording accuracy in the
+   study** (29/35 = 0.829) — a genuinely competitive alternative, not just a
+   near-miss.
+3. **Frequency-domain HRV is the weakest scalar bank, as predicted before
+   the run:** `hrv_bank_features.py` flags in its own docstring that VLF
+   needs ~5.5 minutes of data to resolve and LF is borderline at a 60s
+   window — method 4 is the worst-performing non-image method under every
+   classifier tried.
+4. **Image representations trade sensitivity for specificity, sharply.**
+   Method 7 (CWT of RR — same information as method 1, reprojected) swings
+   to spec=0.911/sens=0.491; method 8 (raw ECG spectrogram, the only method
+   not derived from R-peaks) swings the other way (sens=0.673/spec=0.448)
+   and is the weakest per-minute performer in the whole study, though its
+   per-recording accuracy (0.800) still holds up.
+5. **This does not reopen Phase 3.** The adopted 81.2% model (method 2)
+   remains the best per-minute result in the study; nothing here changes
+   the "Phase 3 is done, no further tuning" decision (§7). The practical
+   takeaway is for Phase 5: QRS-area (method 6) is worth keeping as a
+   fallback EDR signal if R-peak amplitude's amplitude-scale transfer risk
+   (§6) turns out to be a real problem on QVAR hardware.
+
+**Honest limitations specific to this study:**
+- **35 subjects is a small dataset for 2D-CNNs on 2,000–6,000-pixel images**
+  (methods 7/8) even more than it was for the original 1D-CNN — taken more
+  seriously here since these architectures have more capacity relative to
+  the data than RRCNN did.
+- **Frequency-domain features (method 4) are flagged as unreliable, not
+  merely weak** — report for completeness (it was an explicit ask), not
+  because vlf_power in particular should be trusted as a real physiological
+  estimate at this window length.
+- **The scalar-bank-as-1D-CNN-input design was a deliberate, debatable
+  adaptation**, corrected mid-study once flagged — see "Controlled-comparison
+  design" above. The master table reports the winning classifier per bank,
+  named explicitly, specifically so this doesn't get silently averaged away.
+- Two of the largest intermediate caches (CWT scalograms, 125MB; ECG
+  spectrograms, 250MB) exceed GitHub's 100MB file limit and are gitignored
+  rather than committed — both regenerate automatically (~15–25s) the first
+  time their runner script is run without a cache present.
+
+Outputs: `results/feature_study/` — `master_results.csv`/`.md` (this
+table), `hrv_bank_features.csv` (cached scalar features), and one
+subdirectory per method (`method3_time_domain/{cnn,logreg,mlp}/` etc.) with
+per-minute/per-recording predictions and, for methods 3–5, a
+`classifier_comparison.md` showing all three classifiers' full metrics.
+
+---
+
 ### Phase 4 — Effort branch (built, validated on synthetic data only)
 
 **Goal:** implement the IMU → breathing signal pipeline from CLAUDE.md's architecture diagram. Pure signal processing, no training — there is no public dataset pairing IMU with expert apnea labels, so unlike the ECG branch this cannot be trained or cross-validated the same way; it can only be checked against known respiratory physics (synthetic data, done here) and, later, our own breath-hold recordings (Phase 5, needs hardware).
@@ -241,6 +374,7 @@ Outputs: none persisted to `results/` yet (this is a code-correctness check, not
 | 2 — Classical CVHR baseline | Done (71.1% per-minute) |
 | 3 — 1D-CNN | **Done, closed** (81.2% / 75.6% / 84.6% per-minute) |
 | — Deployable ECG model | **Done** — frozen, untested on real QVAR data |
+| §4b — ECG feature-extraction comparison study (8 methods) | **Done, exploratory** — confirms method 2 (adopted) is still best; QRS-area (method 6) is a viable fallback EDR |
 | 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** — real-IMU validation blocked on hardware |
 | 5 — Breath-hold validation on our own hardware | **Blocked** — needs SensorTile hardware; also where the 240 Hz reconciliation and the amplitude-channel transfer risk become live |
 | 6 — Decision-level fusion (fused > ECG-only, the headline claim) | Blocked on 5 |
@@ -286,6 +420,16 @@ apnea/
       cnn_apnea_final.py             Reproduces the adopted final config (2ch, default weight).
       train_deployable_model.py      Trains ONE model on all 35 records (no held-out split) and
                                       saves weights + norm stats -- the actual deployment artifact.
+      hrv_bank_features.py           §4b methods 3-5: per-minute time/freq/nonlinear HRV feature banks.
+      feature_bank_cnn.py            §4b methods 3-5: LOSO runner across 3 classifiers (cnn/logreg/mlp).
+      qrs_area.py                    §4b method 6: QRS-area EDR proxy (whole-complex integral).
+      rr_qrsarea_sequence.py         §4b method 6: 2-channel (RR, QRS-area) sequences.
+      method6_qrsarea_cnn.py         §4b method 6: LOSO runner, same RRCNN as the adopted model.
+      cwt_scalogram.py               §4b method 7: CWT scalogram of the RR series (PyWavelets).
+      cnn2d_model.py                 §4b methods 7-8: ScalogramCNN (2D-CNN) + train/predict helpers.
+      method7_cwt_cnn.py             §4b method 7: LOSO runner.
+      ecg_spectrogram.py             §4b method 8: STFT spectrogram of the raw ECG segment.
+      method8_spectrogram_cnn.py     §4b method 8: LOSO runner.
     effort/
       envelope.py                    Accel magnitude -> motion mask -> bandpass (0.08-0.6Hz) ->
                                       Hilbert envelope -> breathing rate + effort amplitude.
@@ -327,4 +471,13 @@ apnea/
     phase3_cnn_run.log                    Raw stdout from the v1 training run (fold-by-fold timing).
     phase3_cnn_v2_run.log                 Raw stdout from the v2 training run.
     phase3_cnn_ablation_run.log           Raw stdout from the ablation run.
+    feature_study/                        §4b: the 8-method feature-extraction comparison study.
+      master_results.csv / .md            The master table (all 8 methods, one row each).
+      hrv_bank_features.csv               Cached per-minute time/freq/nonlinear features (methods 3-5).
+      method3_time_domain/{cnn,logreg,mlp}/    Method 3 predictions per classifier + classifier_comparison.md.
+      method4_freq_domain/{cnn,logreg,mlp}/    Method 4, same structure.
+      method5_nonlinear/{cnn,logreg,mlp}/      Method 5, same structure.
+      method6_qrsarea_edr/                Method 6 predictions + cached sequences.
+      method7_cwt_scalogram/              Method 7 predictions (scalograms.npz cache gitignored, regenerable).
+      method8_ecg_spectrogram/            Method 8 predictions (spectrograms.npz cache gitignored, regenerable).
 ```
