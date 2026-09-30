@@ -28,3 +28,6 @@ results/feature_study/method8_ecg_spectrogram/spectrograms.npz
 # OS/editor cruft
 .DS_Store
 Thumbs.db
+
+# MESA audit per-subject cache (regenerable)
+results/mesa/audit/.cache/
