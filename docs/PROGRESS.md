@@ -1,7 +1,7 @@
 # Project Progress — Cardiorespiratory Sleep Apnea Detection
 
-**Last updated:** 2026-09-28
-**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. An exploratory 8-method ECG feature-extraction comparison study (§4b) confirmed Phase 3's choice was sound and found one viable alternative (QRS-area EDR). Phase 4 (effort/IMU branch) started against synthetic data only. Real-hardware validation and fusion (Phase 5+) blocked on SensorTile hardware.
+**Last updated:** 2026-09-30
+**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. An exploratory 8-method ECG feature-extraction comparison study (§4b) confirmed Phase 3's choice was sound. The in-house QVAR validation track (§7, Mam's directive 3) is now done: 15 real SensorTile recordings characterized for data quality, PhysioNet-vs-QVAR domain gap, and frozen-model plausibility — R-peak amplitude does not transfer (~108x gap) and QRS-area is not a viable fallback either (~268x gap, worse), real IMU data is now confirmed usable for the effort branch, and a model-generalization blind spot plus a missing ECG-quality-gate gap were found. Phase 4 (effort/IMU branch) is still built against synthetic data only; Phase 5 breath-hold validation and fusion (Phase 6+) remain blocked on a dedicated breath-hold recording session.
 
 This document is the state of the project: what exists, what the numbers actually are, how each result was produced, and what isn't done yet. For the full project rationale (motivation, team, hardware, constraints), see `CLAUDE.md` in the project root — this file assumes that context and focuses on **what has actually been built and measured**.
 
@@ -30,7 +30,7 @@ Effort branch (signal processing,   IMU → accel magnitude → bandpass → Hil
                                                   DECISION-LEVEL FUSION → per-night report (events/hour, severity)
 ```
 
-**Most of this document is the ECG branch** (the left half of that diagram). The effort branch (right half) is signal-processing, not a trained model — it has now been built and checked against a synthetic signal (§3–4, Phase 4), but not against real IMU data yet, since that needs SensorTile hardware (see §7).
+**Most of this document is the ECG branch** (the left half of that diagram). The effort branch (right half) is signal-processing, not a trained model — it has now been built and checked against a synthetic signal (§3–4, Phase 4); real IMU data is now confirmed present and usable in all 15 in-house recordings (§7), but the effort-branch pipeline hasn't been run against it yet.
 
 ---
 
@@ -277,10 +277,13 @@ has an identifiable, documented cause (below), not silent acceptance.
    per-recording accuracy (0.800) still holds up.
 5. **This does not reopen Phase 3.** The adopted 81.2% model (method 2)
    remains the best per-minute result in the study; nothing here changes
-   the "Phase 3 is done, no further tuning" decision (§7). The practical
-   takeaway is for Phase 5: QRS-area (method 6) is worth keeping as a
-   fallback EDR signal if R-peak amplitude's amplitude-scale transfer risk
-   (§6) turns out to be a real problem on QVAR hardware.
+   the "Phase 3 is done, no further tuning" decision (§8). The practical
+   takeaway at the time was that QRS-area (method 6) looked worth keeping
+   as a fallback EDR signal if R-peak amplitude's transfer risk (§6) turned
+   out to be real on QVAR hardware. **§7 (in-house QVAR validation)
+   overturns this**: the amplitude-scale transfer risk did turn out to be
+   real (~108x mean gap), but QRS-area's own PhysioNet-vs-QVAR gap
+   (~268x) is worse, not better — it is not a usable fallback as-is.
 
 **Honest limitations specific to this study:**
 - **35 subjects is a small dataset for 2D-CNNs on 2,000–6,000-pixel images**
@@ -365,7 +368,33 @@ Outputs: none persisted to `results/` yet (this is a code-correctness check, not
 
 ---
 
-## 7. Current status and what's next
+## 7. In-house QVAR validation track (Mam's directive 3)
+
+**What & constraint.** 15 SensorTile QVAR-ECG recordings across ~9 subjects (healthy 19–20yo, no apnea labels) were downloaded and processed as **validation-only** data, per CLAUDE.md §4 — never used to train anything. With no apnea labels, no sensitivity/accuracy claim is possible from this data and none is made below; everything here is signal-quality, distribution-comparison, and negative-control checks.
+
+**Data quality** (`results/inhouse_validation/quality_report.csv`). 14/15 files plausible (mean HR 44.7–90.0 bpm, implausible-RR ≤0.23%); one too-short aborted capture (`user_1612bhavi_ecg_000`, 320 samples, 1.3s); one noisier file (`user_0802-anagesh_ecg_000`, 1.09% implausible-RR, just over the 1.0% comparability margin). Empirical sample rate is **238.1–243.2 Hz** across all 15 files, a systematic ~1–1.3% offset from the nominal 240 Hz — too small to trip the loader's 2% warning, but real and consistent across every file, which vindicates CLAUDE.md rule 6's choice to keep RR features in time units rather than trust a fixed sample count. The accelerometer channel is present and non-flat in **all 15 files** — the effort branch is now real-data-testable, correcting the earlier "blocked on hardware" status for that specific check (Phase 5's breath-hold protocol itself still hasn't been run).
+
+**Domain gap, PhysioNet vs QVAR** (`results/inhouse_validation/domain_gap/`, 13 plausible in-house files vs all 35 labelled PhysioNet records, per-beat distributions):
+
+| Channel | PhysioNet mean | QVAR mean | Ratio |
+|---|---|---|---|
+| RR-interval (s) | 0.908 | 1.066 | 1.17x |
+| R-peak amplitude | 1.295 | 140.5 | ~108x |
+| QRS-area | 0.047 | 12.60 | ~268x |
+
+RR-interval transfers cleanly — the 17% mean gap is healthy-young vs older-clinical physiology, not a hardware artifact. R-peak amplitude and QRS-area both fail to transfer, by two to three orders of magnitude: QVAR is an uncalibrated electrostatic sensor, not a calibrated ECG amplifier, and cleaning doesn't fix a scale mismatch that large. **This overturns §4b's assumption that QRS-area (method 6) is a viable fallback EDR channel for real hardware** — its PhysioNet-vs-QVAR gap is larger than the amplitude channel's, not smaller.
+
+**Frozen-model plausibility test** (`results/inhouse_validation/plausibility/`, negative control: healthy subjects should get a LOW predicted apnea rate; 9 of 13 plausible files had ≥1 usable minute, 2,027 minutes total, 4 files too short for even one 60s window). The full 2-channel deployable model (RR + R-peak amplitude) predicts an implausible **52.8%** overall apnea-minute rate — a transfer artifact, not a result. Neutralizing the amplitude channel (RR-only variant, amplitude set to its training mean) drops this to **21.3%** overall, and to single digits for 6 of 7 longer recordings (kishor 71.4%→10.9%, aadhithiyaa 51.6%→6.1%, jayendran 59.0%→11.1%), confirming the amplitude channel as the dominant failure mode — consistent with the ~108x domain gap above. **The frozen model does not transfer to QVAR as-is; it needs a QVAR-specific recalibration of the amplitude/EDR channel — not a swap to QRS-area, not a retrain.**
+
+**Hudson/Hari anomaly investigation** (`results/inhouse_validation/hudson_debug/`) — two recordings stayed implausible even in the RR-only variant; investigated rather than tuned around, same discipline as Phase 4's cessation-detection bug (§3–4). The initial hypothesis (R-peak under-detection from low HR) was tested and **rejected**: both hudson files' implausible-RR% (0.019%, 0.0%) sit at or *below* the known-good comparison file's (kishor, 0.225%), with unimodal RR histograms and every visible beat correctly marked in the waveform plots. Actual causes, established from the diagnostics, not assumed:
+- **Both hudson recordings**: a genuine, stable ~45 bpm resting HR, roughly 2 SD below PhysioNet's training mean (68±11.8 bpm) — a **model-generalization limitation** on real, atypical-but-plausible physiology, not a bug or a bad capture. Notable because fit/low-resting-HR young adults are exactly who a wearable screener would encounter.
+- **`user_2406Hari`**: a real ~10–15s electrode-contact/EMG electrical artifact (amplitude spikes to 400–500 vs. a normal ~50–100), visible in the biggest-RR-gap waveform plot. The IMU-based motion gate (`src/effort/envelope.py::compute_motion_mask`) flagged only 0.09% of this file — it cannot see a purely electrical artifact with no chest movement. **Exposes a tooling gap: there is no ECG-signal-based quality gate, only an IMU-based one.**
+
+**Net result.** Directive 3 is complete. Three concrete findings carry forward into Phase 5/6, none of them blockers on closing this track: (a) RR-interval transfers, R-peak amplitude does not and needs QVAR-specific recalibration (QRS-area is not a fallback — it's worse); (b) an out-of-distribution-bradycardia blind spot in the PhysioNet-trained model; (c) a missing ECG-domain signal-quality gate that IMU-based motion gating cannot substitute for.
+
+---
+
+## 8. Current status and what's next
 
 | Phase | Status |
 |---|---|
@@ -373,19 +402,20 @@ Outputs: none persisted to `results/` yet (this is a code-correctness check, not
 | 1 — Ingestion (loader + R-peaks) | Done |
 | 2 — Classical CVHR baseline | Done (71.1% per-minute) |
 | 3 — 1D-CNN | **Done, closed** (81.2% / 75.6% / 84.6% per-minute) |
-| — Deployable ECG model | **Done** — frozen, untested on real QVAR data |
-| §4b — ECG feature-extraction comparison study (8 methods) | **Done, exploratory** — confirms method 2 (adopted) is still best; QRS-area (method 6) is a viable fallback EDR |
-| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** — real-IMU validation blocked on hardware |
-| 5 — Breath-hold validation on our own hardware | **Blocked** — needs SensorTile hardware; also where the 240 Hz reconciliation and the amplitude-channel transfer risk become live |
+| — Deployable ECG model | **Done** — frozen; tested for plausibility (not accuracy) on real QVAR data, does not transfer as-is (see §7) |
+| §4b — ECG feature-extraction comparison study (8 methods) | **Done, exploratory** — confirms method 2 (adopted) is still best; QRS-area (method 6) is **no longer** considered a viable fallback EDR (see §7 — QVAR domain gap is worse for QRS-area than for amplitude) |
+| — In-house QVAR validation track (Mam's directive 3) | **Done** — see §7: 15-recording data-quality report, PhysioNet-vs-QVAR domain gap, frozen-model plausibility test, hudson/Hari anomaly investigation |
+| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** — real IMU signal is now present and confirmed usable in all 15 in-house recordings (§7), so this is real-data-testable; not yet run against it |
+| 5 — Breath-hold validation on our own hardware | **Blocked** on collecting a timestamped breath-hold session specifically (healthy-night recordings already exist and were used for §7). The 240 Hz reconciliation and the amplitude-channel transfer risk are no longer hypothetical — both are now measured (§7: fs 238–243 Hz vs nominal 240; ~108x R-amplitude gap, needs QVAR-specific recalibration before Phase 6) |
 | 6 — Decision-level fusion (fused > ECG-only, the headline claim) | Blocked on 5 |
 | 7 — Per-night report (events/hour, severity band, no-SpO2 caveat) | Blocked on 6 |
 | 8 — Track B (MESA, multimodal + SpO2 + obstructive/central) | Stretch goal, blocked on NSRR data access |
 
-Phase 4's synthetic-only build means the *code* for both branches now exists and is internally validated — what's left across Phases 4–7 is fundamentally the same hardware dependency (SensorTile, currently down, timeline unknown per CLAUDE.md): real IMU data to validate the effort branch against, and real QVAR recordings to test the deployable ECG model and the sample-rate reconciliation against. No further ECG-branch software work is planned per the "Phase 3 is done, no further tuning" decision.
+Phase 4's synthetic-only build means the *code* for both branches now exists and is internally validated; §7 confirms real IMU data is present and usable in all 15 in-house recordings, so the effort branch's remaining gap is running it against real data, not hardware access. What's still genuinely blocked is Phase 5's breath-hold protocol specifically (a recording session that hasn't happened) and the ECG branch's QVAR-specific amplitude recalibration flagged in §7. No further ECG-branch *architecture* work is planned per the "Phase 3 is done, no further tuning" decision — the amplitude-channel fix is a recalibration/normalization task, not a new model.
 
 ---
 
-## 8. File and directory map
+## 9. File and directory map
 
 ```
 apnea/
@@ -398,12 +428,20 @@ apnea/
     physionet/                       PhysioNet Apnea-ECG database (328 files): a01-a20 (apnea),
                                       b01-b05 (borderline), c01-c10 (control) — each with
                                       .dat/.hea/.apn/.qrs — plus x01-x35 (withheld, no labels).
-    recordings/                      (not yet created) — future home for our own SensorTile
-                                      recordings; validation-only, never committed to git.
+    recordings/
+      inhouse_ecg/                   15 in-house SensorTile QVAR-ECG+IMU .txt recordings (§7);
+                                      validation-only, gitignored, never committed.
 
   src/
     ingest/
       physionet.py                   Loads one Apnea-ECG record's ECG signal + per-minute labels.
+      sensortile.py                  Loads one SensorTile .txt recording (QVAR+IMU), all channels
+                                      kept; empirical sample-rate + timestamp-gap checks (§7).
+      inhouse_quality_report.py      §7: per-file R-peak plausibility report over all 15 recordings.
+      domain_gap.py                  §7: PhysioNet-vs-QVAR distribution comparison (RR, HR,
+                                      R-amplitude, QRS-area).
+      hudson_debug.py                §7: waveform/RR-histogram diagnostics for the hudson/Hari
+                                      plausibility-test anomaly.
     ecg/
       rpeaks.py                      R-peak detection (neurokit2) + RR-intervals + R-peak amplitudes.
       features.py                    Per-minute CVHR/HRV feature extraction (7 features) for the
@@ -430,6 +468,8 @@ apnea/
       method7_cwt_cnn.py             §4b method 7: LOSO runner.
       ecg_spectrogram.py             §4b method 8: STFT spectrogram of the raw ECG segment.
       method8_spectrogram_cnn.py     §4b method 8: LOSO runner.
+      inhouse_plausibility.py        §7: runs the frozen deployable model (2ch + RR-only variant)
+                                      over the in-house recordings as a negative control.
     effort/
       envelope.py                    Accel magnitude -> motion mask -> bandpass (0.08-0.6Hz) ->
                                       Hilbert envelope -> breathing rate + effort amplitude.
@@ -480,4 +520,12 @@ apnea/
       method6_qrsarea_edr/                Method 6 predictions + cached sequences.
       method7_cwt_scalogram/              Method 7 predictions (scalograms.npz cache gitignored, regenerable).
       method8_ecg_spectrogram/            Method 8 predictions (spectrograms.npz cache gitignored, regenerable).
+    inhouse_validation/                   §7: in-house QVAR validation track (all sub-results here).
+      quality_report.csv / README.md      Per-file plausibility report, all 15 recordings.
+      domain_gap/                         PhysioNet-vs-QVAR distribution summary CSV + histogram
+                                           PNGs (RR, HR, R-amplitude, QRS-area) + README.
+      plausibility/                       Frozen-model negative-control predictions (2ch + RR-only)
+                                           per subject + README.
+      hudson_debug/                       Waveform/RR-histogram diagnostic plots + summary.csv +
+                                           README for the hudson/Hari anomaly investigation.
 ```
