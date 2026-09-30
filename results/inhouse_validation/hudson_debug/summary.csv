@@ -1,0 +1,5 @@
+file,n_samples,duration_s,fs_measured,raw_qvar_min,raw_qvar_max,raw_qvar_std,motion_flagged_pct,n_beats,mean_bpm,rr_mean_s,rr_std_s,rr_min_s,rr_max_s,implausible_too_fast_pct,implausible_too_slow_pct,implausible_total_pct,max_gap_s
+user_1101hudson_ecg_000.txt,5048391,20802.0,242.69,-32704.0,31744.0,443.97248673490077,0.07,15484,44.66,1.343,0.245,0.305,2.905,0.0,0.019,0.019,2.9
+user_1510hudson_ecg_000.txt,683592,2816.8,242.68,-1784.0,1684.0,157.8750884556998,0.21,2150,45.81,1.31,0.199,0.453,1.714,0.0,0.0,0.0,1.71
+user_2406Hari(chest_chest & ecg_000.txt,962548,3959.7,243.08,-18708.0,17256.0,478.6632886327932,0.09,3796,57.52,1.043,0.249,0.309,4.357,0.0,0.896,0.896,4.36
+user_kishor0404_ecg_000.txt,6020141,24761.4,243.13,-32704.0,32704.0,348.31587877587333,0.09,23522,57.0,1.053,0.168,0.304,5.03,0.0,0.225,0.225,5.03
