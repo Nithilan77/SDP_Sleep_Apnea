@@ -1,0 +1,14 @@
+file,n_minutes,apnea_pct_2ch,mean_prob_2ch,apnea_pct_rronly,mean_prob_rronly
+user_0502-bala_ecg_000.txt,0,,,,
+user_0502-bala_ecg_001.txt,0,,,,
+user_0502-bala_ecg_002.txt,93,6.45,0.0671,4.3,0.1212
+user_1002-jayendran_ecg_000.txt,0,,,,
+user_1002-jayendran_ecg_001.txt,234,58.97,0.5957,11.11,0.1991
+user_1101hudson_ecg_000.txt,346,63.87,0.6382,65.61,0.6024
+user_1510hudson_ecg_000.txt,46,80.43,0.7996,82.61,0.7289
+user_1612bhavi_ecg_001.txt,168,34.52,0.3517,8.33,0.1538
+user_2406Hari(chest_chest & ecg_000.txt,65,10.77,0.1125,30.77,0.3482
+user_aadhithiyaa_ecg_000.txt,314,51.59,0.5164,6.05,0.0896
+user_aniruth3103_ecg1_000.txt,349,42.12,0.4249,10.89,0.1398
+user_aniruth3103_ecg_000.txt,0,,,,
+user_kishor0404_ecg_000.txt,412,71.36,0.7113,10.92,0.1754
