@@ -9,6 +9,9 @@ data/physionet/
 # (project rule: validation-only, never even used for training).
 data/recordings/
 
+# MESA (NSRR) -- gated human-subject data (Track B), never committed.
+data/mesa/
+
 # Python
 __pycache__/
 *.py[cod]
