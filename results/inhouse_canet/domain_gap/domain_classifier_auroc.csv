@@ -1,0 +1,7 @@
+comparison,features,auroc,embedding_mean_shift_in_mesa_sd
+CONTROL: MESA subjects half A vs half B (belt vs belt),8 handcrafted epoch features,0.50662540625,
+CONTROL: MESA subjects half A vs half B (belt vs belt),resp-encoder embedding (128-d),0.47405371875,
+MESA belts vs in-house accel magnitude (envelope.py),8 handcrafted epoch features,0.9939158316200325,
+MESA belts vs in-house accel magnitude (envelope.py),resp-encoder embedding (128-d),0.996651826621992,0.352867066860199
+MESA belts vs in-house accel principal axis,8 handcrafted epoch features,0.9903726406857043,
+MESA belts vs in-house accel principal axis,resp-encoder embedding (128-d),0.9979258066428107,0.35935741662979126

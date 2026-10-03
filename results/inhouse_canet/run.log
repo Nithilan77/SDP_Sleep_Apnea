@@ -1,0 +1,15 @@
+S03: 1.6 h, 187 epochs, median RR 0.76 s
+S04: 7.5 h, 904 epochs, median RR 0.76 s
+S06: 3.9 h, 469 epochs, median RR 1.00 s
+S07: 5.8 h, 693 epochs, median RR 1.39 s
+S08: 0.8 h, 93 epochs, median RR 1.36 s
+S10: 2.8 h, 336 epochs, median RR 0.88 s
+S11: 1.1 h, 131 epochs, median RR 1.08 s
+S12: 5.2 h, 628 epochs, median RR 1.07 s
+S13: 5.8 h, 699 epochs, median RR 1.17 s
+S15: 6.9 h, 825 epochs, median RR 1.08 s
+10 usable nights (>= 600 s) [0s]
+stage 1 (per-night CANet output) done [4s]
+MESA/in-house epoch features done [12s]
+domain classifiers done [12s]
+done

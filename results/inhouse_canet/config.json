@@ -1,0 +1,9 @@
+{
+  "n_nights": 10,
+  "thresholds": {
+    "ecg_only": 0.4456397294998169,
+    "resp_only": 0.3647775650024414,
+    "headline": 0.3602639436721802
+  },
+  "note": "characterisation only; no apnea labels; healthy cohort"
+}
