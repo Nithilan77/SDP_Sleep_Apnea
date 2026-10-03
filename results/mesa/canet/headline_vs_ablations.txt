@@ -1,0 +1,3 @@
+headline minus concat_fusion: dAUROC +0.036 [+0.029,+0.045]  dAUPRC +0.066 [+0.046,+0.084]
+headline minus resp_only: dAUROC +0.033 [+0.023,+0.042]  dAUPRC +0.068 [+0.044,+0.092]
+(paired subject bootstrap, 200 reps)

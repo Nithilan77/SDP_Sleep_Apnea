@@ -1,0 +1,74 @@
+subjects 220 | sleep epochs 164383 -> kept 156826 (4.60% dropped for < 10 beats)
+resp stream on GPU: (2, 273792000) fp16 (1.10 GB)
+variant headline | streams ('cardiac', 'resp') | fusion cross | X 156826 epochs
+parameters: 168705
+fold 0: train/val/test epochs 106425/18488/31913
+    ep  0 val AUPRC 0.4088
+    ep  1 val AUPRC 0.4146
+    ep  2 val AUPRC 0.4239
+    ep  3 val AUPRC 0.4177
+    ep  4 val AUPRC 0.4571
+    ep  5 val AUPRC 0.4548
+    ep  6 val AUPRC 0.4203
+    ep  7 val AUPRC 0.4204
+    ep  8 val AUPRC 0.4434
+    ep  9 val AUPRC 0.4389
+  fold 0 TEST: sens 0.855 spec 0.561 AUROC 0.762 AUPRC 0.460 F1 0.545 (thr 0.347)
+fold 1: train/val/test epochs 106624/18745/31457
+    ep  0 val AUPRC 0.4171
+    ep  1 val AUPRC 0.4579
+    ep  2 val AUPRC 0.4859
+    ep  3 val AUPRC 0.5057
+    ep  4 val AUPRC 0.5019
+    ep  5 val AUPRC 0.4895
+    ep  6 val AUPRC 0.5167
+    ep  7 val AUPRC 0.4945
+    ep  8 val AUPRC 0.4891
+    ep  9 val AUPRC 0.5056
+    ep 10 val AUPRC 0.5032
+    ep 11 val AUPRC 0.5002
+  fold 1 TEST: sens 0.813 spec 0.654 AUROC 0.804 AUPRC 0.561 F1 0.594 (thr 0.495)
+fold 2: train/val/test epochs 108740/17585/30501
+    ep  0 val AUPRC 0.4476
+    ep  1 val AUPRC 0.5398
+    ep  2 val AUPRC 0.4865
+    ep  3 val AUPRC 0.5290
+    ep  4 val AUPRC 0.5341
+    ep  5 val AUPRC 0.5620
+    ep  6 val AUPRC 0.5308
+    ep  7 val AUPRC 0.5373
+    ep  8 val AUPRC 0.5058
+    ep  9 val AUPRC 0.5063
+    ep 10 val AUPRC 0.5260
+  fold 2 TEST: sens 0.797 spec 0.642 AUROC 0.782 AUPRC 0.453 F1 0.533 (thr 0.463)
+fold 3: train/val/test epochs 107143/18864/30819
+    ep  0 val AUPRC 0.3866
+    ep  1 val AUPRC 0.4535
+    ep  2 val AUPRC 0.4038
+    ep  3 val AUPRC 0.4206
+    ep  4 val AUPRC 0.4524
+    ep  5 val AUPRC 0.4571
+    ep  6 val AUPRC 0.4042
+    ep  7 val AUPRC 0.4566
+    ep  8 val AUPRC 0.4447
+    ep  9 val AUPRC 0.4187
+    ep 10 val AUPRC 0.4446
+  fold 3 TEST: sens 0.818 spec 0.599 AUROC 0.780 AUPRC 0.527 F1 0.569 (thr 0.396)
+fold 4: train/val/test epochs 105852/18838/32136
+    ep  0 val AUPRC 0.4723
+    ep  1 val AUPRC 0.4800
+    ep  2 val AUPRC 0.4766
+    ep  3 val AUPRC 0.4855
+    ep  4 val AUPRC 0.5095
+    ep  5 val AUPRC 0.5198
+    ep  6 val AUPRC 0.5066
+    ep  7 val AUPRC 0.4946
+    ep  8 val AUPRC 0.5035
+    ep  9 val AUPRC 0.5064
+    ep 10 val AUPRC 0.5041
+  fold 4 TEST: sens 0.821 spec 0.612 AUROC 0.773 AUPRC 0.441 F1 0.534 (thr 0.463)
+POOLED headline: sens 0.822 spec 0.613 AUROC 0.780 AUPRC 0.490 F1 0.555 | per-fold AUROC 0.780 +/- 0.016
+AHI corr (pred_rate vs a0h3 / a0h4): r=0.737 / 0.702
+                              model     auroc     auprc  sens_event  spec_normal        f1  sens_obstructive  sens_central  sens_hypopnea   d_auroc      d_auroc_ci95   d_auprc      d_auprc_ci95
+0    ECG-only baseline (CardiacCNN)  0.608824  0.334860    0.622312     0.535180  0.416395          0.828765      0.839958       0.563694       NaN                         NaN                  
+1  CANet (ECG + effort)  [HEADLINE]  0.780100  0.489742    0.821633     0.613274  0.555393          0.968878      0.981172       0.779640  0.171276  [+0.151, +0.191]  0.154882  [+0.132, +0.184]

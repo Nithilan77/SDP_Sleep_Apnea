@@ -1,0 +1,40 @@
+{
+  "max_epochs": 25,
+  "patience": 5,
+  "batch_size": 512,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.3,
+  "variant": "headline",
+  "streams": [
+    "cardiac",
+    "resp"
+  ],
+  "fusion": "cross",
+  "n_params": 168705,
+  "d_model": 64,
+  "n_heads": 4,
+  "tokens": 75,
+  "kernels": [
+    3,
+    7,
+    15
+  ],
+  "context": 2,
+  "n_subjects": 220,
+  "n_epochs": 156826,
+  "split_seed": 0,
+  "inner_val_frac": 0.15,
+  "loss": "BCEWithLogits, pos_weight=n_neg/n_pos (train fold)",
+  "threshold": "Youden J on inner-val subjects",
+  "amp": "bf16 autocast",
+  "fold_sizes": [
+    44,
+    44,
+    44,
+    44,
+    44
+  ],
+  "torch": "2.13.0+cu130",
+  "device": "cuda"
+}

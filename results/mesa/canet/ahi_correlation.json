@@ -1,0 +1,43 @@
+{
+  "n_subjects": 220,
+  "caveat": "no SpO2 input; rate = predicted event-epochs per scored sleep hour",
+  "pred_rate_vs_ahi_a0h3": {
+    "pearson": 0.7366030308566214,
+    "spearman": 0.7604636013858759
+  },
+  "prob_rate_vs_ahi_a0h3": {
+    "pearson": 0.7267222346882584,
+    "spearman": 0.7559153929966069
+  },
+  "label_rate_vs_ahi_a0h3": {
+    "pearson": 0.6904881945277732,
+    "spearman": 0.7253326541304052
+  },
+  "pred_rate_vs_ahi_a0h4": {
+    "pearson": 0.701849542674657,
+    "spearman": 0.7446489534858135
+  },
+  "prob_rate_vs_ahi_a0h4": {
+    "pearson": 0.7004790922020727,
+    "spearman": 0.7358919887525849
+  },
+  "label_rate_vs_ahi_a0h4": {
+    "pearson": 0.6690614401956881,
+    "spearman": 0.6884251928571026
+  },
+  "pred_rate_vs_ahi_xml_all": {
+    "pearson": 0.6385729110889933,
+    "spearman": 0.6503066274697415
+  },
+  "prob_rate_vs_ahi_xml_all": {
+    "pearson": 0.636739802378247,
+    "spearman": 0.6284866784869992
+  },
+  "label_rate_vs_ahi_xml_all": {
+    "pearson": 0.9499705706500329,
+    "spearman": 0.9528321263678232
+  },
+  "auroc_pred_rate_detects_a0h4_ge5": 0.845771144278607,
+  "auroc_pred_rate_detects_a0h4_ge15": 0.8953693884764935,
+  "auroc_pred_rate_detects_a0h4_ge30": 0.9133892423366108
+}
