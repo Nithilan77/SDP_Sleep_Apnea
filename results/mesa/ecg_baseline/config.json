@@ -1,0 +1,33 @@
+{
+  "context": 2,
+  "grid_hz": 2.0,
+  "min_beats": 10,
+  "n_folds": 5,
+  "split_seed": 0,
+  "inner_val_frac": 0.15,
+  "max_epochs": 25,
+  "patience": 5,
+  "batch_size": 512,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.3,
+  "loss": "BCEWithLogits, pos_weight=n_neg/n_pos (train fold)",
+  "threshold": "Youden J on inner-val subjects",
+  "target": "resp_event (apnea|hypopnea) vs normal, sleep epochs only",
+  "n_subjects": 220,
+  "n_epochs": 156826,
+  "input_shape": [
+    2,
+    300
+  ],
+  "device": "cuda",
+  "fold_sizes": [
+    44,
+    44,
+    44,
+    44,
+    44
+  ],
+  "model": "CardiacCNN(\n  (features): Sequential(\n    (0): Conv1d(2, 32, kernel_size=(7,), stride=(1,), padding=(3,))\n    (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)\n    (2): ReLU()\n    (3): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (4): Conv1d(32, 64, kernel_size=(7,), stride=(1,), padding=(3,))\n    (5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)\n    (6): ReLU()\n    (7): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (8): Conv1d(64, 64, kernel_size=(5,), stride=(1,), padding=(2,))\n    (9): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)\n    (10): ReLU()\n  )\n  (head): Sequential(\n    (0): Linear(in_features=128, out_features=64, bias=True)\n    (1): ReLU()\n    (2): Dropout(p=0.3, inplace=False)\n    (3): Linear(in_features=64, out_features=1, bias=True)\n  )\n)",
+  "torch": "2.13.0+cu130"
+}
