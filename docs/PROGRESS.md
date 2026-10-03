@@ -394,6 +394,59 @@ RR-interval transfers cleanly — the 17% mean gap is healthy-young vs older-cli
 
 ---
 
+## 7b. Track B — MESA public data and CANet (ECG + respiratory effort)
+
+**Scope and constraint.** MESA (NSRR, expert-scored PSG) is the *training* distribution for the fusion model; our own recordings stay validation-only (CLAUDE.md §4). All numbers below are **subject-independent** (grouped 5-fold CV over subjects, no subject in train and test of a fold), on **30 s sleep epochs**, target = **respiratory event (apnea or hypopnea) vs normal** (event prevalence 25.4%). Obstructive-vs-central is descriptive only (central is 0.05% of apnea epochs / zero in 123 of 220 subjects: not learnable).
+
+**Audit** (`results/mesa/audit/`, code `src/ingest/mesa*.py`). 250 subjects downloaded (EDF + NSRR XML + Profusion XML, 0 failures); 220 usable under the strict funnel (4 signals present, sleep >= 4 h, both belts alive and showing breathing in >= 50% of epochs, >= 1 scored event). Native rates: EKG 256 Hz, Thor/Abdo belts 32 Hz, SpO2 1 Hz. Class balance on usable subjects (sleep epochs): 74.9% normal / 19.6% hypopnea-only / 5.5% apnea (89.5% of apnea epochs obstructive, 10.5% central, mixed ~0). Per-subject medians [IQR]: obstructive 8 [2-26], central 0 [0-2], hypopnea 107 [57-153]. AHI is rule-dependent (median 11 under NSRR 4% vs 20 under 3%/arousal vs 21 scoring every event). Committed outputs are anonymised (`subjects_anon.csv`; mesaids never in git).
+
+**ECG-only baseline** (`src/mesa/ecg_baseline.py`, `results/mesa/ecg_baseline/`). RR + R-amplitude (2 Hz, target epoch +/-2 neighbours = 150 s, per-subject label-free normalisation) -> 1D-CNN, weighted BCE, early stopping and Youden threshold from inner-validation *training* subjects only. Pooled over 156,826 test epochs: **AUROC 0.610, AUPRC 0.335** (chance 0.254), sens 0.62 / spec 0.53, F1 0.42. Subject-level AHI correlation r ~ 0.30 (a0h3/a0h4).
+
+**CANet** (`src/mesa/canet.py`, `results/mesa/canet/`). Two streams — cardiac (identical to the baseline input) and respiratory effort (Thor + Abdo @ 32 Hz) — multi-scale 1D-CNN encoders (kernels 3/7/15), bidirectional cross-modal attention, GAP+GMP -> MLP; 169k parameters; same folds, same epochs, same threshold discipline (asserted in code). **No SpO2, no arousal in the headline model** (our wearable has neither).
+
+| Model | AUROC | AUPRC | Sens | Spec | AHI r (a0h3 / a0h4) |
+|---|---|---|---|---|---|
+| ECG-only baseline | 0.610 | 0.335 | 0.62 | 0.53 | 0.31 / 0.30 |
+| **CANet (ECG + effort)** | **0.780** | **0.490** | 0.82 | 0.61 | 0.74 / 0.70 |
+| ablation: effort only | 0.747 | 0.422 | 0.84 | 0.57 | 0.71 / 0.68 |
+| ablation: ECG + effort, concat (no attention) | 0.744 | 0.424 | 0.82 | 0.58 | 0.72 / 0.69 |
+| CEILING: CANet + SpO2 (not on our wearable) | 0.813 | 0.541 | 0.85 | 0.64 | 0.82 / 0.77 |
+
+Headline vs baseline: dAUROC +0.171 (95% CI +0.151..+0.191), dAUPRC +0.155 (+0.132..+0.184), paired subject bootstrap; every fold improves (CANet AUROC 0.76-0.80 vs 0.56-0.64). Per-class sensitivity at each model's own threshold: obstructive apnea 0.83 -> 0.97, central apnea 0.84 -> 0.98, hypopnea 0.56 -> 0.78, specificity (normal) 0.54 -> 0.61. Attention vs alternatives: +0.036 AUROC over concat fusion, +0.033 over effort-only (CIs exclude 0).
+
+**Honest caveats.**
+- Most of the ECG-only -> CANet gain comes from the effort signal (effort-only already 0.747); ECG fused by attention adds a smaller, real gain.
+- The concat ablation is **not parameter-matched** (102k vs 169k), so the attention gain is not cleanly attributable to attention.
+- **Single seed per fold**, no hyperparameter search; fold-to-fold SD ~0.015 AUROC.
+- The "AHI" correlation is an epoch-rate proxy (flagged 30 s epochs per sleep hour), not an event-scored AHI, and there is **no SpO2**, so desaturation-based definitions cannot be matched. Specificity is only 0.61; sensitivity numbers use lenient Youden thresholds, so compare AUROC/AUPRC across models, not sensitivity alone.
+- Hypopnea dominates the positives and is the weakest class; the usable cohort is skewed toward disease (median all-event AHI 21).
+- MESA effort is a **respiratory inductance belt**; see §7c for what that means for our accelerometer.
+
+## 7c. In-house CANet transfer (MESA-trained CANet on our QVAR + IMU hardware)
+
+**Headline: CANet runs end to end on our hardware, BUT the belt-trained effort stream does NOT transfer to accelerometer input.** Healthy subjects get flagged on ~94% of epochs — a **transfer failure, not an apnea result**.
+
+**Constraint.** The in-house cohort is healthy 19-20 y/o, unlabelled, **validation only — never trained on, never committed**. Nothing in this section is an apnea-detection accuracy and none is claimed. The study is characterization + plausibility + deployability (`results/inhouse_canet/`, code `src/inhouse/`, `src/mesa/train_final.py`). Nights are anonymised S01..; sleep state is unknown (no staging), rates are per recorded hour; 10 of 15 recordings are usable (5 are 1-32 s aborted captures).
+
+**Deployability: yes.** QVAR -> R-peaks -> cardiac stream (MESA-identical grid; per-night normalisation, so the earlier ~108x amplitude gap is neutralised by construction) and accelerometer -> breathing trace (`src/effort/envelope.py`) -> 32 Hz, MESA belt preprocessing -> MESA-trained CANet -> per-epoch probability -> per-night rate, for all 10 usable nights. (Weights are refit on MESA only for this purpose: the CV runs did not keep weights; they are gitignored.)
+
+**Belt vs accelerometer gap.** A classifier separates MESA belt epochs from our accelerometer epochs with **AUROC 0.99** (handcrafted features) / **0.997-0.998** (effort-encoder embedding); control (MESA half vs half) 0.51 / 0.47. Breathing *is* in the accelerometer (spectral peak near 0.2-0.25 Hz) but the signal is broadband and irregular: spectral entropy 0.64-0.66 vs 0.46 for belts (night medians at the 87-98th MESA percentile), zero-crossings 40-42 vs 30 per min, breathing-rate spread IQR 10 vs 4 bpm. Accel magnitude and principal axis look about equally far. Caveat: posture/activity of the recordings is unverified, so part of the gap may be behaviour rather than sensor.
+
+**Healthy negative control** (flag fraction at the MESA operating points; reference = MESA out-of-fold low-AHI subjects, a0h4 < 5, n = 67):
+
+| Model | In-house | MESA low-AHI median [p90] |
+|---|---|---|
+| ECG-only | 0.58 | 0.43 [0.67] |
+| effort-only (accel) | 0.80-0.84 | 0.35 [0.55] |
+| **headline CANet** | **0.92-0.94** | 0.28 [0.48] |
+| effort-only, white-noise effort | 0.33 | 0.35 [0.55] |
+
+The ablation isolates the **effort branch**: pure white-noise effort gives 33% (in MESA range) while real accelerometer effort gives 80-84% — the model reads our structured-but-wrong-morphology trace as disrupted breathing. The cardiac side is **mildly elevated** (58%, 4/10 nights above MESA p90); possible respiratory sinus arrhythmia in young hearts, **unverified**. Fusion compounds both. (Note the MESA thresholds flag ~28% even of MESA low-AHI subjects; that, not zero, is the right comparator.)
+
+**Conclusion.** The effort branch needs **adaptation or an accelerometer-native effort model** before deployment; MESA belts remain the only validated effort input. Whether our accelerometer can even detect cessation is now the critical open question — see `docs/breath_hold_protocol.md` (Phase 5 recording session).
+
+---
+
 ## 8. Current status and what's next
 
 | Phase | Status |
@@ -405,11 +458,11 @@ RR-interval transfers cleanly — the 17% mean gap is healthy-young vs older-cli
 | — Deployable ECG model | **Done** — frozen; tested for plausibility (not accuracy) on real QVAR data, does not transfer as-is (see §7) |
 | §4b — ECG feature-extraction comparison study (8 methods) | **Done, exploratory** — confirms method 2 (adopted) is still best; QRS-area (method 6) is **no longer** considered a viable fallback EDR (see §7 — QVAR domain gap is worse for QRS-area than for amplitude) |
 | — In-house QVAR validation track (Mam's directive 3) | **Done** — see §7: 15-recording data-quality report, PhysioNet-vs-QVAR domain gap, frozen-model plausibility test, hudson/Hari anomaly investigation |
-| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** — real IMU signal is now present and confirmed usable in all 15 in-house recordings (§7), so this is real-data-testable; not yet run against it |
-| 5 — Breath-hold validation on our own hardware | **Blocked** on collecting a timestamped breath-hold session specifically (healthy-night recordings already exist and were used for §7). The 240 Hz reconciliation and the amplitude-channel transfer risk are no longer hypothetical — both are now measured (§7: fs 238–243 Hz vs nominal 240; ~108x R-amplitude gap, needs QVAR-specific recalibration before Phase 6) |
-| 6 — Decision-level fusion (fused > ECG-only, the headline claim) | Blocked on 5 |
+| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** (but see §7c: the MESA-belt-trained CANet effort stream does not transfer to our accelerometer) — real IMU signal is now present and confirmed usable in all 15 in-house recordings (§7), so this is real-data-testable; not yet run against it |
+| 5 — Breath-hold validation on our own hardware | **Now the critical experiment (§7c); protocol in `docs/breath_hold_protocol.md`, session pending.** Previously: **blocked** on collecting a timestamped breath-hold session specifically (healthy-night recordings already exist and were used for §7). The 240 Hz reconciliation and the amplitude-channel transfer risk are no longer hypothetical — both are now measured (§7: fs 238–243 Hz vs nominal 240; ~108x R-amplitude gap, needs QVAR-specific recalibration before Phase 6) |
+| 6 — Fusion (fused > ECG-only, the headline claim) | **Shown on MESA** (§7b: CANet AUROC 0.780 vs 0.610 ECG-only, subject-independent) using belts; on our own accelerometer hardware **blocked on 5** (transfer failure, §7c) |
 | 7 — Per-night report (events/hour, severity band, no-SpO2 caveat) | Blocked on 6 |
-| 8 — Track B (MESA, multimodal + SpO2 + obstructive/central) | Stretch goal, blocked on NSRR data access |
+| 8 — Track B (MESA) | **Done for the headline path** (§7b): audit, ECG-only baseline, CANet, ablations, SpO2 ceiling; obstructive/central kept descriptive only (central not learnable) |
 
 Phase 4's synthetic-only build means the *code* for both branches now exists and is internally validated; §7 confirms real IMU data is present and usable in all 15 in-house recordings, so the effort branch's remaining gap is running it against real data, not hardware access. What's still genuinely blocked is Phase 5's breath-hold protocol specifically (a recording session that hasn't happened) and the ECG branch's QVAR-specific amplitude recalibration flagged in §7. No further ECG-branch *architecture* work is planned per the "Phase 3 is done, no further tuning" decision — the amplitude-channel fix is a recalibration/normalization task, not a new model.
 
@@ -528,4 +581,11 @@ apnea/
                                            per subject + README.
       hudson_debug/                       Waveform/RR-histogram diagnostic plots + summary.csv +
                                            README for the hudson/Hari anomaly investigation.
+    mesa/audit/                           §7b: 250-subject MESA audit (anonymised subjects_anon.csv, summary, funnel, plots).
+    mesa/ecg_baseline/                    §7b: ECG-only baseline (grouped 5-fold CV) metrics/config/AHI points (no ids).
+    mesa/canet/                           §7b: CANet headline + ablations + SpO2 ceiling, head_to_head.md/.csv, per-variant subdirs.
+    inhouse_canet/                        §7c: deployability / domain_gap / negative_control for the MESA-trained CANet on QVAR+IMU.
+  src/mesa/                               MESA cardiac + respiratory streams, ECG baseline, CANet, final-model training.
+  src/inhouse/                            In-house stream builder (QVAR+IMU -> CANet inputs) and the transfer study driver.
+  docs/breath_hold_protocol.md            Monday's breath-hold recording checklist (Phase 5).
 ```
