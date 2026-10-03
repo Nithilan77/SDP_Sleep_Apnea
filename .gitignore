@@ -31,3 +31,7 @@ Thumbs.db
 
 # MESA audit per-subject cache (regenerable)
 results/mesa/audit/.cache/
+
+# MESA audit: per-participant file with mesaids -- never commit (anonymized copy is subjects_anon.csv)
+results/mesa/audit/subjects.csv
+results/mesa/audit/.AUDIT_FINISHED

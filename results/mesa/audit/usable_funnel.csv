@@ -1,0 +1,8 @@
+criterion (cumulative),subjects
+complete subjects (EDF+XML),250
+ECG + SpO2 + Thor + Abdo all present,250
+XML has sleep-stage events,250
+sleep time >= 4 h,224
+both belts flat_frac < 0.5,222
+both belts breathing visible in >= 50% epochs,220
+scored respiratory events present (>=1 apnea or hypopnea),220

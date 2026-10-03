@@ -1,0 +1,83 @@
+{
+  "n_complete": 250,
+  "n_errors": 0,
+  "n_usable": 220,
+  "event_totals": {
+    "obstructive": 6071,
+    "central": 849,
+    "mixed": 4,
+    "hypopnea": 27746
+  },
+  "epoch_balance_sleep": {
+    "apnea": 0.05682297673633576,
+    "hypopnea": 0.1977720892289516,
+    "resp_event": 0.25424625165264847
+  },
+  "ahi_corr": {
+    "ahi_a0h3": 0.71402261591931,
+    "ahi_a0h3a": 0.747925920810661,
+    "desat3_vs_a0h3": 0.8479619572244003
+  },
+  "ahi_ratio_median": {
+    "xml_all/official_a0h3a": 1.028881102423529,
+    "xml_desat3/official_a0h3": 0.4980422691931822
+  },
+  "sleep_time_diff_min": {
+    "median_abs": 0.0,
+    "max_abs": 1.0
+  },
+  "belts": {
+    "thor": {
+      "flat_frac median": 0.0,
+      "good_epoch_frac median": 0.857,
+      "good_epoch_frac<0.5 (subjects)": 3.0,
+      "clip_frac median": 0.0,
+      "breath rate median (bpm)": 14.0
+    },
+    "abdo": {
+      "flat_frac median": 0.002,
+      "good_epoch_frac median": 0.887,
+      "good_epoch_frac<0.5 (subjects)": 4.0,
+      "clip_frac median": 0.0,
+      "breath rate median (bpm)": 14.0
+    }
+  },
+  "prevalence": [
+    {
+      "group": "audited subset",
+      "hypopnea rule": "3% or arousal",
+      "n": 250,
+      "AHI>=5": "90%",
+      "AHI>=15": "64%",
+      "AHI>=30": "34%",
+      "median AHI": 20.2
+    },
+    {
+      "group": "audited subset",
+      "hypopnea rule": "4% desat",
+      "n": 250,
+      "AHI>=5": "68%",
+      "AHI>=15": "38%",
+      "AHI>=30": "18%",
+      "median AHI": 10.8
+    },
+    {
+      "group": "full MESA sleep cohort (NSRR)",
+      "hypopnea rule": "3% or arousal",
+      "n": 2057,
+      "AHI>=5": "90%",
+      "AHI>=15": "59%",
+      "AHI>=30": "30%",
+      "median AHI": 18.4
+    },
+    {
+      "group": "full MESA sleep cohort (NSRR)",
+      "hypopnea rule": "4% desat",
+      "n": 2057,
+      "AHI>=5": "66%",
+      "AHI>=15": "34%",
+      "AHI>=30": "15%",
+      "median AHI": 9.1
+    }
+  ]
+}
