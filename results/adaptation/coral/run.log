@@ -1,0 +1,36 @@
+Loading headline model ...
+Extracting MESA belt tokens (64-dim) ...
+  MESA: 135000 tokens, 1800 embeddings
+Extracting in-house accelerometer tokens (64-dim) ...
+  In-house: 135825 tokens, 1811 embeddings
+
+Sweeping CORAL reg in 64-dim token space ...
+  BEFORE CORAL (token space): 0.9542
+  reg=0.01 -> AUROC 0.9514
+  reg=0.10 -> AUROC 0.9409
+  reg=0.50 -> AUROC 0.9352
+  reg=1.00 -> AUROC 0.9340
+  reg=2.00 -> AUROC 0.9364
+  reg=5.00 -> AUROC 0.9394
+  reg=10.00 -> AUROC 0.9435
+Best reg=1.00 (AUROC closest to 0.5) -> 0.9340
+Saved coral_params_token.npz
+
+Running corrected inference (CORAL at token level) ...
+  S03: 97.9% flagged
+  S04: 96.9% flagged
+  S06: 96.2% flagged
+  S07: 95.4% flagged
+  S08: 97.8% flagged
+  S10: 96.4% flagged
+  S11: 89.3% flagged
+  S12: 97.0% flagged
+  S13: 96.4% flagged
+  S15: 96.0% flagged
+
+=== RESULTS ===
+Domain AUROC before CORAL : 0.9542
+Domain AUROC after  CORAL : 0.9340  (ideal: 0.50)
+Flag rate BEFORE CORAL    : ~93%% (from previous run)
+Flag rate AFTER  CORAL    : 96.4% median  (MESA low-AHI reference: ~28%)
+All outputs in results/adaptation/coral
