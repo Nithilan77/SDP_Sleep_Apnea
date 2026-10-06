@@ -1,0 +1,34 @@
+Loading effort encoder from headline.pt ...
+Effort encoder loaded (45560 params)
+Extracting MESA belt embeddings (60 subjects x 30 epochs) ...
+  MESA belt: 1800 embeddings
+Extracting in-house accelerometer embeddings ...
+  in-house mag: 1811 embeddings
+  in-house pca: 1811 embeddings
+Running PCA (n_components=50) ...
+  Top-10 explained variance: [82.4000015258789, 5.099999904632568, 2.700000047683716, 1.399999976158142, 1.0, 0.800000011920929, 0.699999988079071, 0.6000000238418579, 0.4000000059604645, 0.4000000059604645]
+  Top-10 shifted PCA dims (mag): ['PC4:1.31SD', 'PC3:0.84SD', 'PC9:0.67SD', 'PC8:0.62SD', 'PC12:0.45SD', 'PC5:0.43SD', 'PC10:0.41SD', 'PC6:0.23SD', 'PC37:0.23SD', 'PC27:0.20SD']
+  Mean shift across all 50 dims — mag: 0.162 SD  pca: 0.151 SD
+Running t-SNE (this takes a few minutes) ...
+Saved embedding_space.png
+Saved pca_dim_gap.png
+
+=== EMBEDDING GAP SUMMARY ===
+MESA belt     : mean=0.481  std=1.065  norm=11.484
+In-house mag  : mean=0.561  std=1.068  norm=11.965
+In-house pca  : mean=0.623  std=1.335  norm=13.896
+Mean L2 distance within MESA:  10.601
+Mean L2 distance MESA->inhouse: 10.086  (ratio 0.95x)
+Top-3 shifted PCA dims (mag): [('PC4', '1.31SD'), ('PC3', '0.84SD'), ('PC9', '0.67SD')]
+All outputs in results/adaptation/embed_gap
+[t-SNE] Computing 121 nearest neighbors...
+[t-SNE] Indexed 5000 samples in 0.000s...
+[t-SNE] Computed neighbors for 5000 samples in 0.507s...
+[t-SNE] Computed conditional probabilities for sample 1000 / 5000
+[t-SNE] Computed conditional probabilities for sample 2000 / 5000
+[t-SNE] Computed conditional probabilities for sample 3000 / 5000
+[t-SNE] Computed conditional probabilities for sample 4000 / 5000
+[t-SNE] Computed conditional probabilities for sample 5000 / 5000
+[t-SNE] Mean sigma: 0.658313
+[t-SNE] KL divergence after 250 iterations with early exaggeration: 74.026207
+[t-SNE] KL divergence after 1000 iterations: 1.344555
