@@ -1,0 +1,14 @@
+{
+  "attempt": 2,
+  "hidden_dim": 32,
+  "lambda_residual": 0.3,
+  "lr_adaptor": 0.0003,
+  "lr_disc": 0.0001,
+  "stopped_early": true,
+  "stop_step": 240,
+  "pre_adaptation_held_out_auroc": 0.9984479279838585,
+  "best_held_out_auroc_during_training": 0.9981372636328554,
+  "final_held_out_auroc": 0.9997193666548505,
+  "val_flag_rate_median": 0.8900595238095239,
+  "verdict": "NO IMPROVEMENT (within noise or worse)"
+}
