@@ -1,0 +1,24 @@
+{
+  "n_steps": 1200,
+  "train_nights": [
+    "S03",
+    "S06",
+    "S07",
+    "S08",
+    "S11",
+    "S12",
+    "S13",
+    "S15"
+  ],
+  "val_nights": [
+    "S04",
+    "S10"
+  ],
+  "final_alpha": 0.13817493617534637,
+  "final_disc_belt": 0.6337381601333618,
+  "final_disc_adapted": 0.38108140230178833,
+  "val_domain_auroc": 1.0,
+  "val_flag_rate_median": 0.8783333333333333,
+  "flag_rate_before_adaptation_reference": "~93-100% (from CORAL run / original)",
+  "mesa_lowAHI_reference": 0.28
+}

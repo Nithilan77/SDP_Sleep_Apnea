@@ -1,0 +1,80 @@
+Loading headline model (frozen) ...
+Extracting MESA belt tokens ...
+  MESA belt tokens: (1800, 75, 64)
+Loading in-house stream cache ...
+  S03: 187 epochs prepared
+  S06: 400 epochs prepared
+  S07: 400 epochs prepared
+  S08: 93 epochs prepared
+  S11: 131 epochs prepared
+  S12: 400 epochs prepared
+  S13: 400 epochs prepared
+  S15: 400 epochs prepared
+  S04: 400 epochs prepared
+  S10: 336 epochs prepared
+Train nights: ['S03', 'S06', 'S07', 'S08', 'S11', 'S12', 'S13', 'S15'] | Val nights: ['S04', 'S10']
+Train accel tokens: (2411, 75, 64)
+Starting training: 1200 steps, validate every 40
+step    1 | D: 1.402 | adv: 0.767 | res: 0.0180 | cons: -0.012 (autocorr 0.012) | alpha 0.100 | disc(belt)=0.46 disc(adapted)=0.46
+step   40 | D: 1.183 | adv: 0.920 | res: 0.1070 | cons: -0.094 (autocorr 0.094) | alpha 0.101 | disc(belt)=0.51 disc(adapted)=0.40
+step   80 | D: 1.191 | adv: 0.937 | res: 1.2999 | cons: -0.304 (autocorr 0.304) | alpha 0.103 | disc(belt)=0.51 disc(adapted)=0.39
+step  120 | D: 1.356 | adv: 0.829 | res: 4.8314 | cons: -0.305 (autocorr 0.305) | alpha 0.105 | disc(belt)=0.47 disc(adapted)=0.44
+step  160 | D: 1.192 | adv: 0.885 | res: 3.2240 | cons: -0.340 (autocorr 0.340) | alpha 0.107 | disc(belt)=0.54 disc(adapted)=0.42
+step  200 | D: 1.131 | adv: 0.946 | res: 2.6730 | cons: -0.414 (autocorr 0.414) | alpha 0.108 | disc(belt)=0.54 disc(adapted)=0.39
+step  240 | D: 1.134 | adv: 0.972 | res: 2.8855 | cons: -0.428 (autocorr 0.428) | alpha 0.109 | disc(belt)=0.55 disc(adapted)=0.39
+step  280 | D: 1.193 | adv: 0.930 | res: 4.2254 | cons: -0.347 (autocorr 0.347) | alpha 0.110 | disc(belt)=0.57 disc(adapted)=0.40
+step  320 | D: 1.061 | adv: 1.000 | res: 3.4979 | cons: -0.421 (autocorr 0.421) | alpha 0.112 | disc(belt)=0.59 disc(adapted)=0.37
+step  360 | D: 0.883 | adv: 1.024 | res: 3.5674 | cons: -0.432 (autocorr 0.432) | alpha 0.113 | disc(belt)=0.68 disc(adapted)=0.37
+step  400 | D: 0.971 | adv: 1.081 | res: 4.0795 | cons: -0.426 (autocorr 0.426) | alpha 0.115 | disc(belt)=0.62 disc(adapted)=0.35
+step  440 | D: 0.969 | adv: 1.181 | res: 3.3312 | cons: -0.349 (autocorr 0.349) | alpha 0.116 | disc(belt)=0.59 disc(adapted)=0.31
+step  480 | D: 0.720 | adv: 1.190 | res: 3.4708 | cons: -0.496 (autocorr 0.496) | alpha 0.118 | disc(belt)=0.77 disc(adapted)=0.32
+step  520 | D: 1.026 | adv: 1.185 | res: 6.7668 | cons: -0.384 (autocorr 0.384) | alpha 0.119 | disc(belt)=0.65 disc(adapted)=0.33
+step  560 | D: 0.712 | adv: 1.793 | res: 13.2114 | cons: -0.420 (autocorr 0.420) | alpha 0.123 | disc(belt)=0.68 disc(adapted)=0.18
+step  600 | D: 1.401 | adv: 1.004 | res: 4.7664 | cons: -0.459 (autocorr 0.459) | alpha 0.123 | disc(belt)=0.54 disc(adapted)=0.40
+step  640 | D: 1.193 | adv: 1.028 | res: 3.9715 | cons: -0.403 (autocorr 0.403) | alpha 0.123 | disc(belt)=0.52 disc(adapted)=0.37
+step  680 | D: 1.261 | adv: 0.871 | res: 6.7402 | cons: -0.382 (autocorr 0.382) | alpha 0.125 | disc(belt)=0.56 disc(adapted)=0.43
+step  720 | D: 1.100 | adv: 0.982 | res: 3.9078 | cons: -0.365 (autocorr 0.365) | alpha 0.126 | disc(belt)=0.60 disc(adapted)=0.39
+step  760 | D: 0.845 | adv: 1.156 | res: 1.6596 | cons: -0.478 (autocorr 0.478) | alpha 0.126 | disc(belt)=0.67 disc(adapted)=0.32
+step  800 | D: 0.814 | adv: 1.136 | res: 1.9261 | cons: -0.416 (autocorr 0.416) | alpha 0.126 | disc(belt)=0.70 disc(adapted)=0.33
+step  840 | D: 0.873 | adv: 1.189 | res: 3.0556 | cons: -0.441 (autocorr 0.441) | alpha 0.127 | disc(belt)=0.67 disc(adapted)=0.32
+step  880 | D: 1.194 | adv: 0.936 | res: 7.4152 | cons: -0.430 (autocorr 0.430) | alpha 0.130 | disc(belt)=0.61 disc(adapted)=0.41
+step  920 | D: 0.790 | adv: 1.046 | res: 5.2690 | cons: -0.331 (autocorr 0.331) | alpha 0.131 | disc(belt)=0.78 disc(adapted)=0.37
+step  960 | D: 0.826 | adv: 1.173 | res: 3.6490 | cons: -0.492 (autocorr 0.492) | alpha 0.131 | disc(belt)=0.71 disc(adapted)=0.33
+step 1000 | D: 0.922 | adv: 1.203 | res: 2.8394 | cons: -0.488 (autocorr 0.488) | alpha 0.132 | disc(belt)=0.67 disc(adapted)=0.32
+step 1040 | D: 0.942 | adv: 1.098 | res: 3.9877 | cons: -0.495 (autocorr 0.495) | alpha 0.134 | disc(belt)=0.73 disc(adapted)=0.37
+step 1080 | D: 0.902 | adv: 1.241 | res: 6.4506 | cons: -0.541 (autocorr 0.541) | alpha 0.137 | disc(belt)=0.68 disc(adapted)=0.30
+step 1120 | D: 0.867 | adv: 1.104 | res: 7.2868 | cons: -0.428 (autocorr 0.428) | alpha 0.139 | disc(belt)=0.76 disc(adapted)=0.34
+step 1160 | D: 0.982 | adv: 1.314 | res: 4.2844 | cons: -0.496 (autocorr 0.496) | alpha 0.137 | disc(belt)=0.70 disc(adapted)=0.31
+step 1200 | D: 1.167 | adv: 1.061 | res: 3.8181 | cons: -0.337 (autocorr 0.337) | alpha 0.138 | disc(belt)=0.63 disc(adapted)=0.38
+
+=== VALIDATION on held-out nights ['S04', 'S10'] ===
+  S04: 84.0% flagged (was ~93-97% before adaptation)
+  S10: 91.7% flagged (was ~93-97% before adaptation)
+Held-out domain AUROC (val nights, adapted, vs MESA): 1.0000
+
+=== SUMMARY ===
+{
+  "n_steps": 1200,
+  "train_nights": [
+    "S03",
+    "S06",
+    "S07",
+    "S08",
+    "S11",
+    "S12",
+    "S13",
+    "S15"
+  ],
+  "val_nights": [
+    "S04",
+    "S10"
+  ],
+  "final_alpha": 0.13817493617534637,
+  "final_disc_belt": 0.6337381601333618,
+  "final_disc_adapted": 0.38108140230178833,
+  "val_domain_auroc": 1.0,
+  "val_flag_rate_median": 0.8783333333333333,
+  "flag_rate_before_adaptation_reference": "~93-100% (from CORAL run / original)",
+  "mesa_lowAHI_reference": 0.28
+}
+All outputs in results/adaptation/adaptor
