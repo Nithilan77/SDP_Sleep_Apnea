@@ -80,53 +80,92 @@ class SensorTileRecord:
         return bool(np.any(stds > 1e-6))
 
 
+# New firmware format (2026-10, comma-delimited .csv): column names changed
+# entirely. Both formats map to the same SensorTileRecord; see CLAUDE.md /
+# docs/PROGRESS.md Sec.11.1 (format change notice, csv header mapping).
+EXPECTED_COLUMNS_CSV = [
+    "time[us]",
+    "acc_x[LSB]", "acc_y[LSB]", "acc_z[LSB]",
+    "acc_x[mg]", "acc_y[mg]", "acc_z[mg]",
+    "gyro_x[LSB]", "gyro_y[LSB]", "gyro_z[LSB]",
+    "gyro_x[dsp]", "gyro_y[dsp]", "gyro_z[dsp]",   # "dsp" is the firmware's own label for dps
+    "temp[LSB]", "temp[C]",
+    "ah_qvar[LSB]",
+]
+
+
 def _find_header_row(path: Path, max_scan_lines: int = 20) -> int:
-    """Return the 0-based line index of the header row (the line containing
-    'Timestamp'). Robust to leading metadata lines."""
+    """Return the 0-based line index of the header row. Robust to leading
+    metadata lines. Matches either 'Timestamp' (old .txt) or 'time[us]'
+    (new .csv) so both formats are detected the same way."""
     with open(path, "r", errors="replace") as f:
         for i, line in enumerate(f):
             if i >= max_scan_lines:
                 break
-            if "Timestamp" in line:
+            if "Timestamp" in line or "time[us]" in line:
                 return i
-    raise ValueError(f"{path}: could not find a header row containing 'Timestamp' "
-                      f"in the first {max_scan_lines} lines")
+    raise ValueError(f"{path}: could not find a header row (looked for 'Timestamp' "
+                      f"or 'time[us]') in the first {max_scan_lines} lines")
+
+
+def _is_new_csv_format(path: Path) -> bool:
+    """New format: .csv extension AND comma-delimited header with 'time[us]'."""
+    if path.suffix.lower() != ".csv":
+        return False
+    header_row = _find_header_row(path)
+    with open(path, "r", errors="replace") as f:
+        for i, line in enumerate(f):
+            if i == header_row:
+                return "time[us]" in line and "," in line
+    return False
 
 
 def load_sensortile(path: str | Path) -> SensorTileRecord:
-    """Load one SensorTile .txt recording. Robust to leading metadata lines,
-    a trailing empty column from the trailing tab, and short/tiny (aborted
-    capture) files."""
+    """Load one SensorTile recording, old tab-delimited .txt or new
+    comma-delimited .csv (format changed 2026-10, see docs/PROGRESS.md
+    Sec.11.1). Robust to leading metadata lines, a trailing empty column
+    from a trailing tab (old format), and short/tiny (aborted capture)
+    files. Both formats normalise to the same SensorTileRecord."""
     path = Path(path)
     name = path.stem
-
+    is_new = _is_new_csv_format(path)
     header_row = _find_header_row(path)
 
     df = pd.read_csv(
         path,
-        sep="\t",
+        sep="," if is_new else "\t",
         skiprows=header_row,
         header=0,
         engine="c",
         skip_blank_lines=True,
     )
-    # Drop the trailing empty column produced by the trailing tab in the header.
     df = df.loc[:, ~df.columns.str.match(r"^Unnamed")]
     df.columns = [c.strip() for c in df.columns]
 
-    missing = [c for c in EXPECTED_COLUMNS if c not in df.columns]
-    if missing:
-        raise ValueError(f"{path.name}: missing expected columns {missing}; "
-                          f"found columns {list(df.columns)}")
-
-    df = df.dropna(subset=["Timestamp [us]"])
-    n_samples = len(df)
-
-    timestamp_us = df["Timestamp [us]"].to_numpy(dtype=np.float64)
-    accel_mg = df[["A_X [mg]", "A_Y [mg]", "A_Z [mg]"]].to_numpy(dtype=np.float64)
-    gyro_dps = df[["G_X [dps]", "G_Y [dps]", "G_Z [dps]"]].to_numpy(dtype=np.float64)
-    temp_degC = df["T [degC]"].to_numpy(dtype=np.float64)
-    qvar = df["QVAR [LSB]"].to_numpy(dtype=np.float64)
+    if is_new:
+        missing = [c for c in EXPECTED_COLUMNS_CSV if c not in df.columns]
+        if missing:
+            raise ValueError(f"{path.name}: missing expected CSV columns {missing}; "
+                             f"found columns {list(df.columns)}")
+        df = df.dropna(subset=["time[us]"])
+        n_samples = len(df)
+        timestamp_us = df["time[us]"].to_numpy(dtype=np.float64)
+        accel_mg = df[["acc_x[mg]", "acc_y[mg]", "acc_z[mg]"]].to_numpy(dtype=np.float64)
+        gyro_dps = df[["gyro_x[dsp]", "gyro_y[dsp]", "gyro_z[dsp]"]].to_numpy(dtype=np.float64)
+        temp_degC = df["temp[C]"].to_numpy(dtype=np.float64)
+        qvar = df["ah_qvar[LSB]"].to_numpy(dtype=np.float64)
+    else:
+        missing = [c for c in EXPECTED_COLUMNS if c not in df.columns]
+        if missing:
+            raise ValueError(f"{path.name}: missing expected columns {missing}; "
+                             f"found columns {list(df.columns)}")
+        df = df.dropna(subset=["Timestamp [us]"])
+        n_samples = len(df)
+        timestamp_us = df["Timestamp [us]"].to_numpy(dtype=np.float64)
+        accel_mg = df[["A_X [mg]", "A_Y [mg]", "A_Z [mg]"]].to_numpy(dtype=np.float64)
+        gyro_dps = df[["G_X [dps]", "G_Y [dps]", "G_Z [dps]"]].to_numpy(dtype=np.float64)
+        temp_degC = df["T [degC]"].to_numpy(dtype=np.float64)
+        qvar = df["QVAR [LSB]"].to_numpy(dtype=np.float64)
 
     rec = SensorTileRecord(
         name=name,
