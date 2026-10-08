@@ -1,0 +1,25 @@
+Loading chest box recording ...
+Recording duration: 1795.6s (29.93 min)
+Stopwatch total: 1800.46s -- diff: 4.8s (expected ~5-10s sync lag)
+Detecting R-peaks across full session ...
+  2160 beats detected, 2159 RR intervals, 100.0% plausible
+Computing effort envelope (accelerometer) across full session ...
+
+7 hold events to analyse (laps [2, 4, 6, 8, 10, 12, 14])
+Event 1 (lap 2): nominal [991.2,1020.6] | refined start +8.8s, end +8.7s | HR pre=70.8 hold=76.2 (Δ=+5.5) | effort ratio=0.623
+Event 2 (lap 4): nominal [1111.0,1140.6] | refined start -2.9s, end +7.8s | HR pre=68.6 hold=70.5 (Δ=+1.8) | effort ratio=0.309
+Event 3 (lap 6): nominal [1231.1,1261.6] | refined start -4.8s, end +2.4s | HR pre=70.7 hold=73.4 (Δ=+2.7) | effort ratio=0.491
+Event 4 (lap 8): nominal [1352.5,1383.3] | refined start -11.9s, end +2.7s | HR pre=67.7 hold=68.6 (Δ=+0.9) | effort ratio=0.516
+Event 5 (lap 10): nominal [1470.6,1501.4] | refined start +11.2s, end -2.7s | HR pre=76.6 hold=73.1 (Δ=-3.5) | effort ratio=0.775
+Event 6 (lap 12): nominal [1592.0,1622.5] | refined start -4.2s, end -2.8s | HR pre=74.1 hold=71.6 (Δ=-2.6) | effort ratio=0.329
+Event 7 (lap 14): nominal [1713.2,1743.8] | refined start -2.5s, end -4.1s | HR pre=66.0 hold=67.1 (Δ=+1.2) | effort ratio=1.494
+
+=== SUMMARY ===
+Mean HR delta (hold - pre-hold): 0.84 bpm (SD 3.07)
+Events with HR INCREASE during hold (unexpected direction): 5 / 7
+Mean |start offset|: 6.6s, mean |end offset|: 4.5s (sync refinement magnitude)
+Mean effort ratio (hold RMS / pre-hold RMS): 0.648 (SD 0.407) -- <1.0 means effort DROPPED during hold, as expected if cessation is detectable
+Events with effort ratio < 0.8 (clear drop): 6 / 7
+
+All outputs in results/breath_hold
+user_MukuBreathHold_ECG_07_10_2026: measured fs=243.10 Hz vs nominal 240 Hz (+1.29% diff), n_samples=436523, duration=1795.6s

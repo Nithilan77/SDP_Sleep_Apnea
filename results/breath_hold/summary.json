@@ -1,0 +1,9 @@
+{
+  "n_events": 7,
+  "mean_hr_delta": 0.8408652786815297,
+  "mean_start_offset_s": -0.8951275569204427,
+  "mean_end_offset_s": 1.715010802635415,
+  "mean_effort_ratio": 0.6482024537618687,
+  "n_effort_ratio_below_0_8": 6,
+  "sync_lag_check_stopwatch_vs_recording_s": 4.83667400000013
+}
