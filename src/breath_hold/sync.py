@@ -222,6 +222,7 @@ def stopwatch_only_times(laps: pd.DataFrame, stop_total_s: float, rec_duration_s
 
 def hold_windows(t_lap: pd.Series, mode: str, inset_s: float | None = None) -> pd.DataFrame:
     """Per-hold primary windows from lap times (laps 2..19 = 9 holds, order A), the rest-only stretches, and the pre-hold baseline.
+    short_hold rule: primary window < 3 s -> 0 s-inset window is `used_*`, labelled short-hold; both windows kept as columns.
     Insets: primary 2 s (taps) / 5 s (stopwatch-only); also 0 s and 5 s for sensitivity (NaN where the hold is too short)."""
     primary = inset_s if inset_s is not None else (INSET_STOPWATCH_ONLY_S if mode.startswith("STOPWATCH") else INSET_S)
     banner = "SYNC=taps" if mode == "taps" else "SYNC=STOPWATCH-ONLY (not tap-synchronised; boundaries uncertain by several seconds)"
@@ -236,6 +237,12 @@ def hold_windows(t_lap: pd.Series, mode: str, inset_s: float | None = None) -> p
             row[f"{name}_start"], row[f"{name}_end"] = (a, b) if b - a >= 1.0 else (np.nan, np.nan)
         row["primary_len_s"] = row["primary_end"] - row["primary_start"] if not np.isnan(row["primary_start"]) else np.nan
         row["primary_window_too_short"] = bool(np.isnan(row["primary_len_s"]) or row["primary_len_s"] < 3.0)
+        # Approved 2026-10-09 (docs/breath_hold_protocol.md 9.3): holds whose primary (2 s-inset in tap mode) window is < 3 s are
+        # "short-hold": the 0 s-inset window is the window used, BOTH values are always reported, neither is called correct.
+        row["short_hold"] = row["primary_window_too_short"]
+        row["window_used"] = "inset0" if row["short_hold"] else "primary"
+        row["used_start"], row["used_end"] = (row["inset0_start"], row["inset0_end"]) if row["short_hold"] else (row["primary_start"], row["primary_end"])
+        row["window_label"] = f"H{k} short-hold (sub-breath-cycle window; 0 s-inset used, primary reported alongside)" if row["short_hold"] else f"H{k}"
         row["pre_start"], row["pre_end"] = s - PRE_GAP_S - PRE_LEN_S, s - PRE_GAP_S
         rows.append(row)
     rows.append(dict(item="rest_start", kind="rest_only", t_start=float(t_lap[1]), t_end=float(t_lap[2])))
@@ -281,7 +288,7 @@ def cmd_align(path, laps_path, out_dir, stopwatch_only=False, stop_total=None):
     W.to_csv(out / "aligned_windows.csv", index=False)
     pd.DataFrame(dict(lap=t_lap.index, t_rec_s=t_lap.values, sync_mode=mode)).to_csv(out / "lap_times_recording.csv", index=False)
     print(f"\nsync_mode = {mode} | {info}")
-    print(W[W.kind == "hold"][["item", "planned_s", "actual_s", "t_start", "t_end", "primary_start", "primary_end", "primary_window_too_short", "aborted_or_short"]].round(2).to_string(index=False))
+    print(W[W.kind == "hold"][["item", "planned_s", "actual_s", "t_start", "t_end", "primary_start", "primary_end", "primary_window_too_short", "short_hold", "window_used", "aborted_or_short"]].round(2).to_string(index=False))
     print(f"\nSaved {out/'aligned_windows.csv'} and {out/'lap_times_recording.csv'}")
     return W
 

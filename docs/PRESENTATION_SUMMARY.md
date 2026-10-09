@@ -149,6 +149,7 @@ One volunteer, one ~30 min session, chest SensorTile, **7 voluntary ~30 s holds*
 ## 9. Next steps
 
 1. **Second (and third) breath-hold session(s), more subjects:** 3 sharp sync taps / event markers, the 5–7 s SHORT-hold false-positive test, holds spread across the recording with a rest-only control stretch (addresses drift), and a rest-period comparison. → validates a boundary detector on held-out events.
+   *Known limitation for session 2:* the two 5 s holds' effort ratios are reported under two window conventions (2 s-inset and 0 s-inset, labelled "short-hold") because neither leaves a window as long as one breath cycle; treat them as less reliable than the 10/30/45/60 s holds (PROGRESS §6).
 2. **Subject-independent evaluation** (≥10 subjects) once enough events exist.
 3. With a larger labelled in-house set: **fine-tune the effort encoder** (not just a head) and revisit adaptation with labels; a temporal model trained on our own data becomes viable around the sizes in §7 above.
 4. **QVAR-specific recalibration of the ECG amplitude channel**, and an ECG-domain signal-quality gate (IMU motion gating cannot see electrical artifacts). [PROGRESS §7]
