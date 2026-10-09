@@ -1,0 +1,30 @@
+{
+ "trained_on": "user_MukuBreathHold_ECG_07_10_2026.csv",
+ "trained_duration_s": 1795.623326,
+ "n_train_windows": 76,
+ "n_pos": 28,
+ "n_rest": 48,
+ "C": 0.01,
+ "hand_features": [
+  "rms",
+  "kurtosis",
+  "clip_frac",
+  "zcr_per_min",
+  "band_ratio",
+  "resp_bpm",
+  "peak_prominence",
+  "spec_entropy"
+ ],
+ "threshold": 0.5,
+ "note": "IN-SAMPLE for the training session; encoders frozen; only the two linear heads are fitted.",
+ "in_sample_train_fit": {
+  "frozen_256": {
+   "sens": 0.9285714285714286,
+   "spec": 1.0
+  },
+  "handcrafted_8": {
+   "sens": 0.35714285714285715,
+   "spec": 1.0
+  }
+ }
+}

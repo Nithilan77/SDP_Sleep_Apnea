@@ -1,0 +1,8 @@
+fold_event,test_pos,test_rest,train_pos,train_rest,purged,train_pos_events
+1,4,4,24,40,4,6
+2,4,8,24,32,8,6
+3,4,8,24,32,8,6
+4,4,8,24,32,8,6
+5,4,8,24,32,8,6
+6,4,8,24,32,8,6
+7,4,4,24,40,4,6
