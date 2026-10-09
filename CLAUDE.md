@@ -45,6 +45,8 @@ Consequences:
   labelled apnea-like events, plus healthy overnight recordings as negative controls.
 - Any experiment that trains on our own recordings is wrong by design.
 
+> **Scoped exception (recorded 2026-10-09 in `docs/PROGRESS.md` §7f, before any result existed; advisor-directed):** linear (L2 logistic-regression) heads on *frozen* MESA-trained CANet features and on hand-crafted effort features were fitted on the 7 labelled holds of one breath-hold session. No encoder/attention weights and no deep network are trained on in-house data; the ECG and MESA branches are unchanged. See the §7f paragraph for the full scope and why.
+
 ## 5. Hardware
 
 - **ST SensorTile.box PRO** + **STEVAL-MKI242A** adapter. We have 5 units.
@@ -154,6 +156,8 @@ channel (wired as ECG). Prior team has a txt→CSV→EDF pipeline (pyEDFlib) we 
 
 ## 11. Environment
 
+> **Update 2026-10-09:** the environment below describes the original Windows laptop and is out of date. Work is now on a Linux machine (Python 3.12.3, NVIDIA RTX 5000 Ada GPU). The system `python3` has torch 2.13.0+cu130 and is used for everything that imports torch; the project `venv/` has numpy/scipy/pandas/matplotlib/scikit-learn/neurokit2/mne but no torch. `requirements.txt` pins different versions from those installed. See `docs/HANDOFF_2026-10-09.md` §8.1.
+
 - **Currently: Windows laptop, Python 3.11.9, CPU only** (GPU lab machine temporarily
   unavailable — timeline unknown). Everything through the CVHR baseline needs no GPU;
   a small 1D-CNN trains on CPU (slower but fine). When the GPU machine returns, copy the
@@ -179,6 +183,8 @@ apnea/
 ```
 
 ## 13. WHERE WE ARE NOW (status)
+
+> **Update 2026-10-09:** this section is a historical snapshot from project start and is out of date: all `src/` folders now contain code and results exist for Phases 0-5 and the MESA/transfer tracks. Current status: `docs/PROGRESS.md` (§8 table) and the complete record in `docs/HANDOFF_2026-10-09.md`. The original text below is kept unchanged.
 
 DONE:
 - Environment set up (Windows laptop, Python 3.11.9, venv active, packages installed:
