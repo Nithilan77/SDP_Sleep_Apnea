@@ -569,6 +569,8 @@ Visual verdict per event (all 7 plots read): OK = 2, 4, 6; FAIL = 1 (fell back; 
 
 **Open problem — status.** The *bug* is resolved (root cause identified and removed); a **reliable automatic boundary detector is not**. Needs a second session (ideally with a physical sync marker — 3 sharp taps per protocol — or a button/event marker to cut the 4.8 s lag uncertainty) to validate a detector against, plus the SHORT 5–7 s hold false-positive test from `docs/breath_hold_protocol.md`, which this session did not include.
 
+**Session 2 preparation (2026-10-09).** A v2 protocol (`docs/breath_hold_protocol.md`: sync double-taps at the start and end, 9 holds of 5–60 s, rest ≥ max(90 s, 3× hold), annotation sheet, mandatory pre-session tap check with a STOPWATCH-ONLY fallback, and a pre-specified analysis plan) and the sync tooling (`src/breath_hold/sync.py`; validation gate `src/breath_hold/sync_validate.py`, results in `results/breath_hold/sync_validation/`) have been prepared. **No session-2 data exists yet**; nothing in this section changes until it is recorded.
+
 **What this establishes / does not.** Establishes: on real hardware, chest accelerometer effort visibly collapses during voluntary holds (inner-window ratio < 0.8 in 7/7), the first labelled evidence that the raw accelerometer carries cessation information — a counterpoint to §7c, which showed the *belt-trained learned representation* doesn't transfer, not that the signal is uninformative. Does not establish: boundary precision, detector thresholds, HR behaviour, generalisation beyond one subject, or any false-positive rate.
 
 ---
