@@ -117,7 +117,7 @@ def main():
         cap = ("CAUTION: both heads were fitted on these same 7 holds, so Head A's strong peaks here are overfitting, not accuracy.\n"
                "The honest out-of-fold (leave-one-event-out) comparison is in docs/PROGRESS.md \u00a77f and must ALWAYS be shown alongside this plot:\n"
                "frozen A and hand-crafted B tie on pooled AUROC (0.83 vs 0.83); A is less consistent per event (min fold 0.16 vs 0.78) "
-               "and has 24% vs 0% false positives on the baseline period. Pilot: 1 subject, 7 events.")
+               "and has 24% vs 0.5% false positives on the baseline period. Pilot: 1 subject, 7 events.")
     else:
         cap = ("Pilot-scale heads (1 subject, 7 holds). Out-of-fold comparison of heads A vs B: docs/PROGRESS.md \u00a77f - show alongside this plot.")
     fig.tight_layout(rect=(0, 0.11, 1, 1))
