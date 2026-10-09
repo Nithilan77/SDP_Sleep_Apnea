@@ -1,9 +1,17 @@
 {
   "n_events": 7,
-  "mean_hr_delta": 0.8408652786815297,
-  "mean_start_offset_s": -0.8951275569204427,
-  "mean_end_offset_s": 1.715010802635415,
-  "mean_effort_ratio": 0.6482024537618687,
-  "n_effort_ratio_below_0_8": 6,
+  "n_hr_artifacts_despiked": 2,
+  "mean_hr_delta": -1.3452066079241973,
+  "mean_refined_duration_s": 19.6282246781808,
+  "mean_start_offset_s": 0.11117367391138291,
+  "mean_end_offset_s": -10.59060164790776,
+  "n_refinement_fell_back": 1,
+  "sd_start_offset_s": 5.592927931017102,
+  "mean_effort_ratio": 0.2128266238138737,
+  "mean_effort_ratio_fixedpad": 0.3511834271225642,
+  "mean_effort_ratio_nominal": 0.6482024537618687,
+  "n_detector_visually_ok": 3,
+  "n_effort_ratio_below_0_8": 7,
+  "n_effort_ratio_below_0_5": 6,
   "sync_lag_check_stopwatch_vs_recording_s": 4.83667400000013
 }

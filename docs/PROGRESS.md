@@ -1,7 +1,7 @@
 # Project Progress — Cardiorespiratory Sleep Apnea Detection
 
-**Last updated:** 2026-09-30
-**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. An exploratory 8-method ECG feature-extraction comparison study (§4b) confirmed Phase 3's choice was sound. The in-house QVAR validation track (§7, Mam's directive 3) is now done: 15 real SensorTile recordings characterized for data quality, PhysioNet-vs-QVAR domain gap, and frozen-model plausibility — R-peak amplitude does not transfer (~108x gap) and QRS-area is not a viable fallback either (~268x gap, worse), real IMU data is now confirmed usable for the effort branch, and a model-generalization blind spot plus a missing ECG-quality-gate gap were found. Phase 4 (effort/IMU branch) is still built against synthetic data only; Phase 5 breath-hold validation and fusion (Phase 6+) remain blocked on a dedicated breath-hold recording session.
+**Last updated:** 2026-10-09
+**Status at a glance:** Phase 0–3 done (ECG branch, classical baseline + CNN), plus a frozen deployable ECG model. An exploratory 8-method ECG feature-extraction comparison study (§4b) confirmed Phase 3's choice was sound. The in-house QVAR validation track (§7, Mam's directive 3) is done. MESA Track B (§7b) is done: CANet (ECG + effort belt, cross-modal attention) achieves AUROC 0.780 vs 0.610 ECG-only baseline on 220 MESA subjects, subject-independent. §7c confirmed the MESA-trained CANet runs end-to-end on SensorTile hardware but the effort stream does not transfer (94% healthy flag rate, AUROC 0.997 belt-vs-accelerometer separability). §7d (new) — a four-attempt sensor-domain adaptation track — rigorously ruled out representation-space alignment (linear and nonlinear, with and without adversarial training) as a solution to this gap with current data. Phase 5 has now had its first session (§7e): the chest accelerometer shows a clear effort drop during voluntary breath-holds (effort ratio below 1 in 7/7 events under a conservative window), but automatic boundary detection was attempted three ways and did not generalise across all 7 events, so effort ratios are reported as ranges. Next: a second session to validate a boundary detector, and labelled supervision for the effort encoder.
 
 This document is the state of the project: what exists, what the numbers actually are, how each result was produced, and what isn't done yet. For the full project rationale (motivation, team, hardware, constraints), see `CLAUDE.md` in the project root — this file assumes that context and focuses on **what has actually been built and measured**.
 
@@ -447,6 +447,129 @@ The ablation isolates the **effort branch**: pure white-noise effort gives 33% (
 
 ---
 
+
+---
+
+## 7d. Sensor-domain adaptation track — four attempts, consistent negative result
+
+**Motivation.** §7c established that the MESA-belt-trained effort encoder is trivially separable from accelerometer input (AUROC 0.997 in embedding space) and produces ~94% false-positive flagging on healthy in-house nights. This track systematically attempts to close that gap without labels, using only the 10 usable in-house nights and the MESA belt data.
+
+**All experiments are in `src/adaptation/`; outputs in `results/adaptation/`.**
+
+---
+
+### Step 1 — Embedding gap characterisation (`embed_gap.py`)
+
+**Outputs:** `results/adaptation/embed_gap/` (embeddings.npz, embedding_space.png, pca_dim_gap.png)
+
+Extracted the resp encoder's 128-dim GAP+GMP embeddings (60 MESA subjects × 30 epochs = 1,800 belt embeddings; 10 in-house nights × ~180 epochs = 1,811 accelerometer embeddings). PCA + t-SNE on the joint space.
+
+**Key findings:**
+- **PC1 carries 82.4% of variance.** Belt embeddings span the full PC1 range (−10 to +35); accelerometer embeddings are **collapsed into a tight cluster at the left end** (−8 to −2) — the encoder uses only a tiny corner of its representational space for accelerometer input.
+- **Mean shift is small** (0.162 SD across 50 PCA dims), but separability is 0.997 — the gap is in manifold structure (variance collapse in PC1, distributional shape differences in minor PCs), not in mean offset. A linear shift/scale adaptor will not fix this.
+- **Mean L2 distance MESA→in-house: 10.086 vs. within-MESA: 10.601 (ratio 0.95x).** Cross-domain distance is *smaller* than within-domain, confirming the gap is structural rather than a global offset.
+- t-SNE shows partial overlap (not completely disjoint clusters), confirming the spaces are not entirely incompatible — adaptation is potentially viable, but requires more than a linear map.
+
+---
+
+### Step 2 — CORAL (Correlation Alignment, linear, two attempts) (`coral_adaptor.py`)
+
+**Outputs:** `results/adaptation/coral/` (including FINDINGS.md)
+
+CORAL (Sun et al. 2016) aligns second-order statistics (covariance) between domains — closed-form, no labels needed.
+
+**Attempt 2a — CORAL at pooled (GAP+GMP, 128-dim) embedding level.**
+- Covariance alignment succeeded: domain AUROC 0.994 → 0.218.
+- But flag rate went 93% → 100% — got worse.
+- **Diagnosis:** bypassed cross-attention entirely; the head received a representation it was never trained on. Alignment worked, model broke.
+
+**Attempt 2b — CORAL at token level (64-dim, pre-attention), preserving full forward pass.**
+- Domain AUROC: 0.954 → 0.934 (barely moved; regularisation sweep 0.01–10.0, best reg=1.0).
+- Flag rate: ~93% → 96.4% median (no real improvement, within noise).
+- **Diagnosis:** per-token CORAL assumes Gaussian blobs; belt vs. accelerometer tokens differ in *nonlinear temporal structure* (different relationship between signal shape and token content across 75 positions), not just covariance. Consistent with the spectral characterisation from §7c (spectral entropy, zero-crossing rate, breathing-rate IQR all structurally different).
+
+**Conclusion:** linear alignment is insufficient at either level. See `results/adaptation/coral/FINDINGS.md`.
+
+---
+
+### Step 3 — Adversarial adaptor v1 (large capacity) (`train_adaptor.py`)
+
+**Outputs:** `results/adaptation/adaptor/` (including FINDINGS.md)
+
+Residual MLP per-token (hidden=128), trained adversarially against a belt-vs-accel discriminator, with a breathing-consistency loss (autocorrelation at the measured per-epoch respiratory lag) and an L2 residual anchor. Train nights: S03/S06/S07/S08/S11/S12/S13/S15 (2,411 epochs). Val nights held out: S04, S10.
+
+**Result:** Training unstable — residual loss oscillated 1.6–13.2 without converging; discriminator confidence on belt tokens trended *upward* (toward 0.78) rather than toward the fooled equilibrium of 0.5. Held-out domain AUROC (at end of training): **1.0000** — worse than the pre-adaptation baseline (~0.93–0.95). Textbook adversarial overfitting: adaptor found a training-set-specific equilibrium that did not generalize to unseen nights.
+
+**Training curve confirms:** disc(belt) and disc(adapted) diverge throughout; no sign of the crossing-at-0.5 equilibrium that indicates genuine alignment. See `results/adaptation/adaptor/training_curves.png`.
+
+---
+
+### Step 4 — Adversarial adaptor v2 (constrained capacity, corrected measurement) (`train_adaptor_v2.py`)
+
+**Outputs:** `results/adaptation/adaptor_v2/` (including FINDINGS.md)
+
+Changes from v1: hidden dim 128→32, residual penalty 0.05→0.3 (6x stronger anchor), discriminator LR 3×10⁻⁴→1×10⁻⁴ (slower than adaptor to prevent discriminator winning the arms race), early-stopping on held-out domain AUROC checked every 40 steps.
+
+**Measurement bug caught and fixed mid-run:** the held-out AUROC function originally fit a logistic regression and scored it on the *same* data (resubstitution), giving spurious AUROC=1.0 even for the identity (no-op) adaptor as a sanity check. Caught because the identity sanity check returned 1.0 — that's impossible for a genuine generalization measurement. Fixed to use a proper random train/test split inside the classifier. All numbers below are post-fix.
+
+**Result:** Pre-adaptation sanity check (identity adaptor): **0.9984** (validates the measurement — matches the CORAL experiment's ~0.95 baseline range). Best held-out AUROC during training: **0.9981** (delta: −0.0003, within noise). Training stable but inert — alpha grew only 0.050→0.057 over 240 steps before early-stop triggered. Flag rate on held-out nights: S04 85.8%, S10 92.3% (essentially unchanged from pre-adaptation ~93–97%).
+
+**Verdict: NO IMPROVEMENT.** Unlike v1 (actively overfit), v2 was stable but had too little capacity to move the representation at all with this data volume.
+
+---
+
+### Summary across all adaptation attempts
+
+| Attempt | Mechanism | Train-domain effect | Held-out generalization | Flag rate change |
+|---|---|---|---|---|
+| CORAL pooled (128-dim) | linear covariance | AUROC 0.994→0.218 (strong) | Broke model (cross-attn bypassed) | 93%→100% (worse) |
+| CORAL token (64-dim) | linear covariance | AUROC 0.954→0.934 (weak) | Consistent — no real improvement | ~93%→96.4% (noise) |
+| Adversarial v1 (hidden=128) | nonlinear, large | Discriminator winning | AUROC 1.000 (overfit) | ~93%→96–100% |
+| Adversarial v2 (hidden=32) | nonlinear, constrained | Stable but inert | AUROC 0.9984→0.9981 (noise) | ~93%→84–92% |
+
+**Overall conclusion.** Four distinct mechanisms — linear and nonlinear, loosely and tightly constrained — produced consistent null or negative results. This is not a single failed attempt; it is evidence that **representation-space manipulation of the effort encoder's tokens cannot close the belt-to-accelerometer gap with 2,411 training epochs across 8 nights**. The gap is real (confirmed in §7c, characterized structurally in §7d Step 1) but requires either substantially more in-house accelerometer data, a labelled supervisory signal (breath-hold events from Phase 5), or direct retraining/fine-tuning of the effort encoder on accelerometer data. These results make Phase 5 (breath-hold protocol) not merely useful but **necessary** before any further adaptation work is meaningful.
+
+**Note on cross-experiment AUROC comparability:** the CORAL token-space measurement used `GroupKFold` across all nights; the adaptor v2 measurement used a 50/50 split restricted to 2 held-out nights. These are not directly comparable; the difference in baseline values (0.9542 vs 0.9984) reflects different night subsets and protocols, not a real change in separability.
+
+---
+
+## 7e. Phase 5 — first breath-hold session (chest SensorTile, 7 voluntary holds)
+
+**Constraint, as always.** One healthy volunteer, one session, one device (chest box: QVAR-ECG + accelerometer; the EOG/EMG boxes were placed elsewhere and are not analysed). Validation only, never trained on, raw recording not committed. This is a plausibility/detectability result, **not** an apnea-accuracy number. Code `src/breath_hold/analyze_session.py`, outputs and per-event plots in `results/breath_hold/` (write-up: `results/breath_hold/FINDINGS.md`).
+
+**Session.** `data/recordings/breath_hold/user_MukuBreathHold_ECG_07_10_2026.csv` (new comma-delimited firmware format; loader fixed in 68d16f8). Recording 1795.6 s, empirical fs 243.1 Hz (+1.29% vs nominal, same offset as §7). Seven ~30 s holds (stopwatch laps 2,4,…,14); stopwatch total 1800.46 s vs recording 1795.6 s, i.e. a **4.8 s sync lag**, consistent with the reported 5–10 s manual start lag. Stopwatch boundaries are therefore good to a few seconds only, which is exactly why boundary placement matters for the ratio below.
+
+**Effort ratio** = RMS of the 0.08–0.6 Hz bandpassed accelerometer magnitude inside the hold ÷ RMS over the 15 s before it (<1 means effort dropped). Reported under two honest windows, because automatic boundary detection did not work reliably (next subsection):
+
+| Event | Inner window (nominal inset by 4.8 s sync lag) | Wide window (nominal stopwatch boundaries) | Detector (visually graded) |
+|---|---|---|---|
+| 1 | 0.25 | 0.62 | fell back to nominal — FAIL |
+| 2 | 0.27 | 0.31 | 0.07 — OK |
+| 3 | 0.64 | 0.49 | 0.05 — FAIL (truncated by a mid-hold burst) |
+| 4 | 0.14 | 0.52 | 0.09 — OK |
+| 5 | 0.46 | 0.78 | 0.16 — FAIL (no clean quiet stretch) |
+| 6 | 0.10 | 0.33 | 0.04 — OK |
+| 7 | 0.60 | 1.49 | 0.47 — FAIL (start ~13 s late) |
+| mean / median | 0.35 / 0.27 | 0.65 / 0.52 | — |
+
+**Read these as a range per event (inner → wide), not a point value.** Inner window: 7/7 events below 0.8, 5/7 below 0.5. Wide window: 6/7 below 0.8, 3/7 below 0.5. Direction is consistent in every event under the inner window; magnitude is not pinned down. All 7 hold windows in `session_overview.png` show a visibly flat effort stretch.
+
+Why the two windows differ, event-specific and not forced: the 4.8 s lag means quiet periods sit earlier in recording time than the stopwatch says, so the wide window of Event 7 (quiet ends ≈1738 s, nominal end 1743.8 s) swallows the recovery-gasp burst — hence 1.49, which is boundary bleed, not "effort increased". Conversely in Event 1 the true quiet starts ≈5 s *after* nominal start (breath/settling), so the wide window includes breathing. The pre-hold baseline is anchored to the nominal start, so events whose quiet starts before nominal (Event 4, ≈6 s) have a slightly quiet-contaminated baseline, which biases ratios *upward* (conservative). Event 3 has a ~3.5 s mid-hold burst (swallow/twitch); Event 5 is not cleanly quiet at all.
+
+**Boundary detection: attempted three ways, did not generalise (an honest result).**
+1. *v2 (previous run) — the confirmed bug.* `refine_from_effort` ran on the **signed bandpassed trace**, taking `|x|` below a 30th-percentile threshold for **5 consecutive samples ≈ 20 ms** at 243 Hz. `|bandpassed|` crosses zero twice per breath, so every zero-crossing counted as "quiet" and the first match was always the left edge of the ±12 s search window: all 7 start offsets landed at −11.0…−11.9 s (the search bound, not 7 independent detections). Event 1's ratio of 3.12 came from a "hold" window that was mostly normal breathing.
+2. *v3a — Hilbert envelope, threshold = 30% of pre-hold median envelope, quiet run ≥ 2 measured breath periods (period from each event's own baseline spectrum, 2.1–3.9 s), segments chained across ≤1 period of activity, ≥80% quiet, refuses to return a boundary on the search-window edge (falls back to nominal, flagged).* Removed the edge-pinning. Visually correct on Events 2, 4, 6 only.
+3. *v3b — floor-relative threshold (noise floor from the event's own window + 30% of the way to baseline).* Changed nothing materially (noise floor ≈ 0), same 3/7. Per the agreed rule this was the last threshold adjustment; tuning further on one subject/session would overfit the detector to this session.
+
+Visual verdict per event (all 7 plots read): OK = 2, 4, 6; FAIL = 1 (fell back; real quiet ≈997–1015 s not found), 3 (stops at ≈1240.6 s because of the mid-hold burst; quiet resumes to ≈1257 s), 5 (6 s fragment), 7 (start 1724.6 s vs visible quiet from ≈1710.5 s; end OK). The CSV carries `refinement_fell_back_to_nominal`, `fallback_reason` and a `detector_visual_verdict` column (a **manual** annotation, flagged as such in the code), so rows are self-describing. The detector's per-event numbers (0.04–0.09 on the three visually-good events) are shown for transparency; they are **not** a headline.
+
+**HR direction: still unconfirmed.** Hold-minus-pre mean HR, computed on each version's boundaries: v1 +0.84 bpm (5/7 up), v2 −3.08 (1/7 up), v3 −1.35 bpm, SD 4.8 (3/7 up; per event +5.5, +1.7, +2.8, −3.8, −6.2, −7.1, −2.3). The sign changes with the boundaries, so no direction is established and no bradycardia/tachycardia claim is made. The expected physiological caveat stands (short voluntary awake holds often show anticipatory sympathetic rise), but it is a hypothesis, not a finding. Separately, Event 1 contains a ~153 bpm two-beat R-peak artifact near 1000 s that the single-beat despiker does not catch (two consecutive samples), which inflates that event's hold-mean HR; not fixed here.
+
+**Open problem — status.** The *bug* is resolved (root cause identified and removed); a **reliable automatic boundary detector is not**. Needs a second session (ideally with a physical sync marker — 3 sharp taps per protocol — or a button/event marker to cut the 4.8 s lag uncertainty) to validate a detector against, plus the SHORT 5–7 s hold false-positive test from `docs/breath_hold_protocol.md`, which this session did not include.
+
+**What this establishes / does not.** Establishes: on real hardware, chest accelerometer effort visibly collapses during voluntary holds (inner-window ratio < 0.8 in 7/7), the first labelled evidence that the raw accelerometer carries cessation information — a counterpoint to §7c, which showed the *belt-trained learned representation* doesn't transfer, not that the signal is uninformative. Does not establish: boundary precision, detector thresholds, HR behaviour, generalisation beyond one subject, or any false-positive rate.
+
+---
 ## 8. Current status and what's next
 
 | Phase | Status |
@@ -458,11 +581,12 @@ The ablation isolates the **effort branch**: pure white-noise effort gives 33% (
 | — Deployable ECG model | **Done** — frozen; tested for plausibility (not accuracy) on real QVAR data, does not transfer as-is (see §7) |
 | §4b — ECG feature-extraction comparison study (8 methods) | **Done, exploratory** — confirms method 2 (adopted) is still best; QRS-area (method 6) is **no longer** considered a viable fallback EDR (see §7 — QVAR domain gap is worse for QRS-area than for amplitude) |
 | — In-house QVAR validation track (Mam's directive 3) | **Done** — see §7: 15-recording data-quality report, PhysioNet-vs-QVAR domain gap, frozen-model plausibility test, hudson/Hari anomaly investigation |
-| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** (but see §7c: the MESA-belt-trained CANet effort stream does not transfer to our accelerometer) — real IMU signal is now present and confirmed usable in all 15 in-house recordings (§7), so this is real-data-testable; not yet run against it |
-| 5 — Breath-hold validation on our own hardware | **Now the critical experiment (§7c); protocol in `docs/breath_hold_protocol.md`, session pending.** Previously: **blocked** on collecting a timestamped breath-hold session specifically (healthy-night recordings already exist and were used for §7). The 240 Hz reconciliation and the amplitude-channel transfer risk are no longer hypothetical — both are now measured (§7: fs 238–243 Hz vs nominal 240; ~108x R-amplitude gap, needs QVAR-specific recalibration before Phase 6) |
+| 4 — Effort branch (IMU → envelope → cessation detection) | **Built and validated on synthetic data only** (but see §7c: the MESA-belt-trained CANet effort stream does not transfer to our accelerometer) — real IMU signal is present in all 15 in-house recordings (§7) and the chest accelerometer envelope visibly collapses during breath-holds (§7e); cessation *detector* thresholds still unvalidated on real data |
+| 5 — Breath-hold validation on our own hardware | **First session done (§7e, 2026-10-07 recording, one subject, 7 holds).** Accelerometer effort drops during holds (ratio range per event in §7e; inner-window ratio < 0.8 in 7/7). Automatic boundary refinement did NOT generalise (3 approaches, 3/7 events visually correct) -> ratios reported as a range. HR direction unconfirmed. Second session needed to validate a detector; short-hold false-positive test not part of this session. |
 | 6 — Fusion (fused > ECG-only, the headline claim) | **Shown on MESA** (§7b: CANet AUROC 0.780 vs 0.610 ECG-only, subject-independent) using belts; on our own accelerometer hardware **blocked on 5** (transfer failure, §7c) |
 | 7 — Per-night report (events/hour, severity band, no-SpO2 caveat) | Blocked on 6 |
 | 8 — Track B (MESA) | **Done for the headline path** (§7b): audit, ECG-only baseline, CANet, ablations, SpO2 ceiling; obstructive/central kept descriptive only (central not learnable) |
+| §7d — Sensor-domain adaptation track | **Done (negative result, documented).** Four attempts (CORAL pooled, CORAL token, adversarial v1, adversarial v2) all failed to close the belt→accelerometer gap with current data. Consistent finding: representation-space manipulation insufficient at this data scale. Phase 5 breath-hold protocol is now the critical unblocked path. See `results/adaptation/` and individual FINDINGS.md files. |
 
 Phase 4's synthetic-only build means the *code* for both branches now exists and is internally validated; §7 confirms real IMU data is present and usable in all 15 in-house recordings, so the effort branch's remaining gap is running it against real data, not hardware access. What's still genuinely blocked is Phase 5's breath-hold protocol specifically (a recording session that hasn't happened) and the ECG branch's QVAR-specific amplitude recalibration flagged in §7. No further ECG-branch *architecture* work is planned per the "Phase 3 is done, no further tuning" decision — the amplitude-channel fix is a recalibration/normalization task, not a new model.
 
@@ -585,7 +709,26 @@ apnea/
     mesa/ecg_baseline/                    §7b: ECG-only baseline (grouped 5-fold CV) metrics/config/AHI points (no ids).
     mesa/canet/                           §7b: CANet headline + ablations + SpO2 ceiling, head_to_head.md/.csv, per-variant subdirs.
     inhouse_canet/                        §7c: deployability / domain_gap / negative_control for the MESA-trained CANet on QVAR+IMU.
+    adaptation/
+      embed_gap/                          §7d step 1: embeddings.npz, embedding_space.png, pca_dim_gap.png, run.log.
+      coral/                              §7d step 2: CORAL params, alignment plots, reg sweep, flag rates, FINDINGS.md.
+      adaptor/                            §7d step 3: adversarial v1 training history, curves, checkpoint, FINDINGS.md.
+      adaptor_v2/                         §7d step 4: adversarial v2 (corrected measurement), training history,
+                                           curves, checkpoint, FINDINGS.md, summary.json.
+  src/adaptation/                         §7d: sensor-domain adaptation track.
+    embed_gap.py                           Step 1: effort-encoder embedding visualisation (PCA + t-SNE),
+                                            gap characterisation. Outputs -> results/adaptation/embed_gap/.
+    coral_adaptor.py                       Step 2: CORAL (linear covariance alignment) at pooled and
+                                            token levels. Negative result — see FINDINGS.md.
+    train_adaptor.py                       Step 3: adversarial residual MLP adaptor v1 (hidden=128).
+                                            Negative result (overfit) — see FINDINGS.md.
+    train_adaptor_v2.py                    Step 4: adversarial adaptor v2 (hidden=32, stronger anchor,
+                                            balanced LRs, early-stop guardrail). Negative result (inert).
+                                            Fixed a measurement bug (resubstitution AUROC) mid-run.
   src/mesa/                               MESA cardiac + respiratory streams, ECG baseline, CANet, final-model training.
   src/inhouse/                            In-house stream builder (QVAR+IMU -> CANet inputs) and the transfer study driver.
+  src/breath_hold/analyze_session.py      §7e: breath-hold session analysis (R-peaks, despiked HR, effort envelope,
+                                           3-way effort-ratio windows, boundary-detector attempt + flags).
+  results/breath_hold/                    §7e outputs: event_summary.csv, event_XX.png, session_overview.png, summary.json, FINDINGS.md.
   docs/breath_hold_protocol.md            Monday's breath-hold recording checklist (Phase 5).
 ```
