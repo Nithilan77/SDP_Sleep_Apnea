@@ -500,6 +500,8 @@ Residual MLP per-token (hidden=128), trained adversarially against a belt-vs-acc
 
 **Result:** Training unstable — residual loss oscillated 1.6–13.2 without converging; discriminator confidence on belt tokens trended *upward* (toward 0.78) rather than toward the fooled equilibrium of 0.5. Held-out domain AUROC (at end of training): **1.0000** — worse than the pre-adaptation baseline (~0.93–0.95). Textbook adversarial overfitting: adaptor found a training-set-specific equilibrium that did not generalize to unseen nights.
 
+> **Erratum (2026-10-09):** the held-out AUROC of 1.0000 reported for attempt 1 came from the pre-fix *resubstitution* measurement (classifier fit and scored on the same data; see Step 4, where the same bug returned 1.0 for the identity adaptor) and must not be read as a valid number; the finding for attempt 1 rests on the unstable training dynamics and the absence of a credible flag-rate benefit, not on that AUROC.
+
 **Training curve confirms:** disc(belt) and disc(adapted) diverge throughout; no sign of the crossing-at-0.5 equilibrium that indicates genuine alignment. See `results/adaptation/adaptor/training_curves.png`.
 
 ---
@@ -524,7 +526,7 @@ Changes from v1: hidden dim 128→32, residual penalty 0.05→0.3 (6x stronger a
 |---|---|---|---|---|
 | CORAL pooled (128-dim) | linear covariance | AUROC 0.994→0.218 (strong) | Broke model (cross-attn bypassed) | 93%→100% (worse) |
 | CORAL token (64-dim) | linear covariance | AUROC 0.954→0.934 (weak) | Consistent — no real improvement | ~93%→96.4% (noise) |
-| Adversarial v1 (hidden=128) | nonlinear, large | Discriminator winning | AUROC 1.000 (overfit) | ~93%→96–100% |
+| Adversarial v1 (hidden=128) | nonlinear, large | Discriminator winning | AUROC 1.000 (overfit) — *invalid, see erratum under Step 3* | ~93%→96–100% |
 | Adversarial v2 (hidden=32) | nonlinear, constrained | Stable but inert | AUROC 0.9984→0.9981 (noise) | ~93%→84–92% |
 
 **Overall conclusion.** Four distinct mechanisms — linear and nonlinear, loosely and tightly constrained — produced consistent null or negative results. This is not a single failed attempt; it is evidence that **representation-space manipulation of the effort encoder's tokens cannot close the belt-to-accelerometer gap with 2,411 training epochs across 8 nights**. The gap is real (confirmed in §7c, characterized structurally in §7d Step 1) but requires either substantially more in-house accelerometer data, a labelled supervisory signal (breath-hold events from Phase 5), or direct retraining/fine-tuning of the effort encoder on accelerometer data. These results make Phase 5 (breath-hold protocol) not merely useful but **necessary** before any further adaptation work is meaningful.

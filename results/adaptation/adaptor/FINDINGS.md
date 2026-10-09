@@ -1,5 +1,7 @@
 # Nonlinear adversarial adaptor — attempt 1, negative result
 
+> **Pointer (added 2026-10-09; the text below is left unchanged as the historical record):** the "held-out domain AUROC 1.0000" below was computed with the pre-fix resubstitution measurement and is not a valid number. See the erratum in `docs/PROGRESS.md` section 7d, Step 3. The unstable training and lack of credible benefit described below are unaffected.
+
 **Date:** 2026-10-06
 **Status:** Negative result — overfit to training nights, does not generalize.
 
