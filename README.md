@@ -15,7 +15,7 @@ A wearable sleep apnea *screening* system (not a diagnostic device) that fuses E
 - Not done: decision-level fusion and per-night report on our hardware (Phases 6-7), a validated cessation/boundary detector, subject-independent validation on our hardware.
 
 **Update 2026-10-19** (uncommitted work; details in `docs/PROGRESS.md` §7h):
-- **Read the 81.2% above as the historical Phase 3 number** (its CNN variant was chosen on the same test folds; single seed). A controlled multi-seed re-evaluation (LOSO, inner-validation early stopping/thresholds, 3 seeds) gives the CNN **75.3% accuracy at threshold 0.5** (AUROC 0.807); TCN 76.0%, GRU 71.7%, LSTM 69.2%. No recurrent/temporal model beats the CNN. The gap to 81.2% is not yet explained — a diagnostic is still running (its seed 0 reproduces 0.81 with the historical recipe, and gives 0.74 when 5 records are withheld from training); a tabular HRV model is under evaluation (preliminary, one seed).
+- **Read the 81.2% above as the historical Phase 3 number** (its CNN variant was chosen on the same test folds; single seed). A controlled multi-seed re-evaluation (LOSO, inner-validation early stopping/thresholds, 3 seeds) gives the CNN **75.3% accuracy at threshold 0.5** (AUROC 0.807); TCN 76.0%, GRU 71.7%, LSTM 69.2%. No recurrent/temporal model beats the CNN. The gap to 81.2% is explained: the historical recipe averages 77.8% ± 3.0 over three seeds (81.2% was the best seed) and drops to ≈ 75.4% when trained on 29 instead of 34 records; a gradient-boosting model on hand-crafted HRV/CVHR features reaches 80.2% accuracy @0.5 (AUROC 0.84) under the same protocol — competitive with, not demonstrably better than, the CNN (paired CI includes 0).
 - **MESA SpO2 ablations** (same 220 subjects/folds, AUROC): ECG 0.609, SpO2 0.775, ECG+SpO2 0.769, effort 0.747, ECG+effort 0.780, ECG+effort+SpO2 0.813. Our wearable has no SpO2.
 - **In-house recordings:** the Google Drive folder (ID ends in `_`) was downloaded to `data/recordings/drive_2026-10-19/` and verified; the second breath-hold session could not be aligned to an event timeline and its tiles are not synchronised. See §7h.5.
 - **Dashboard:** `python3 -m src.webapp.app` → http://127.0.0.1:5000 (overview, in-house recordings, upload & inference, model comparison, MESA multimodal, methodology, report download). End-to-end tests (`python3 tests/e2e_webapp.py`, real server over HTTP): 25/25 pass as of 2026-10-19.
@@ -37,5 +37,20 @@ python src/ecg/cvhr_baseline.py
 python src/ecg/cnn_apnea_final.py
 ```
 See `docs/PROGRESS.md` §3–4 for the full list and expected results.
+
+## Running the dashboard (also on a fresh clone)
+
+```
+git clone https://github.com/Nithilan77/SDP_Sleep_Apnea.git && cd SDP_Sleep_Apnea
+pip install -r requirements.txt          # includes Flask; use a Python with torch (system python3 on the lab machine)
+python3 -m src.webapp.app                # then open http://127.0.0.1:5000
+```
+
+Everything the dashboard needs is in git **except** three things that are deliberately not committed (human-subject / gated data):
+- **Demo button** needs `data/recordings/breath_hold/user_MukuBreathHold_ECG_07_10_2026.csv`; without it the button reports "Demo recording missing". Uploading your own SensorTile ECG `.csv`/`.txt` (>= 10 min) works.
+- **Effort-branch results on an upload** need the MESA-derived weights `data/mesa/cache/final_models/headline.pt` (~0.7 MB, copy it from the original machine to the same path). Without it the upload still returns the ECG-branch results, with a warning that the effort branch is unavailable.
+- Page content (Overview, In-house, Model comparison, MESA, Methodology) is read from committed files under `results/`; the in-house figures are included.
+
+Tests: `python3 tests/e2e_webapp.py` (needs the recordings above; 25/25 pass on the original machine).
 
 Our own SensorTile recordings (`data/recordings/`) are validation-only and never committed to this repo (human-subject data).

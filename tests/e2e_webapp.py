@@ -63,7 +63,7 @@ make_variants()
 srv = start()
 try:
     case("P1 Overview", "200; headline MESA result + historical CNN card", page("/", "AUROC", "Per-minute apnea classifier", "Pipeline"))
-    case("P2 In-house", "200; inventory with 6 logs, Drive status, provenance", page("/inhouse", "Recording inventory", "NOT RETRIEVED", "S2 EMG", "negative result"))
+    case("P2 In-house", "200; inventory with 6 logs, Drive status, provenance", page("/inhouse", "Recording inventory", "RETRIEVED AND VERIFIED", "S2 EMG", "negative result"))
     case("P3 Models", "200; historical table; controlled section present", page("/models", "Model comparison", "Historical results", "Controlled comparison"))
     case("P4 MESA", "200; six configurations listed", page("/mesa", "ECG only", "SpO2 only", "ECG + SpO2", "Effort only", "ECG + effort (CANet)", "ECG + effort + SpO2"))
     case("P5 Methods", "200; leakage + limitations + checkpoint hashes", page("/methods", "leakage prevention", "Negative / limiting results", "SHA-256"))

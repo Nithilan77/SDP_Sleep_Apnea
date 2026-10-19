@@ -1,0 +1,12 @@
+[hgb_within] seed 0 done 1504s
+[hgb_within] seed 1 done 508s
+[hgb_within] seed 2 done 570s
+[logreg_within] seed 0 done 2s
+[logreg_within] seed 1 done 2s
+[logreg_within] seed 2 done 2s
+[hgb_plusprev] seed 0 done 575s
+[hgb_plusprev] seed 1 done 624s
+[hgb_plusprev] seed 2 done 494s
+[logreg_plusprev] seed 0 done 52s
+[logreg_plusprev] seed 1 done 50s
+[logreg_plusprev] seed 2 done 62s

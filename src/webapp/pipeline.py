@@ -153,7 +153,11 @@ def effort_branch(path: Path, stride: float = 5.0) -> dict:
     s = S.build(path, "UP")
     if s is None:
         raise InputError("Effort branch could not build streams (recording too short / unreadable).")
-    bundle = joblib.load(HEADS); df = predict_windows(s, bundle["heads"], stride)
+    try:
+        bundle = joblib.load(HEADS); df = predict_windows(s, bundle["heads"], stride)
+    except FileNotFoundError as e:   # e.g. fresh clone: MESA-derived frozen CANet weights are gitignored (data/mesa/cache/final_models/headline.pt)
+        raise InputError(f"Effort branch unavailable on this machine: a required model file is missing ({Path(str(e.filename)).name}). "
+                         "Copy data/mesa/cache/final_models/headline.pt from the original machine to enable it; the ECG branch is unaffected.")
     res = dict(n_windows=len(df), heads={}, in_sample=(path.name == bundle["meta"]["trained_on"]))
     fig, ax = plt.subplots(3, 1, figsize=(12, 6.5), sharex=True)
     tt = np.arange(len(s.effort_raw["mag"])) / 32.0

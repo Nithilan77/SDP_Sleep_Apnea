@@ -14,8 +14,8 @@
 | U3b results are computed from each upload | ECG-branch numbers differ between the two uploads; each report carries its own recording duration | ecg sections differ=True (len 721/720) | PASS |
 | U4 unknown report id | HTTP 404 | HTTP 404 | PASS |
 | E1 wrong file type (.pdf) | HTTP 400, 'Unsupported file type' | HTTP 400 | PASS |
-| E2 garbage .csv | HTTP 400, 'Could not parse' | HTTP 400: linical datasets (PhysioNet Apnea-ECG, MESA); in-house recordings are feasibility data from healthy volunteers. Not clinically validated. 2026-10-19.  | PASS |
-| E3 valid format but too short (~2 min) | HTTP 400, 'at least 600 s' | HTTP 400: ESA); in-house recordings are feasibility data from healthy volunteers. Not clinically validated. 2026-10-19.  | PASS |
+| E2 garbage .csv | HTTP 400, 'Could not parse' | HTTP 400: linical datasets (PhysioNet Apnea-ECG, MESA); in-house recordings are feasibility data from healthy volunteers. Not clinically validated. 2026-10-20.  | PASS |
+| E3 valid format but too short (~2 min) | HTTP 400, 'at least 600 s' | HTTP 400: ESA); in-house recordings are feasibility data from healthy volunteers. Not clinically validated. 2026-10-20.  | PASS |
 | E4 empty upload | HTTP 400, 'No file uploaded' | HTTP 400 | PASS |
 | E5 session-1 EMG-wired tile | HTTP 400 'no clear cardiac rhythm' (not accepted as ECG) | HTTP 400: Could not analyse this file. The QVAR channel shows no clear cardiac rhythm (spectral prominence 6.6 &lt; 20). This ECG  | PASS |
 | E6 session-1 EOG-wired tile | HTTP 400 'no clear cardiac rhythm' (not accepted as ECG) | HTTP 400: Could not analyse this file. The QVAR channel shows no clear cardiac rhythm (spectral prominence 6.1 &lt; 20). This ECG  | PASS |
