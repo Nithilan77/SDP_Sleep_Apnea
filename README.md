@@ -46,9 +46,9 @@ pip install -r requirements.txt          # includes Flask; use a Python with tor
 python3 -m src.webapp.app                # then open http://127.0.0.1:5000
 ```
 
-Everything the dashboard needs is in git **except** three things that are deliberately not committed (human-subject / gated data):
+Everything the dashboard needs is in git, **including** the MESA-trained CANet weights `data/mesa/cache/final_models/headline.pt` (~0.7 MB; force-added although `data/mesa/` is gitignored — it is the only file from that folder that is tracked) used by the effort branch. Three things are deliberately *not* in git (human-subject / gated data):
 - **Demo button** needs `data/recordings/breath_hold/user_MukuBreathHold_ECG_07_10_2026.csv`; without it the button reports "Demo recording missing". Uploading your own SensorTile ECG `.csv`/`.txt` (>= 10 min) works.
-- **Effort-branch results on an upload** need the MESA-derived weights `data/mesa/cache/final_models/headline.pt` (~0.7 MB, copy it from the original machine to the same path). Without it the upload still returns the ECG-branch results, with a warning that the effort branch is unavailable.
+- The MESA dataset itself and the other model caches under `data/mesa/` (only needed to retrain, not to run the dashboard).
 - Page content (Overview, In-house, Model comparison, MESA, Methodology) is read from committed files under `results/`; the in-house figures are included.
 
 Tests: `python3 tests/e2e_webapp.py` (needs the recordings above; 25/25 pass on the original machine).
