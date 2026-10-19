@@ -1,0 +1,46 @@
+{
+ "rnn": {
+  "config": {
+   "epochs": 80,
+   "hidden": 64,
+   "pool": "mean",
+   "bidir": false
+  },
+  "metrics": {
+   "n": 16949.0,
+   "tp": 4358.0,
+   "tn": 8126.0,
+   "fp": 2311.0,
+   "fn": 2154.0,
+   "accuracy": 0.7365626290636615,
+   "sensitivity": 0.6692260442260443,
+   "specificity": 0.7785762192200824,
+   "precision": 0.6534712850502324,
+   "f1": 0.6612548365070936
+  },
+  "per_recording_correct": 25,
+  "params": 5409
+ },
+ "lstm": {
+  "config": {
+   "epochs": 80,
+   "hidden": 64,
+   "pool": "last",
+   "bidir": false
+  },
+  "metrics": {
+   "n": 16949.0,
+   "tp": 4131.0,
+   "tn": 8518.0,
+   "fp": 1919.0,
+   "fn": 2381.0,
+   "accuracy": 0.7462977166794501,
+   "sensitivity": 0.6343673218673219,
+   "specificity": 0.8161349046660918,
+   "precision": 0.6828099173553719,
+   "f1": 0.6576978188186595
+  },
+  "per_recording_correct": 29,
+  "params": 18465
+ }
+}

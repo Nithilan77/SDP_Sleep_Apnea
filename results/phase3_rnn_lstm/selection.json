@@ -1,0 +1,321 @@
+{
+ "val_records": [
+  "a05",
+  "a10",
+  "a15",
+  "b02",
+  "c03",
+  "c06",
+  "c09"
+ ],
+ "grid": [
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.5864479184319042,
+   "val_acc": 0.4764024933214604
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6370869344178953,
+   "val_acc": 0.6007717423567824
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.6381298367508332,
+   "val_acc": 0.5313149302463639
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.6623312432920974,
+   "val_acc": 0.6004749183734046
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.5845986555950969,
+   "val_acc": 0.4933214603739982
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6533002880867649,
+   "val_acc": 0.5690115761353517
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.6167351578828447,
+   "val_acc": 0.5111308993766697
+  },
+  {
+   "arch": "rnn",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.6072452409196181,
+   "val_acc": 0.4968833481745325
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.617955290063831,
+   "val_acc": 0.5034134758088453
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6276280856352031,
+   "val_acc": 0.5221133867616503
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.669642151047845,
+   "val_acc": 0.6126447016918967
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7111965486075806,
+   "val_acc": 0.6648857227663996
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.6399127266564989,
+   "val_acc": 0.6444048679133274
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6643252556063943,
+   "val_acc": 0.5986939744731374
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.623142264023047,
+   "val_acc": 0.6651825467497774
+  },
+  {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7043601366999943,
+   "val_acc": 0.686850697536361
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.6486979607976049,
+   "val_acc": 0.5776194716533096
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6830134722928317,
+   "val_acc": 0.597506678539626
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.7043170649042535,
+   "val_acc": 0.643217571979816
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7601261085691691,
+   "val_acc": 0.7669931730483823
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.6485320284697509,
+   "val_acc": 0.568417928168596
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6343437552957126,
+   "val_acc": 0.5339863460967647
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.7209696096706772,
+   "val_acc": 0.7111902641733452
+  },
+  {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7508614359148167,
+   "val_acc": 0.7453250222617988
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.6902417669321583,
+   "val_acc": 0.632828732561591
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.6357672428401966,
+   "val_acc": 0.6363906203621252
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.7401873976162232,
+   "val_acc": 0.7287028791926388
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.6159591594644975,
+   "val_acc": 0.6728999703176016
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 32,
+   "val_bal_acc": 0.6864140258713213,
+   "val_acc": 0.7028791926387652
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 30,
+   "hidden": 64,
+   "val_bal_acc": 0.638456052646444,
+   "val_acc": 0.6070050460077174
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 32,
+   "val_bal_acc": 0.6717180703835508,
+   "val_acc": 0.699317304838231
+  },
+  {
+   "arch": "lstm",
+   "pool": "mean",
+   "bidir": true,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.6792563407332091,
+   "val_acc": 0.703472840605521
+  }
+ ],
+ "best": {
+  "rnn": {
+   "arch": "rnn",
+   "pool": "mean",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7111965486075806,
+   "val_acc": 0.6648857227663996
+  },
+  "lstm": {
+   "arch": "lstm",
+   "pool": "last",
+   "bidir": false,
+   "epochs": 80,
+   "hidden": 64,
+   "val_bal_acc": 0.7601261085691691,
+   "val_acc": 0.7669931730483823
+  }
+ }
+}

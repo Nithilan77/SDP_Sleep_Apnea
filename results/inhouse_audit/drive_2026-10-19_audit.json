@@ -1,0 +1,226 @@
+{
+ "folder_id": "1wS9USehoXPs37GDOZKEbiNTCKUq29yo_",
+ "dest": "data/recordings/drive_2026-10-19",
+ "files": {
+  "MithinBreathHold-TimeStamps.mp4": {
+   "size": 2081143,
+   "sha256": "528c47164fd8c8294fbac8060fd833a3f945727281eccd90ea9e912587794bf5",
+   "ftyp": "mp42",
+   "duration_s": 13.616666666666667,
+   "has_moov": true,
+   "tracks": 2,
+   "track_info": [
+    {
+     "kind": "vide",
+     "codec": "avc1",
+     "width": 384,
+     "height": 832
+    },
+    {
+     "kind": "soun",
+     "codec": "mp4a",
+     "width": null,
+     "height": null
+    }
+   ],
+   "frame_extraction": "NOT DONE: no ffmpeg/ffprobe/cv2/av/imageio installed"
+  },
+  "mindMonitor_2026-10-07-MukuBreathHold.zip": {
+   "size": 317220,
+   "sha256": "ddf5cc57957413e78d361e818df7c45dcb5f5ef561dfdba14dbd60532f7bdbaf",
+   "entries": [
+    {
+     "name": "mindMonitor_2026-10-08--00-28-05_7019056952020285314.csv",
+     "size": 1260708
+    }
+   ],
+   "rows": 5271,
+   "columns_n": 59,
+   "columns_head": [
+    "TimeStamp",
+    "Delta_TP9",
+    "Delta_AF7",
+    "Delta_AF8",
+    "Delta_TP10",
+    "Theta_TP9"
+   ],
+   "has_elements_col": true,
+   "element_values": [
+    "/muse/event/connected MuseS-C108",
+    "/muse/elements/blink",
+    "/muse/elements/jaw_clench"
+   ],
+   "first_ts": "2026-10-08 00:28:05.781000",
+   "last_ts": "2026-10-08 00:58:10.867000",
+   "span_s": 1805.086,
+   "raw_nonnull_rows": 1788,
+   "has_ppg_or_hr": [
+    "Heart_Rate"
+   ],
+   "heart_rate_bpm_min_med_max": [
+    59.60069,
+    71.50043,
+    120.190346
+   ],
+   "element_counts": {
+    "/muse/elements/blink": 2812,
+    "/muse/elements/jaw_clench": 670,
+    "/muse/event/connected MuseS-C108": 1
+   },
+   "median_dt_raw_rows_s": 1.008,
+   "accel_cols": [
+    "Accelerometer_X",
+    "Accelerometer_Y",
+    "Accelerometer_Z",
+    "Gyro_X",
+    "Gyro_Y",
+    "Gyro_Z"
+   ]
+  },
+  "mindMonitor_2026-10-11-MithinBreathHold.zip": {
+   "size": 4607553,
+   "sha256": "d8aa2a16b1910c994a3ce942bdf355199388f36056e4fa18cf256f6530903e02",
+   "entries": [
+    {
+     "name": "mindMonitor_2026-10-11--01-22-44_443976809493263492.csv",
+     "size": 18128686
+    }
+   ],
+   "rows": 63368,
+   "columns_n": 59,
+   "columns_head": [
+    "TimeStamp",
+    "Delta_TP9",
+    "Delta_AF7",
+    "Delta_AF8",
+    "Delta_TP10",
+    "Theta_TP9"
+   ],
+   "has_elements_col": true,
+   "element_values": [
+    "/muse/event/connected MuseS-C108",
+    "/muse/elements/blink",
+    "/muse/elements/jaw_clench",
+    "/muse/event/disconnected MuseS-C108"
+   ],
+   "first_ts": "2026-10-11 01:22:44.490000",
+   "last_ts": "2026-10-11 08:55:02.424000",
+   "span_s": 27137.934,
+   "raw_nonnull_rows": 26867,
+   "has_ppg_or_hr": [
+    "Heart_Rate"
+   ],
+   "heart_rate_bpm_min_med_max": [
+    45.801594,
+    51.883465,
+    130.85623
+   ],
+   "element_counts": {
+    "/muse/elements/blink": 30669,
+    "/muse/elements/jaw_clench": 5819,
+    "/muse/event/connected MuseS-C108": 7,
+    "/muse/event/disconnected MuseS-C108": 6
+   },
+   "median_dt_raw_rows_s": 1.008,
+   "accel_cols": [
+    "Accelerometer_X",
+    "Accelerometer_Y",
+    "Accelerometer_Z",
+    "Gyro_X",
+    "Gyro_Y",
+    "Gyro_Z"
+   ]
+  },
+  "user_MithinBreathHold_ECG_000.csv": {
+   "size": 37601280,
+   "sha256": "7bcf2fecfbbb764ab1cfcabb962557b2c47481760435a07d79b87e458e562ca2",
+   "local_counterpart": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_ECG_000.csv",
+   "local_size": 37601280,
+   "identical_to_local": true,
+   "rows": 382156,
+   "truncated_rows": 1,
+   "duration_s": 1574.492759,
+   "fs_mean": 242.71626389867697,
+   "max_gap_s": 0.004121000000168351,
+   "qvar_std": 233.30501566935945,
+   "qvar_unique": 605,
+   "size_mod_4096": 0
+  },
+  "user_MithinBreathHold_EMG_000.csv": {
+   "size": 25067520,
+   "sha256": "081c0fe4a6b30877da2a2b4f11701be3001d99b506c5ea0d775da7cb34114a12",
+   "local_counterpart": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_EMG_000.csv",
+   "local_size": 25067520,
+   "identical_to_local": true,
+   "rows": 254057,
+   "truncated_rows": 1,
+   "duration_s": 1045.59275,
+   "fs_mean": 242.9779663257994,
+   "max_gap_s": 0.004117000000064763,
+   "qvar_std": 198.10143533936414,
+   "qvar_unique": 869,
+   "size_mod_4096": 0
+  },
+  "user_MithinBreathHold_EOG_000.csv": {
+   "size": 29360128,
+   "sha256": "d974023d153e608493b97cc0b6bdb81a644d240a61ed7dbc27ed6969212d1d8f",
+   "local_counterpart": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_EOG_000.csv",
+   "local_size": 53329920,
+   "identical_to_local": false,
+   "is_byte_prefix_of_local": true,
+   "rows": 286742,
+   "truncated_rows": 1,
+   "duration_s": 1179.2048750000001,
+   "fs_mean": 243.16470028161982,
+   "max_gap_s": 0.004113000000188549,
+   "qvar_std": 36.57375369727118,
+   "qvar_unique": 162,
+   "size_mod_4096": 0
+  },
+  "user_MukuBreathHold_ECG_07_10_2026.csv": {
+   "size": 44454258,
+   "sha256": "92f280f20c805b0654d21c18b6f73c6a5d72b7e44453bc77d24228f011227f32",
+   "local_counterpart": "data/recordings/breath_hold/user_MukuBreathHold_ECG_07_10_2026.csv",
+   "local_size": 44454258,
+   "identical_to_local": true,
+   "rows": 436523,
+   "truncated_rows": 0,
+   "duration_s": 1795.6233260000001,
+   "fs_mean": 243.1033244441156,
+   "max_gap_s": 0.004114000000072338,
+   "qvar_std": 402.1577181736411,
+   "qvar_unique": 1085,
+   "size_mod_4096": 370
+  },
+  "user_MukuBreathHold_EMG_07_10_2026.csv": {
+   "size": 43791269,
+   "sha256": "c934b2624153370d9d1f55bd0e50dd5af87f6d09d06fc360496b13f134d17cfa",
+   "local_counterpart": "data/recordings/breath_hold/user_MukuBreathHold_EMG_07_10_2026.csv",
+   "local_size": 43791269,
+   "identical_to_local": true,
+   "rows": 437218,
+   "truncated_rows": 0,
+   "duration_s": 1801.595803,
+   "fs_mean": 242.6831808066773,
+   "max_gap_s": 0.0041220000000521395,
+   "qvar_std": 177.7989013167579,
+   "qvar_unique": 1149,
+   "size_mod_4096": 933
+  },
+  "user_MukuBreathHold_EOG_07_10_2026.csv": {
+   "size": 42708977,
+   "sha256": "dabb123d30cc5f20cd088ad96983d3bfafc882207a84eba2456ae81752eca733",
+   "local_counterpart": "data/recordings/breath_hold/user_MukuBreathHold_EOG_07_10_2026.csv",
+   "local_size": 42708977,
+   "identical_to_local": true,
+   "rows": 436839,
+   "truncated_rows": 0,
+   "duration_s": 1797.759372,
+   "fs_mean": 242.99025042156754,
+   "max_gap_s": 0.0041169999999510765,
+   "qvar_std": 254.0210910098526,
+   "qvar_unique": 882,
+   "size_mod_4096": 4081
+  }
+ }
+}

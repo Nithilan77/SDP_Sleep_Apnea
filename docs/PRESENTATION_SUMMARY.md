@@ -146,6 +146,14 @@ One volunteer, one ~30 min session, chest SensorTile, **7 voluntary ~30 s holds*
 
 ---
 
+## 8b. Update 2026-10-19 (added after the sections above were written; they are not edited)
+
+- **Read the 0.812 / 0.756 / 0.846 figures in §2 and §8 as the *historical* Phase 3 result.** Its CNN variant was chosen among four using the same leave-one-subject-out test folds, and it is a single seed. A controlled re-evaluation (35-fold LOSO, 5 inner-validation records per fold for early stopping and thresholds, 3 seeds; `docs/PROGRESS.md` §7h.1) gives the same CNN **0.753 ± 0.003 accuracy at threshold 0.5 (0.734 with the validation-selected threshold), AUROC 0.807**. The reason for the ~6-point gap is **not yet established** (a diagnostic is still running). Until it is, quote the controlled number as the unbiased estimate and the historical number only with this caveat.
+- LSTM (0.692) and GRU (0.717) do not beat the CNN; a TCN (0.760) is statistically indistinguishable from it. A gradient-boosting model on hand-crafted HRV features looks competitive in one preliminary seed (0.811 accuracy) — not a result until the remaining seeds finish.
+- MESA, now six modality configurations on the same 220 subjects: ECG 0.609, SpO2 0.775, ECG+SpO2 0.769, effort 0.747, ECG+effort 0.780, ECG+effort+SpO2 0.813 (AUROC). SpO2 alone matches ECG+effort, but our wearable has no SpO2.
+- In-house data: the Google Drive folder was retrieved and verified. The second breath-hold session could not be aligned to any event timeline, its three tiles are not synchronised, and only its ECG tile carries ECG; **no second-session replication of §5 exists.** A 13.6 s timestamps video has not been inspected.
+- A multi-page research dashboard exists (`python3 -m src.webapp.app`); its end-to-end test suite passes 25/25 (real uploads of both ECG tiles, report export, rejection of non-ECG and malformed files); no browser/UI or overnight-file test was run.
+
 ## 9. Next steps
 
 1. **Second (and third) breath-hold session(s), more subjects:** 3 sharp sync taps / event markers, the 5–7 s SHORT-hold false-positive test, holds spread across the recording with a rest-only control stretch (addresses drift), and a rest-period comparison. → validates a boundary detector on held-out events.

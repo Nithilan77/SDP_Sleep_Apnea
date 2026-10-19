@@ -1,0 +1,162 @@
+{
+ "generated": "2026-10-19T23:03:17",
+ "files": [
+  {
+   "session": "S1",
+   "tile": "ECG",
+   "name": "user_MukuBreathHold_ECG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 44454258,
+   "sha256": "92f280f20c805b0654d21c18b6f73c6a5d72b7e44453bc77d24228f011227f32"
+  },
+  {
+   "session": "S1",
+   "tile": "EMG",
+   "name": "user_MukuBreathHold_EMG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 43791269,
+   "sha256": "c934b2624153370d9d1f55bd0e50dd5af87f6d09d06fc360496b13f134d17cfa"
+  },
+  {
+   "session": "S1",
+   "tile": "EOG",
+   "name": "user_MukuBreathHold_EOG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 42708977,
+   "sha256": "dabb123d30cc5f20cd088ad96983d3bfafc882207a84eba2456ae81752eca733"
+  },
+  {
+   "session": "S2",
+   "tile": "ECG",
+   "name": "user_MithinBreathHold_ECG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 37601280,
+   "sha256": "7bcf2fecfbbb764ab1cfcabb962557b2c47481760435a07d79b87e458e562ca2"
+  },
+  {
+   "session": "S2",
+   "tile": "EMG",
+   "name": "user_MithinBreathHold_EMG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 25067520,
+   "sha256": "081c0fe4a6b30877da2a2b4f11701be3001d99b506c5ea0d775da7cb34114a12"
+  },
+  {
+   "session": "S2",
+   "tile": "EOG",
+   "name": "user_MithinBreathHold_EOG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 53329920,
+   "sha256": "7c01177f797cc381ea0aedbc1b596f0e398b7d375c5cd4d1d4e4562c76ed065c"
+  },
+  {
+   "session": "S2",
+   "tile": "timestamps video",
+   "name": "MithinBreathHold-TimeStamps.mp4",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - not previously held locally; content not inspected",
+   "size_bytes": 2081143,
+   "sha256": "528c47164fd8c8294fbac8060fd833a3f945727281eccd90ea9e912587794bf5",
+   "source": "drive_download"
+  },
+  {
+   "session": "S1",
+   "tile": "Muse EEG export",
+   "name": "mindMonitor_2026-10-07-MukuBreathHold.zip",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - not previously held locally",
+   "size_bytes": 317220,
+   "sha256": "ddf5cc57957413e78d361e818df7c45dcb5f5ef561dfdba14dbd60532f7bdbaf",
+   "source": "drive_download"
+  },
+  {
+   "session": "S2",
+   "tile": "Muse EEG export",
+   "name": "mindMonitor_2026-10-11-MithinBreathHold.zip",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - not previously held locally",
+   "size_bytes": 4607553,
+   "sha256": "d8aa2a16b1910c994a3ce942bdf355199388f36056e4fa18cf256f6530903e02",
+   "source": "drive_download"
+  },
+  {
+   "session": "S2",
+   "tile": "ECG",
+   "name": "user_MithinBreathHold_ECG_000.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - byte-identical to the local copy",
+   "size_bytes": 37601280,
+   "sha256": "7bcf2fecfbbb764ab1cfcabb962557b2c47481760435a07d79b87e458e562ca2",
+   "source": "drive_download"
+  },
+  {
+   "session": "S2",
+   "tile": "EMG",
+   "name": "user_MithinBreathHold_EMG_000.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - byte-identical to the local copy",
+   "size_bytes": 25067520,
+   "sha256": "081c0fe4a6b30877da2a2b4f11701be3001d99b506c5ea0d775da7cb34114a12",
+   "source": "drive_download"
+  },
+  {
+   "session": "S2",
+   "tile": "EOG",
+   "name": "user_MithinBreathHold_EOG_000.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - NOT identical: byte-prefix (truncated copy) of the complete Desktop file",
+   "size_bytes": 29360128,
+   "sha256": "d974023d153e608493b97cc0b6bdb81a644d240a61ed7dbc27ed6969212d1d8f",
+   "source": "drive_download"
+  },
+  {
+   "session": "S1",
+   "tile": "ECG",
+   "name": "user_MukuBreathHold_ECG_07_10_2026.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - byte-identical to the local copy",
+   "size_bytes": 44454258,
+   "sha256": "92f280f20c805b0654d21c18b6f73c6a5d72b7e44453bc77d24228f011227f32",
+   "source": "drive_download"
+  },
+  {
+   "session": "S1",
+   "tile": "EMG",
+   "name": "user_MukuBreathHold_EMG_07_10_2026.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - byte-identical to the local copy",
+   "size_bytes": 43791269,
+   "sha256": "c934b2624153370d9d1f55bd0e50dd5af87f6d09d06fc360496b13f134d17cfa",
+   "source": "drive_download"
+  },
+  {
+   "session": "S1",
+   "tile": "EOG",
+   "name": "user_MukuBreathHold_EOG_07_10_2026.csv",
+   "location": "project: data/recordings/drive_2026-10-19/ (Drive copy, downloaded 2026-10-19) - byte-identical to the local copy",
+   "size_bytes": 42708977,
+   "sha256": "dabb123d30cc5f20cd088ad96983d3bfafc882207a84eba2456ae81752eca733",
+   "source": "drive_download"
+  }
+ ],
+ "all_distinct": true,
+ "drive": {
+  "folder_id": "1wS9USehoXPs37GDOZKEbiNTCKUq29yo_",
+  "status": "RETRIEVED AND VERIFIED",
+  "detail": "Downloaded 2026-10-19 to data/recordings/drive_2026-10-19/ (9 files). Sizes equal Drive's reported lengths; zips pass integrity test; SHA-256 compared with local copies. Folder ID ends in an underscore (earlier 404s used the ID without it). 5 of 6 CSVs are byte-identical to local copies; the session-2 EOG file on Drive is a truncated byte-prefix of the complete Desktop copy (29,360,128 of 53,329,920 bytes). Also present: 2 Muse mindMonitor zips and a 13.6 s MP4 whose content has NOT been inspected.",
+  "checked": "2026-10-19",
+  "destination": "data/recordings/drive_2026-10-19",
+  "audit": "results/inhouse_audit/drive_2026-10-19_audit.json"
+ },
+ "identity_notes": [
+  "File names suggest two different volunteers ('Muku' vs 'Mithin') - this is an inference from names only; no participant metadata exists in the files.",
+  "Each session has three independent SensorTile logs (ECG/EMG/EOG label = intended electrode wiring). Each tile has its own clock starting near 0 us; no shared timestamps.",
+  "Session-2 logs end in one truncated row each (dropped, <=5-row policy in src/ingest/sensortile.py). Raw files untouched.",
+  "Drive retrieval (2026-10-19): the session-2 EOG file on Drive (1179.2 s) is a byte-prefix of the Desktop EOG file (2131.9 s); the Desktop file is the complete one.",
+  "Muse exports (mindMonitor zips) have ~1 raw EEG row/s and no sync event shared with SensorTile; no alignment between any SensorTile tile and the Muse logs is established."
+ ],
+ "drive_history": [
+  {
+   "folder_id": "1wS9USehoXPs37GDOZKEbiNTCKUq29yo",
+   "status": "NOT RETRIEVED",
+   "detail": "gdown (unauthenticated) -> HTTP 404 (folder not public; editor sharing does not make it public). claude.ai Google Drive connector requires OAuth: run /mcp and authorise 'claude.ai Google Drive'. Until then it is unknown whether the Desktop 'Mithin' files are the Drive files.",
+   "checked": "2026-10-19",
+   "recorded_in": "provenance.json generated before retrieval",
+   "note": "Superseded. The 404 was caused by an incorrectly entered folder ID (trailing underscore dropped), not by permissions; see drive."
+  }
+ ],
+ "all_distinct_note": "'all_distinct' refers to the six local SensorTile files only; Drive copies repeat five of them by design.",
+ "updated": "2026-10-19T23:33:34"
+}

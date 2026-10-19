@@ -1,0 +1,1 @@
+{"model": "tcn", "params": 12921, "epochs": 40, "batch": 128, "lr": 0.001, "n_val_records": 5, "seeds": [0, 1, 2]}

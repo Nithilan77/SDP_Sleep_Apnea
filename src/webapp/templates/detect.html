@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block body %}
+<h1>Apnea detection · upload &amp; inference</h1>
+<p class="lead">Upload a SensorTile.box PRO log whose QVAR channel is wired as chest ECG. The server validates it, detects R-peaks, and runs the PhysioNet-trained ECG models and the pilot accelerometer effort heads. No labels exist for your file, so outputs are <b>flag rates, not accuracy</b>.</p>
+<div class="card"><form class="up" method="post" enctype="multipart/form-data" action="/analyze" onsubmit="document.getElementById('busy').style.display='block'">
+<input type="file" name="recording" accept=".csv,.txt" required> <button>Upload &amp; analyse</button>
+<button class="sec" formaction="/demo" formnovalidate>Run on bundled demo (session 1 ECG tile)</button></form>
+<p class="small mut">Accepted: SensorTile <code>.csv</code> (columns <code>time[us]</code>, <code>acc_*[mg]</code>, <code>gyro_*[dsp]</code>, <code>ah_qvar[LSB]</code>) or legacy tab-delimited <code>.txt</code>; ≥ 10 min; measured rate 180–300 Hz; QVAR must show a cardiac rhythm (spectral prominence ≥ {{20}}). EMG/EOG-wired tiles, IMU-only logs and other formats are rejected with the reason. Processing is synchronous (10–60 s; overnight files longer).</p>
+<div id="busy" class="note"><span class="spin"></span><b>Processing…</b> validating, detecting R-peaks, running models.</div></div>
+{% if error %}<div class="note bad"><b>Could not analyse this file.</b> {{error}}<br><span class="small">No prediction was produced; nothing is substituted.</span></div>{% endif %}
+{% if r %}
+<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><span class="pill p-ok">Analysis complete</span> <b>{{r.source_name}}</b> <span class="mut small">· {{r.analysed}}</span></div>
+<a class="btn" href="/report/{{rid}}">Download report (HTML)</a></div></div>
+{% for w in r.warnings %}<div class="note">⚠ {{w}}</div>{% endfor %}
+<div class="grid2"><div class="card"><h2>1 · File validation &amp; metadata</h2>
+<p><span class="pill p-ok">passed</span> channels detected: {{r.validation.channels}}</p>
+<table><tr><th>Check</th><th>Result</th></tr><tr><td>Measured sampling rate</td><td>{{'%.2f'%r.validation.fs_measured}} Hz (accepted 180–300)</td></tr><tr><td>Duration</td><td>{{'%.0f'%r.validation.duration_s}} s (min {{'%.0f'%r.validation.min_duration_s}} s)</td></tr>
+<tr><td>Cardiac rhythm in QVAR</td><td>prominence {{'%.1f'%r.validation.cardiac_prominence}} (gate ≥ {{'%.0f'%r.validation.gate}})</td></tr></table>
+<h3>Recording metadata</h3><table>{% for k,v in r.meta.items() %}<tr><th>{{k}}</th><td>{{v}}</td></tr>{% endfor %}</table></div>
+<div class="card"><h2>2 · Signals</h2><img class="fig" alt="signals" src="data:image/png;base64,{{r.signals}}"><p class="small mut">ECG excerpt, accelerometer breathing band (0.08–0.6 Hz), and its 10 s RMS amplitude. The accelerometer trace is a chest-motion proxy, not airflow.</p></div></div>
+{% if r.ecg %}<div class="card"><h2>3 · ECG branch — per-minute apnea probability</h2>
+<p>{{r.ecg.n_beats}} R-peaks, median HR {{'%.0f'%r.ecg.mean_hr}} bpm, {{r.ecg.n_minutes}} analysable minutes. Models were trained on PhysioNet Apnea-ECG only.</p>
+<div class="scroll"><table><tr><th>Model</th><th class="n">% minutes flagged (RR + amp)</th><th class="n">mean P</th><th class="n">% flagged (RR only)</th><th class="n">mean P</th></tr>
+{% for m in r.ecg.rows %}<tr><td>{{m.model}}</td><td class="n">{{'%.1f'%m.pct_2ch}}</td><td class="n">{{'%.3f'%m.mean_2ch}}</td><td class="n">{{'%.1f'%m.pct_rr}}</td><td class="n">{{'%.3f'%m.mean_rr}}</td></tr>{% endfor %}</table></div>
+<img class="fig" alt="ECG probabilities" src="data:image/png;base64,{{r.ecg.plot}}">
+<div class="note"><b>Read with care.</b> This recording has no per-minute labels. A high flag rate on a healthy volunteer is a known <i>domain-gap artefact</i> (QVAR R-amplitude is ~100× off PhysioNet scale), not apnea; the RR-only column neutralises that channel. The healthy-volunteer flag rate is the honest specificity check, not accuracy.</div></div>{% endif %}
+{% if r.effort %}<div class="card"><h2>4 · Effort branch — chest accelerometer hold/cessation likelihood</h2>
+{% if r.effort.in_sample %}<div class="note bad"><b>In-sample:</b> the two linear heads were fitted on this exact recording's 7 labelled holds; this is not a performance estimate.</div>{% else %}<p class="small">Out-of-sample: the heads never saw this recording.</p>{% endif %}
+<div class="scroll"><table><tr><th>Head</th><th class="n">% windows flagged (P ≥ 0.5)</th><th class="n">Segments</th><th>First segments (s)</th></tr>
+{% for n,h in r.effort.heads.items() %}<tr><td>{{n}}</td><td class="n">{{'%.1f'%h.pct}}</td><td class="n">{{h.n_segments}}</td><td class="small">{{h.segments[:6]}}</td></tr>{% endfor %}</table></div>
+<img class="fig" alt="effort heads" src="data:image/png;base64,{{r.effort.plot}}">
+<p class="small mut">Pilot heads (1 subject, 7 holds). They were not validated on other recordings; on the second session the breathing signal was too weak for them to be meaningful.</p></div>{% endif %}
+<div class="card"><h2>Limitations</h2><ul><li>Healthy 19–20-year-old volunteers: no apnea accuracy can be claimed on our hardware; voluntary breath-holds are not clinical apnea.</li><li>ECG models are PhysioNet-trained; the R-amplitude channel does not transfer to QVAR.</li><li>Hypopnea cannot be assessed without SpO2. This is a screening research prototype, not a diagnosis.</li></ul></div>
+{% endif %}{% endblock %}

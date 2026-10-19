@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% block body %}
+<h1>In-house recordings</h1>
+<p class="lead">Healthy-volunteer SensorTile logs, used for <b>validation and feasibility only</b>. Nothing here is trained on, and voluntary breath-holds are not clinical apnea. This page separates what was measured from what is inferred.</p>
+{% set a=inh.audit %}{% set bc=inh.bc %}
+<div class="card"><h2>Recording inventory &amp; signal quality</h2>
+{% if not a %}<div class="note bad">Audit file missing: run <code>python3 src/inhouse/audit_breath_hold_files.py</code>.</div>{% else %}
+<div class="scroll"><table><tr><th>Log</th><th class="n">Duration</th><th class="n">Rate (Hz)</th><th class="n">Rows</th><th class="n">Truncated rows dropped</th><th class="n">Gaps</th><th>QVAR content</th><th class="n">Acc. breathing-peak windows*</th><th>ECG gate</th></tr>
+{% for k,r in a.items() %}{% set b=bc[k] if bc else None %}<tr><td><b>{{k.replace('_',' ')}}</b></td><td class="n">{{'%.0f'%r.duration_s}} s</td><td class="n">{{'%.1f'%r.fs_median}}</td><td class="n">{{'{:,}'.format(r.rows)}}</td><td class="n">{{r.truncated_rows_dropped}}</td><td class="n">{{r.n_gaps_gt_3dt}}</td>
+<td>{% if b %}{{'cardiac rhythm (prominence %.0f)'%b.qvar_cardiac_prominence if b.qvar_cardiac_prominence>=gate else 'no cardiac rhythm (prominence %.1f)'%b.qvar_cardiac_prominence}}{% endif %}</td>
+<td class="n">{% if b %}{{'%.0f%%'%(100*b.frac_windows_prom_gt_8)}} <span class="mut small">({{'%.2f'%b.breath_peak_median_hz}} Hz)</span>{% endif %}</td>
+<td>{% if b %}{% if b.qvar_cardiac_prominence>=gate %}<span class="pill p-ok">accepted</span>{% else %}<span class="pill p-bad">rejected</span>{% endif %}{% endif %}</td></tr>{% endfor %}</table></div>
+<p class="small mut">*Fraction of 60 s windows in which the accelerometer's first principal component has a spectral peak in 0.15–0.6 Hz that is ≥ 8× the band median (peaks at the 0.1 Hz band edge are drift and excluded). Median peak frequency in brackets. Modalities actually present: QVAR, accelerometer, gyroscope, temperature. <b>No SpO2, EEG, or true EMG/EOG</b> (the EMG/EOG-labelled logs are QVAR channels with unknown electrode wiring; their QVAR shows no recognisable EMG/EOG pattern here and is not analysed further). Source: <code>results/inhouse_audit/audit.json</code>, <code>breathing_cardiac.json</code>.</p>{% endif %}</div>
+
+<div class="card"><h2>Identity, provenance &amp; synchronisation</h2>
+{% if prov %}<ul>{% for n in prov.identity_notes %}<li>{{n}}</li>{% endfor %}</ul>
+<div class="note {{ 'bad' if prov.drive.status.startswith('NOT') else 'ok' }}"><b>Google Drive folder: {{prov.drive.status}}.</b> {{prov.drive.detail}} (checked {{prov.drive.checked}}).</div>
+<div class="scroll"><table><tr><th>Session</th><th>Tile</th><th>File</th><th>Location</th><th class="n">Bytes</th><th>SHA-256 (first 16)</th></tr>
+{% for f in prov.files %}<tr><td>{{f.session}}</td><td>{{f.tile}}</td><td class="small">{{f.name}}</td><td class="small">{{f.location}}</td><td class="n">{{'{:,}'.format(f.size_bytes)}}</td><td><code>{{f.sha256[:16]}}</code></td></tr>{% endfor %}</table></div>
+<p class="small mut">All six files are distinct. The three tiles of a session have different durations in session 2 (1574 / 1046 / 2132 s) and independent clocks, so <b>they are not shown on a shared time axis</b>. Session 1's tiles are all ≈1800 s but still carry no shared clock; only the ECG tile has a validated sync-tap alignment (earlier work).</p>{% else %}<div class="note">Provenance file missing.</div>{% endif %}</div>
+
+<div class="card"><h2>Accelerometer spectrograms, per tile</h2>
+<img class="fig" alt="session 1 tiles" src="/artifact/inhouse_audit/figs/S1_tiles.png"><p class="small mut"><b>Session 1.</b> Red bands on the ECG tile are the <i>stopwatch-nominal</i> hold windows from the protocol — not verified event boundaries.</p>
+<img class="fig" alt="session 2 tiles" src="/artifact/inhouse_audit/figs/S2_tiles.png"><p class="small mut"><b>Session 2.</b> No event overlay: the session-1 lap timeline spans 1800 s and cannot be applied to logs of 1574 s (ECG tile) — holds 6 and 7 would fall after the recording ends — and no independent alignment evidence exists. Right column: the ECG tiles show clean ECG; the other tiles' QVAR is baseline/noise (the S2 EMG tile's QVAR is flat-topped at 960 LSB, i.e. clipped).</p></div>
+
+<div class="card"><h2>Session 1 · breath-hold events <span class="pill p-warn">inferred windows · exploratory</span></h2>
+{% if inh.events %}<div class="scroll"><table><tr><th class="n">Event</th><th>Nominal window (s)</th><th class="n">Effort ratio range (hold RMS / pre-hold RMS)</th><th class="n">HR change in hold (bpm)</th><th>Automatic boundary check</th></tr>
+{% for e in inh.events %}<tr><td class="n">{{e.event}}</td><td>{{'%.0f'%e.nominal_start}}–{{'%.0f'%e.nominal_end}}</td><td class="n">{{'%.2f'%([e.effort_ratio_range_lo,e.effort_ratio_range_hi]|min)}} – {{'%.2f'%([e.effort_ratio_range_lo,e.effort_ratio_range_hi]|max)}}</td><td class="n">{{'%+.1f'%e.hr_delta}}</td><td class="small">{{e.detector_visual_verdict.split(':')[0]}}</td></tr>{% endfor %}</table></div>
+<p class="small mut">Ratios are shown as a range because the true hold boundaries are uncertain (stopwatch laps carry a ≈4.8 s sync lag; automatic refinement was visually correct in 3/7 events). Values below 1 mean lower breathing-band amplitude during the hold. Heart-rate direction is inconsistent across events. Source: <code>results/breath_hold/event_summary.csv</code>, <code>FINDINGS.md</code>.</p>{% endif %}
+<div class="note ok"><b>What this establishes:</b> in one volunteer, the chest-accelerometer breathing-band amplitude is lower in the conservative hold windows in 7/7 events (descriptive).</div>
+<div class="note bad"><b>What it does not:</b> a validated breath-hold detector; reproducibility (session 2 could not be aligned and its ECG-tile accelerometer shows no breathing signal); generalisation (n = 1 volunteer, 7 holds); or anything about clinical apnea.</div></div>
+
+<div class="card"><h2>Session 2 · EMG-tile accelerometer shows breathing, but no protocol events <span class="pill p-info">negative result</span></h2>
+{% set s=inh.s2_line %}<img class="fig" alt="s2 emg breathing line" src="/artifact/inhouse_audit/s2_emg_breathing_line.png">
+{% if s %}<p>The raw trace has a clear ~{{'%.2f'%s.track_hz_median}} Hz oscillation (≈{{'%.0f'%(60*s.track_hz_median)}} breaths/min), so this tile's IMU does couple to chest motion. Tracking that line's amplitude finds {{s.n_dips}} sustained dips (≥ 15 s below 40% of median) lasting {{s.dip_durations_s}} s with start gaps {{s.dip_start_gaps_s}} s. That is not a repeating 30 s-hold / 120 s-cycle pattern, and the largest dips coincide with large posture-shift artefacts. <b>No independent evidence of the protocol's holds, and the sensor's body position is unrecorded.</b> No labels were created and no classifier was trained.</p>{% endif %}</div>
+
+<div class="card"><h2>Likely limitations &amp; what would fix them</h2><ul>
+<li>Sensor coupling differs between tiles and sessions (session-2 ECG-tile accelerometer is ~28× quieter than session 1's), and body position of each tile is not logged.</li>
+<li>No shared clock or sync taps across the three tiles of a session in session 2, so cross-tile alignment is impossible after the fact.</li>
+<li>Fix for the next session: one tile on the chest with ECG <i>and</i> IMU, logged start-to-end with sync taps, a written event log, and a recorded placement.</li></ul></div>
+{% endblock %}

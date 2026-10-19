@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Sleep-apnea research dashboard{% endblock %}</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<header class="top"><div class="bar-in"><div class="brand">Cardiorespiratory apnea screening<small>Research prototype · not a diagnostic device</small></div>
+<nav>{% for key,href,label in NAV %}<a href="{{href}}" class="{{'on' if page==key}}">{{label}}</a>{% endfor %}</nav></div></header>
+<main>{% block body %}{% endblock %}</main>
+<footer>Every figure on this site is read from a saved result file or computed from the file you upload. Validated results come from public clinical datasets (PhysioNet Apnea-ECG, MESA); in-house recordings are feasibility data from healthy volunteers. Not clinically validated. {{now}}.</footer>
+</body></html>

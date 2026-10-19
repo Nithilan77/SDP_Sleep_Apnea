@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block body %}
+{% set names={'cnn':'1D-CNN','lstm':'LSTM','gru':'GRU','tcn':'TCN','hgb_within':'Grad. boosting (within-minute features)','hgb_plusprev':'Grad. boosting (+ previous-minute)','logreg_within':'Logistic reg. (within-minute)','logreg_plusprev':'Logistic reg. (+ previous-minute)'} %}
+<h1>Model comparison</h1>
+<p class="lead"><b>Task:</b> per-minute apnea vs normal (PhysioNet Apnea-ECG expert labels) from single-lead ECG, 35 records, leave-one-subject-out (LOSO). This page compares models on that one task only; MESA results use a different task and dataset and live on the <a href="/mesa">MESA page</a>.</p>
+
+<div class="card"><span class="pill p-ok">Controlled comparison · new</span><h2 style="margin-top:8px">Same folds, same protocol, 3 seeds, no test-fold selection</h2>
+<p class="small mut">Per outer fold, 5 training records are held out (seeded) for early stopping (best validation AUROC) and for the decision threshold (max balanced accuracy). Normalisation and class weights use the remaining training records only; the test record is used once. Hyperparameters were fixed before running. Values are mean ± SD over seeds of pooled per-minute metrics.</p>
+{% if ctrl.status!='complete' %}<div class="note">Not yet available: <code>results/expA_multiseed/per_seed_metrics.csv</code> has not been produced (runs in progress or not aggregated).</div>
+{% else %}
+{% set vt = ctrl.rows|selectattr('rule','equalto','valthr')|list %}{% set ft = ctrl.rows|selectattr('rule','equalto','thr0.5')|list %}
+<h3>Accuracy at validation-selected threshold</h3>
+{% set items=[] %}{% for r in vt %}{% set _=items.append(dict(label=names.get(r.model,r.model), value=r.acc_mean, err=r.acc_sd, cls=('a' if r.model=='cnn' else 'b' if r.model in ('lstm','gru','tcn') else 'd'))) %}{% endfor %}
+{{ C.hbars(items, xmin=0.5, xmax=0.9, ticks=(0.5,0.6,0.7,0.8,0.9)) }}
+<p class="small mut">Blue = adopted CNN · teal = recurrent / temporal-conv · amber = tabular feature models. Whiskers = SD across seeds (not across subjects).</p>
+<div class="scroll"><table><tr><th>Model</th><th>Threshold</th><th class="n">Acc</th><th class="n">Sens</th><th class="n">Spec</th><th class="n">F1</th><th class="n">AUROC</th><th class="n">AUPRC</th><th class="n">Records correct /35</th></tr>
+{% for r in vt+ft %}<tr><td>{{names.get(r.model,r.model)}}</td><td>{{'validation-selected' if r.rule=='valthr' else 'fixed 0.5 (reference)'}}</td>
+{% for k in ['acc','sens','spec','f1','auroc','auprc'] %}<td class="n">{{'%.3f'%r[k+'_mean']}} <span class="mut small">±{{'%.3f'%r[k+'_sd']}}</span></td>{% endfor %}<td class="n">{{'%.1f'%r.per_recording_correct_mean}}</td></tr>{% endfor %}</table></div>
+<h3>Confusion matrices (mean counts over seeds, validation-selected threshold)</h3><div class="grid3">{% for r in vt %}<div>{{ C.confusion(r.tp,r.fn,r.fp,r.tn,names.get(r.model,r.model)) }}</div>{% endfor %}</div>
+{% if ctrl.paired %}<h3>Paired difference vs the CNN (resampling the 35 records)</h3><div class="scroll"><table><tr><th>Model</th><th class="n">Δ AUROC</th><th>95% CI</th><th class="n">Δ accuracy</th><th>95% CI</th><th>Reading</th></tr>
+{% for p in ctrl.paired %}<tr><td>{{names.get(p.model,p.model)}}</td><td class="n">{{'%+.3f'%p.d_auroc_vs_cnn}}</td><td>{{p.d_auroc_ci}}</td><td class="n">{{'%+.3f'%p.d_acc_vs_cnn}}</td><td>{{p.d_acc_ci}}</td>
+<td>{% if '-' in (p.d_acc_ci.split(',')[0]) and not ('-' in (p.d_acc_ci.split(',')[1])) %}CI includes 0 → no demonstrated difference{% elif '-' in p.d_acc_ci.split(',')[1] %}worse than CNN{% else %}better than CNN{% endif %}</td></tr>{% endfor %}</table></div>{% endif %}
+<p class="small mut">Source: <code>{{ctrl.summary_md}}</code>, <code>results/expA_multiseed/*.csv</code>. Reproduce: <code>python3 -m src.ecg.expA_multiseed --model cnn</code> (and lstm/gru/tcn), <code>python3 -m src.ecg.expB_hrv_gbm</code>, <code>python3 -m src.ecg.expA_report</code>.</p>
+{% endif %}</div>
+
+<div class="card"><span class="pill p-info">Historical results</span><h2 style="margin-top:8px">Earlier runs (kept unchanged)</h2>
+<div class="note">These used a fixed 30/30-epoch recipe with threshold 0.5 and no validation set. The CNN's input/loss variant was chosen among four by comparing LOSO test scores, and the RNN/LSTM v2 configurations were selected on 7 records that are also test folds, so those numbers carry selection optimism. Do not compare them with the controlled table as if equal.</div>
+<div class="scroll"><table><tr><th>Model</th><th class="n">Acc</th><th class="n">Sens</th><th class="n">Spec</th><th class="n">AUROC</th><th class="n">Records /35</th><th>Architecture</th><th>Protocol note</th></tr>
+{% for r in hist %}{% if r.status=='complete' %}<tr><td>{{r.label}}</td><td class="n">{{'%.3f'%r.acc}}</td><td class="n">{{'%.3f'%r.sens}}</td><td class="n">{{'%.3f'%r.spec}}</td><td class="n">{{'%.3f'%r.auroc if r.auroc is defined else '–'}}</td><td class="n">{{r.per_recording_correct}}</td><td>{{r.arch}}</td><td class="small">{{r.proto}}<br><span class="mut">{{r.source}}</span></td></tr>
+{% else %}<tr><td>{{r.label}}</td><td colspan="7" class="mut">result file missing: {{r.source}}</td></tr>{% endif %}{% endfor %}</table></div>
+<div class="grid3" style="margin-top:12px">{% for r in hist %}{% if r.status=='complete' and r.label.startswith('1D-CNN') %}<div>{{ C.confusion(r.tp,r.fn,r.fp,r.tn,'1D-CNN historical (all folds pooled)') }}</div>{% endif %}{% endfor %}</div>
+<p class="small mut">Literature reference points are not our results: CNN single-lead 87.9% per-minute (Chang 2020); CVHR/ACAT sens 83%/spec 88% (Hayano 2011).</p></div>
+{% endblock %}

@@ -1,0 +1,78 @@
+subjects 220 | sleep epochs 164383 -> kept 156826 (4.60% dropped for < 10 beats)
+spo2 stream on GPU: (1, 8556000) fp16 (0.02 GB)
+variant ecg_spo2 | streams ('cardiac', 'spo2') | fusion cross | X 156826 epochs
+parameters: 162177
+fold 0: train/val/test epochs 106425/18488/31913
+    ep  0 val AUPRC 0.4594
+    ep  1 val AUPRC 0.4529
+    ep  2 val AUPRC 0.4702
+    ep  3 val AUPRC 0.4437
+    ep  4 val AUPRC 0.4726
+    ep  5 val AUPRC 0.4599
+    ep  6 val AUPRC 0.4712
+    ep  7 val AUPRC 0.4810
+    ep  8 val AUPRC 0.4782
+    ep  9 val AUPRC 0.4797
+    ep 10 val AUPRC 0.4734
+    ep 11 val AUPRC 0.4810
+    ep 12 val AUPRC 0.4785
+  fold 0 TEST: sens 0.742 spec 0.679 AUROC 0.763 AUPRC 0.484 F1 0.553 (thr 0.433)
+fold 1: train/val/test epochs 106624/18745/31457
+    ep  0 val AUPRC 0.4545
+    ep  1 val AUPRC 0.4692
+    ep  2 val AUPRC 0.4692
+    ep  3 val AUPRC 0.4818
+    ep  4 val AUPRC 0.4875
+    ep  5 val AUPRC 0.4718
+    ep  6 val AUPRC 0.4873
+    ep  7 val AUPRC 0.4960
+    ep  8 val AUPRC 0.4702
+    ep  9 val AUPRC 0.4837
+    ep 10 val AUPRC 0.4920
+    ep 11 val AUPRC 0.4907
+    ep 12 val AUPRC 0.4717
+  fold 1 TEST: sens 0.868 spec 0.614 AUROC 0.801 AUPRC 0.558 F1 0.599 (thr 0.458)
+fold 2: train/val/test epochs 108740/17585/30501
+    ep  0 val AUPRC 0.5329
+    ep  1 val AUPRC 0.5424
+    ep  2 val AUPRC 0.5633
+    ep  3 val AUPRC 0.5119
+    ep  4 val AUPRC 0.5150
+    ep  5 val AUPRC 0.5240
+    ep  6 val AUPRC 0.5290
+    ep  7 val AUPRC 0.5124
+  fold 2 TEST: sens 0.738 spec 0.698 AUROC 0.782 AUPRC 0.453 F1 0.537 (thr 0.505)
+fold 3: train/val/test epochs 107143/18864/30819
+    ep  0 val AUPRC 0.4128
+    ep  1 val AUPRC 0.4033
+    ep  2 val AUPRC 0.4010
+    ep  3 val AUPRC 0.4432
+    ep  4 val AUPRC 0.4335
+    ep  5 val AUPRC 0.4225
+    ep  6 val AUPRC 0.3825
+    ep  7 val AUPRC 0.4203
+    ep  8 val AUPRC 0.4335
+  fold 3 TEST: sens 0.810 spec 0.608 AUROC 0.766 AUPRC 0.505 F1 0.569 (thr 0.481)
+fold 4: train/val/test epochs 105852/18838/32136
+    ep  0 val AUPRC 0.5121
+    ep  1 val AUPRC 0.5515
+    ep  2 val AUPRC 0.5341
+    ep  3 val AUPRC 0.5322
+    ep  4 val AUPRC 0.5402
+    ep  5 val AUPRC 0.5604
+    ep  6 val AUPRC 0.5531
+    ep  7 val AUPRC 0.5307
+    ep  8 val AUPRC 0.5390
+    ep  9 val AUPRC 0.5310
+    ep 10 val AUPRC 0.5286
+  fold 4 TEST: sens 0.758 spec 0.632 AUROC 0.748 AUPRC 0.431 F1 0.515 (thr 0.524)
+POOLED ecg_spo2: sens 0.786 spec 0.647 AUROC 0.769 AUPRC 0.481 F1 0.556 | per-fold AUROC 0.772 +/- 0.020
+AHI corr (pred_rate vs a0h3 / a0h4): r=0.865 / 0.810
+                                                     model     auroc     auprc  sens_event  spec_normal        f1  sens_obstructive  sens_central  sens_hypopnea   d_auroc      d_auroc_ci95   d_auprc      d_auprc_ci95
+0                           ECG-only baseline (CardiacCNN)  0.608824  0.334860    0.622312     0.535180  0.416395          0.828765      0.839958       0.563694       NaN                         NaN                  
+1                         CANet (ECG + effort)  [HEADLINE]  0.780100  0.489742    0.821633     0.613274  0.555393          0.968878      0.981172       0.779640  0.171276  [+0.151, +0.191]  0.154882  [+0.132, +0.184]
+2              CEILING: CANet + SpO2 (not on our wearable)  0.812718  0.540885    0.852789     0.641216  0.586565          0.913806      0.944561       0.834681  0.203894  [+0.183, +0.224]  0.206025  [+0.181, +0.227]
+3                                    ablation: effort only  0.746955  0.422076    0.837362     0.570258  0.540067          0.987321      1.000000       0.794657  0.138130  [+0.116, +0.158]  0.087216  [+0.063, +0.116]
+4            ablation: ECG + effort, concat (no attention)  0.744347  0.423989    0.819497     0.582178  0.537721          0.982326      0.993724       0.773195  0.135523  [+0.113, +0.154]  0.089129  [+0.066, +0.114]
+5              ablation C: SpO2 only (not on our wearable)  0.774805  0.480497    0.797261     0.644267  0.560812          0.965292      0.966527       0.749831  0.165981  [+0.144, +0.188]  0.145637  [+0.123, +0.167]
+6  ablation C: ECG + SpO2, no effort (not on our wearable)  0.768806  0.481202    0.785754     0.646583  0.556301          0.942367      0.941423       0.741613  0.159982  [+0.140, +0.179]  0.146342  [+0.123, +0.166]

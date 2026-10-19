@@ -1,0 +1,80 @@
+{
+ "S1_ECG": {
+  "breath_peak_median_hz": 0.16666894586872041,
+  "breath_peak_median_prominence": 5.6445726861974475,
+  "frac_windows_prom_gt_8": 0.3103448275862069,
+  "n_windows": 29,
+  "breath_hz_iqr": [
+   0.16666894586872041,
+   0.2333365242162086
+  ],
+  "qvar_cardiac_peak_median_hz": 1.2001809764108833,
+  "qvar_cardiac_prominence": 54.316224285028404,
+  "qvar_cardiac_frac_gt_8": 0.9491525423728814
+ },
+ "S1_EMG": {
+  "breath_peak_median_hz": 0.18334580967537434,
+  "breath_peak_median_prominence": 3.119623207251143,
+  "frac_windows_prom_gt_8": 0.1,
+  "n_windows": 30,
+  "breath_hz_iqr": [
+   0.16667800879579486,
+   0.2333492123141128
+  ],
+  "qvar_cardiac_peak_median_hz": 0.8000544422198153,
+  "qvar_cardiac_prominence": 6.788103949754965,
+  "qvar_cardiac_frac_gt_8": 0.4166666666666667
+ },
+ "S1_EOG": {
+  "breath_peak_median_hz": 0.20001941316084582,
+  "breath_peak_median_prominence": 2.569583951038141,
+  "frac_windows_prom_gt_8": 0.034482758620689655,
+  "n_windows": 29,
+  "breath_hz_iqr": [
+   0.16668284430070485,
+   0.3333656886014097
+  ],
+  "qvar_cardiac_peak_median_hz": 0.8668697188475241,
+  "qvar_cardiac_prominence": 7.051864757360687,
+  "qvar_cardiac_frac_gt_8": 0.423728813559322
+ },
+ "S2_ECG": {
+  "breath_peak_median_hz": 0.250016753088872,
+  "breath_peak_median_prominence": 3.6398332251780907,
+  "frac_windows_prom_gt_8": 0.038461538461538464,
+  "n_windows": 26,
+  "breath_hz_iqr": [
+   0.16667783539258132,
+   0.35835734609404984
+  ],
+  "qvar_cardiac_peak_median_hz": 1.0002043841978445,
+  "qvar_cardiac_prominence": 321.08089598821863,
+  "qvar_cardiac_frac_gt_8": 1.0
+ },
+ "S2_EMG": {
+  "breath_peak_median_hz": 0.3666837192459587,
+  "breath_peak_median_prominence": 12.48542953507934,
+  "frac_windows_prom_gt_8": 0.7647058823529411,
+  "n_windows": 17,
+  "breath_hz_iqr": [
+   0.33334883567814433,
+   0.4333534863815876
+  ],
+  "qvar_cardiac_peak_median_hz": 1.0001837252708536,
+  "qvar_cardiac_prominence": 9.776850638908751,
+  "qvar_cardiac_frac_gt_8": 0.5588235294117647
+ },
+ "S2_EOG": {
+  "breath_peak_median_hz": 0.26670073661545846,
+  "breath_peak_median_prominence": 2.3813031347898166,
+  "frac_windows_prom_gt_8": 0.0,
+  "n_windows": 35,
+  "breath_hz_iqr": [
+   0.20002555246159384,
+   0.46672628907705227
+  ],
+  "qvar_cardiac_peak_median_hz": 0.86677739400024,
+  "qvar_cardiac_prominence": 7.876767085703385,
+  "qvar_cardiac_frac_gt_8": 0.4788732394366197
+ }
+}

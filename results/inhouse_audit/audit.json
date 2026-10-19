@@ -1,0 +1,236 @@
+{
+ "S1_ECG": {
+  "truncated_rows_dropped": 0,
+  "path": "data/recordings/breath_hold/user_MukuBreathHold_ECG_07_10_2026.csv",
+  "size": 44454258,
+  "rows": 436523,
+  "duration_s": 1795.6233260000001,
+  "fs_median": 243.13153414883485,
+  "fs_mean": 243.1033244441156,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.004114000000072338,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": -206.3922130105401,
+   "std": 402.1577181736411,
+   "min": -32704.0,
+   "max": 18260.0,
+   "frac_at_max": 2.2908300364471058e-06,
+   "n_unique": 1085
+  },
+  "acc_axis_std_mg": [
+   64.47778150502783,
+   113.99035553553207,
+   179.7679453972875
+  ],
+  "acc_breath_band_std_mg": [
+   17.12485291034366,
+   26.294662252114822,
+   35.17386753771303
+  ],
+  "gyro_breath_band_std_dps": [
+   2.491664449253799,
+   2.476923369036167,
+   2.109982607318703
+  ],
+  "acc_best_axis": 2,
+  "acc_peak_hz": 0.1000061153693706,
+  "acc_peak_over_median": 10.39315157207056,
+  "qvar_psd_peak_hz": 0.20002594335568477
+ },
+ "S1_EMG": {
+  "truncated_rows_dropped": 0,
+  "path": "data/recordings/breath_hold/user_MukuBreathHold_EMG_07_10_2026.csv",
+  "size": 43791269,
+  "rows": 437218,
+  "duration_s": 1801.595803,
+  "fs_median": 242.65954865671497,
+  "fs_mean": 242.6831808066773,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.0041220000000521395,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": -168.14246439991035,
+   "std": 177.7989013167579,
+   "min": -31556.0,
+   "max": 3120.0,
+   "frac_at_max": 2.2871885421002794e-06,
+   "n_unique": 1149
+  },
+  "acc_axis_std_mg": [
+   20.31069577170358,
+   15.63666413518821,
+   11.401064928318007
+  ],
+  "acc_breath_band_std_mg": [
+   12.404830369846913,
+   7.769608403458005,
+   4.59870163160078
+  ],
+  "gyro_breath_band_std_dps": [
+   0.838672689077958,
+   0.8890478525515283,
+   1.8215579022706543
+  ],
+  "acc_best_axis": 0,
+  "acc_peak_hz": 0.10000393515628064,
+  "acc_peak_over_median": 3.269931281465415,
+  "qvar_psd_peak_hz": 0.10002454602502678
+ },
+ "S1_EOG": {
+  "truncated_rows_dropped": 0,
+  "path": "data/recordings/breath_hold/user_MukuBreathHold_EOG_07_10_2026.csv",
+  "size": 42708977,
+  "rows": 436839,
+  "duration_s": 1797.759372,
+  "fs_median": 243.0133657309926,
+  "fs_mean": 242.99025042156754,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.0041169999999510765,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": 955.5722543087957,
+   "std": 254.0210910098526,
+   "min": -432.0,
+   "max": 23516.0,
+   "frac_at_max": 2.289172898939884e-06,
+   "n_unique": 882
+  },
+  "acc_axis_std_mg": [
+   10.888382093793377,
+   8.70664245450973,
+   4.803512309705364
+  ],
+  "acc_breath_band_std_mg": [
+   5.519264485649372,
+   3.7417856974326926,
+   1.2426161977840409
+  ],
+  "gyro_breath_band_std_dps": [
+   0.3428864034910389,
+   0.4973686111175612,
+   0.11772050814915226
+  ],
+  "acc_best_axis": 0,
+  "acc_peak_hz": 0.10000550030081999,
+  "acc_peak_over_median": 5.352834566710263,
+  "qvar_psd_peak_hz": 0.10000550030082
+ },
+ "S2_ECG": {
+  "truncated_rows_dropped": 1,
+  "path": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_ECG_000.csv",
+  "size": 37601280,
+  "rows": 382156,
+  "duration_s": 1574.492759,
+  "fs_median": 242.71844660192139,
+  "fs_mean": 242.71626389867697,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.004121000000168351,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": -163.80297051465894,
+   "std": 233.30501566935945,
+   "min": -828.0,
+   "max": 2332.0,
+   "frac_at_max": 2.6167324338751715e-06,
+   "n_unique": 605
+  },
+  "acc_axis_std_mg": [
+   13.186052198116203,
+   4.371525619628662,
+   3.6900603300624013
+  ],
+  "acc_breath_band_std_mg": [
+   2.330217945485461,
+   0.7740551113950764,
+   0.33430037685049224
+  ],
+  "gyro_breath_band_std_dps": [
+   0.043912133931053164,
+   0.19029255322450642,
+   0.1731005814609341
+  ],
+  "acc_best_axis": 0,
+  "acc_peak_hz": 0.10000073333870277,
+  "acc_peak_over_median": 7.353847034175672,
+  "qvar_psd_peak_hz": 1.0000760057763551
+ },
+ "S2_EMG": {
+  "truncated_rows_dropped": 1,
+  "path": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_EMG_000.csv",
+  "size": 25067520,
+  "rows": 254057,
+  "duration_s": 1045.59275,
+  "fs_median": 242.9543245897164,
+  "fs_mean": 242.9779663257994,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.004117000000064763,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": 956.8640265767131,
+   "std": 198.10143533936414,
+   "min": -13116.0,
+   "max": 2240.0,
+   "frac_at_max": 9.446698969128975e-05,
+   "n_unique": 869
+  },
+  "acc_axis_std_mg": [
+   42.16159419692609,
+   40.79609879305259,
+   80.8597881116664
+  ],
+  "acc_breath_band_std_mg": [
+   10.51300236098955,
+   8.024977766901948,
+   23.03306510159713
+  ],
+  "gyro_breath_band_std_dps": [
+   0.9438760975916599,
+   2.505309474186116,
+   0.6074333222001411
+  ],
+  "acc_best_axis": 2,
+  "acc_peak_hz": 0.10000178003281185,
+  "acc_peak_over_median": 6.245369353970181,
+  "qvar_psd_peak_hz": 0.10002236500194171
+ },
+ "S2_EOG": {
+  "truncated_rows_dropped": 1,
+  "path": "/home/admin/Desktop/Mithin-BreathHold/user_MithinBreathHold_EOG_000.csv",
+  "size": 53329920,
+  "rows": 518413,
+  "duration_s": 2131.940396,
+  "fs_median": 243.19066147402242,
+  "fs_mean": 243.16439660914423,
+  "n_gaps_gt_3dt": 0,
+  "max_gap_s": 0.004114000000072338,
+  "nonmonotonic": 0,
+  "qvar": {
+   "mean": -214.48945917637096,
+   "std": 35.70754969837064,
+   "min": -856.0,
+   "max": 396.0,
+   "frac_at_max": 1.928963972739881e-06,
+   "n_unique": 188
+  },
+  "acc_axis_std_mg": [
+   32.719328242604774,
+   31.329528582604464,
+   24.569268029635506
+  ],
+  "acc_breath_band_std_mg": [
+   24.283648513364444,
+   13.042751896366005,
+   10.24325756453726
+  ],
+  "gyro_breath_band_std_dps": [
+   1.0944900738700851,
+   1.7593894289837189,
+   2.0673836478462397
+  ],
+  "acc_best_axis": 0,
+  "acc_peak_hz": 0.11667018232596511,
+  "acc_peak_over_median": 21.083981527239207,
+  "qvar_psd_peak_hz": 0.10003729390128442
+ }
+}

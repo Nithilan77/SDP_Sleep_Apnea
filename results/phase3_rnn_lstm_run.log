@@ -1,0 +1,79 @@
+Loading cached 2-channel RR+amplitude sequences from results/phase3_cnn_v2/sequences.npz
+[rnn] fold  1/35 a01 n=488 5s
+[rnn] fold  2/35 a02 n=527 9s
+[rnn] fold  3/35 a03 n=518 13s
+[rnn] fold  4/35 a04 n=491 17s
+[rnn] fold  5/35 a05 n=453 21s
+[rnn] fold  6/35 a06 n=509 24s
+[rnn] fold  7/35 a07 n=510 28s
+[rnn] fold  8/35 a08 n=500 32s
+[rnn] fold  9/35 a09 n=494 36s
+[rnn] fold 10/35 a10 n=516 40s
+[rnn] fold 11/35 a11 n=465 44s
+[rnn] fold 12/35 a12 n=576 48s
+[rnn] fold 13/35 a13 n=494 52s
+[rnn] fold 14/35 a14 n=508 56s
+[rnn] fold 15/35 a15 n=509 61s
+[rnn] fold 16/35 a16 n=481 65s
+[rnn] fold 17/35 a17 n=482 69s
+[rnn] fold 18/35 a18 n=488 73s
+[rnn] fold 19/35 a19 n=501 77s
+[rnn] fold 20/35 a20 n=509 81s
+[rnn] fold 21/35 b01 n=486 85s
+[rnn] fold 22/35 b02 n=516 89s
+[rnn] fold 23/35 b03 n=440 93s
+[rnn] fold 24/35 b04 n=423 97s
+[rnn] fold 25/35 b05 n=432 102s
+[rnn] fold 26/35 c01 n=474 106s
+[rnn] fold 27/35 c02 n=492 110s
+[rnn] fold 28/35 c03 n=453 114s
+[rnn] fold 29/35 c04 n=464 119s
+[rnn] fold 30/35 c05 n=465 123s
+[rnn] fold 31/35 c06 n=467 127s
+[rnn] fold 32/35 c07 n=428 131s
+[rnn] fold 33/35 c08 n=512 135s
+[rnn] fold 34/35 c09 n=455 139s
+[rnn] fold 35/35 c10 n=423 143s
+
+=== RNN LOSO ===
+n=16949  acc=0.581  sens=0.586  spec=0.578  prec=0.464  f1=0.518
+per-recording 25/35
+[lstm] fold  1/35 a01 n=488 5s
+[lstm] fold  2/35 a02 n=527 9s
+[lstm] fold  3/35 a03 n=518 14s
+[lstm] fold  4/35 a04 n=491 18s
+[lstm] fold  5/35 a05 n=453 23s
+[lstm] fold  6/35 a06 n=509 27s
+[lstm] fold  7/35 a07 n=510 32s
+[lstm] fold  8/35 a08 n=500 37s
+[lstm] fold  9/35 a09 n=494 42s
+[lstm] fold 10/35 a10 n=516 47s
+[lstm] fold 11/35 a11 n=465 52s
+[lstm] fold 12/35 a12 n=576 57s
+[lstm] fold 13/35 a13 n=494 62s
+[lstm] fold 14/35 a14 n=508 66s
+[lstm] fold 15/35 a15 n=509 71s
+[lstm] fold 16/35 a16 n=481 76s
+[lstm] fold 17/35 a17 n=482 81s
+[lstm] fold 18/35 a18 n=488 85s
+[lstm] fold 19/35 a19 n=501 90s
+[lstm] fold 20/35 a20 n=509 94s
+[lstm] fold 21/35 b01 n=486 99s
+[lstm] fold 22/35 b02 n=516 104s
+[lstm] fold 23/35 b03 n=440 108s
+[lstm] fold 24/35 b04 n=423 113s
+[lstm] fold 25/35 b05 n=432 117s
+[lstm] fold 26/35 c01 n=474 123s
+[lstm] fold 27/35 c02 n=492 128s
+[lstm] fold 28/35 c03 n=453 133s
+[lstm] fold 29/35 c04 n=464 137s
+[lstm] fold 30/35 c05 n=465 142s
+[lstm] fold 31/35 c06 n=467 146s
+[lstm] fold 32/35 c07 n=428 151s
+[lstm] fold 33/35 c08 n=512 156s
+[lstm] fold 34/35 c09 n=455 160s
+[lstm] fold 35/35 c10 n=423 165s
+
+=== LSTM LOSO ===
+n=16949  acc=0.640  sens=0.517  spec=0.717  prec=0.533  f1=0.525
+per-recording 24/35

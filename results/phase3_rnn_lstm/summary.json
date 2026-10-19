@@ -1,0 +1,42 @@
+{
+ "rnn": {
+  "metrics": {
+   "n": 16949.0,
+   "tp": 3814.0,
+   "tn": 6033.0,
+   "fp": 4404.0,
+   "fn": 2698.0,
+   "accuracy": 0.5809782288040592,
+   "sensitivity": 0.5856879606879607,
+   "specificity": 0.5780396665708537,
+   "precision": 0.46410318812363105,
+   "f1": 0.5178547182620502
+  },
+  "per_recording_correct": 25,
+  "n_records": 35,
+  "params": 1697,
+  "hidden": 32,
+  "epochs": 30,
+  "seed": 0
+ },
+ "lstm": {
+  "metrics": {
+   "n": 16949.0,
+   "tp": 3367.0,
+   "tn": 7485.0,
+   "fp": 2952.0,
+   "fn": 3145.0,
+   "accuracy": 0.6402737624638621,
+   "sensitivity": 0.5170454545454546,
+   "specificity": 0.717160103478011,
+   "precision": 0.5328374742839057,
+   "f1": 0.524822695035461
+  },
+  "per_recording_correct": 24,
+  "n_records": 35,
+  "params": 5153,
+  "hidden": 32,
+  "epochs": 30,
+  "seed": 0
+ }
+}

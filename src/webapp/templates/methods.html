@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block body %}
+<h1>Methodology &amp; limitations</h1>
+<div class="grid2"><div class="card"><h2>Datasets &amp; provenance</h2><ul>
+<li><b>PhysioNet Apnea-ECG</b>: 35 labelled records (a01–a20, b01–b05, c01–c10), single-lead ECG at 100 Hz, per-minute expert apnea labels. Training and evaluation of the ECG models.</li>
+<li><b>MESA via NSRR</b>: 250 subjects downloaded, 220 pass the usable-signal funnel; ECG (256 Hz), thoracic/abdominal belts (32 Hz), SpO2 (1 Hz), event labels.</li>
+<li><b>In-house SensorTile.box PRO logs</b> (QVAR-ECG + IMU, ~243 Hz measured): healthy volunteers, validation only; raw files are never committed or trained on (one scoped exception: linear heads on 7 labelled holds of one session, documented in <code>docs/PROGRESS.md</code> §7f).</li></ul></div>
+<div class="card"><h2>Pipeline &amp; models</h2><ul>
+<li>ECG → R-peaks → per-minute RR-interval and R-amplitude sequence (60 steps) → 1D-CNN (3.4k params), LSTM/GRU, TCN, or tabular HRV/CVHR features.</li>
+<li>Effort: accelerometer → 0.08–0.6 Hz band → Hilbert envelope → hold-likelihood from two linear heads (pilot).</li>
+<li>MESA: CANet — multi-scale CNN encoders per stream with bidirectional cross-modal attention (169k params for ECG + effort).</li></ul></div></div>
+<div class="card"><h2>Validation &amp; leakage prevention</h2><ul>
+<li>Subject-independent only: each Apnea-ECG record is a subject (leave-one-record-out); MESA uses subject-grouped 5-fold CV.</li>
+<li>Normalisation, class weights, early stopping and decision thresholds are computed from training/validation partitions only; the held-out subject is used once.</li>
+<li>Historical runs did not fully meet this: the CNN variant was chosen on test folds; RNN/LSTM v2 configs were selected on records that are also test folds. The controlled comparison on the model page removes this and is the unbiased estimate.</li>
+<li>Metrics: accuracy, sensitivity, specificity, precision, F1, AUROC, AUPRC, confusion matrices, per-recording correctness (record flagged if &gt;5% of minutes positive). Per-minute and per-recording are different tasks.</li></ul></div>
+<div class="card"><h2>Negative / limiting results (kept on purpose)</h2><ul>
+<li>Belt → accelerometer transfer failed: four domain-adaptation attempts (CORAL pooled/token, adversarial v1/v2) did not close the gap; frozen MESA features tied hand-crafted effort features on pooled AUROC (0.83 vs 0.83) but were worse per event and gave more false positives (n = 7 events, one subject).</li>
+<li>RNN/LSTM did not beat the CNN in the historical runs; see the controlled comparison for the multi-seed result.</li>
+<li>The ECG R-amplitude channel does not transfer from PhysioNet to QVAR (≈100× scale mismatch); healthy-volunteer flag rates are therefore inflated with the amplitude channel.</li>
+<li>SpO2 and EEG are not recorded by our wearable; MESA SpO2 results do not apply to it.</li></ul></div>
+<div class="card"><h2>Model artifacts used by the upload page</h2><div class="scroll"><table><tr><th>Model</th><th>Directory</th><th>Checkpoint SHA-256 (12)</th></tr>{% for c in ckpts %}<tr><td>{{c.model}}</td><td><code>{{c.path}}</code></td><td><code>{{c.sha256_12}}</code></td></tr>{% endfor %}</table></div>
+<p class="small mut">Deployable checkpoints are trained on all 35 records (no held-out set), so their own performance is the LOSO figures, not an in-sample score.</p></div>
+<div class="card"><h2>Clinical status</h2><p>This is a research prototype for screening-style flagging. It is not a diagnostic device, has no clinical validation, cannot assess hypopnea without SpO2, and was never evaluated on patients with our hardware.</p></div>
+<div class="card"><h2>Roadmap (not done)</h2><ul><li>Second chest-worn session with ECG + IMU on one tile, sync taps, event log and recorded placement.</li><li>Retrieve the Google Drive recording once the connector is authorised.</li><li>Any self-supervised or further domain-adaptation work needs substantially more in-house data; not attempted.</li></ul></div>
+{% endblock %}

@@ -148,6 +148,11 @@ def load_sensortile(path: str | Path) -> SensorTileRecord:
             raise ValueError(f"{path.name}: missing expected CSV columns {missing}; "
                              f"found columns {list(df.columns)}")
         df = df.dropna(subset=["time[us]"])
+        # Truncated-write policy (session-2 logs end in one incomplete row): drop <=5 trailing rows that have any NaN; more than that is
+        # real data loss and is left in for the caller's validation to reject.
+        _bad = df.isna().any(axis=1)
+        if 0 < _bad.sum() <= 5 and _bad.iloc[-_bad.sum():].all():
+            df = df.loc[~_bad]
         n_samples = len(df)
         timestamp_us = df["time[us]"].to_numpy(dtype=np.float64)
         accel_mg = df[["acc_x[mg]", "acc_y[mg]", "acc_z[mg]"]].to_numpy(dtype=np.float64)

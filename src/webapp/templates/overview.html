@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% block body %}
+{% set ce = mesa['ECG only'] %}{% set cf = mesa['ECG + effort (CANet)'] %}{% set cnn = hist["1D-CNN (adopted, 'Variant A')"] %}{% set base = hist['CVHR logistic baseline'] %}
+<h1>Detecting sleep apnea from a chest-worn ECG + motion sensor</h1>
+<p class="lead">One chest SensorTile records ECG (via QVAR) and chest-wall motion (IMU). Apnea is a cardiorespiratory event, so the project asks whether fusing heart and breathing signals beats the heart alone. Models are trained on public, expert-labelled clinical data; our own healthy-volunteer recordings are used only for validation.</p>
+
+{% if cf and cf.status=='complete' and ce.status=='complete' %}
+<div class="card hero"><span class="pill p-ok">Validated · clinical dataset · subject-independent</span>
+<h2 style="margin-top:8px">Strongest validated result: adding respiratory effort to ECG improves apnea-event detection</h2>
+<div class="grid3"><div><div class="big">{{'%.3f'%cf.auroc}}</div><div class="mut">AUROC, ECG + respiratory effort (CANet)</div></div>
+<div><div class="kpi">{{'%.3f'%ce.auroc}} <small>ECG only</small></div><div class="mut small">Δ AUROC {{'%+.3f'%cf.d_auroc}}, 95% CI {{cf.d_auroc_ci95}} (paired subject bootstrap)</div></div>
+<div><div class="kpi">{{mesa_cfg.get('n_subjects','?')}} <small>MESA subjects, 5-fold grouped CV</small></div><div class="mut small">{{'{:,}'.format(mesa_cfg.get('n_epochs',0))}} thirty-second epochs; threshold chosen on inner-validation subjects only</div></div></div>
+<div class="note">Honest reading: most of the gain comes from the effort channel (effort alone reaches {{'%.3f'%mesa['Effort only'].auroc}}), and {% if mesa['SpO2 only'].status=='complete' %}SpO2 alone reaches {{'%.3f'%mesa['SpO2 only'].auroc}}{% else %}an SpO2-only run is pending{% endif %}. SpO2 is not available on our wearable. The effort signal here is a clinical respiratory-inductance belt; it does <b>not</b> transfer to our chest accelerometer (see the in-house page). <a href="/mesa">Full six-configuration comparison →</a></div></div>
+{% endif %}
+
+<div class="grid2">
+<div class="card"><span class="pill p-ok">Validated · Apnea-ECG · ECG only</span><h2 style="margin-top:8px">Per-minute apnea classifier (1D-CNN)</h2>
+{% if cnn.status=='complete' %}<div class="kpi">{{'%.1f'%(100*cnn.acc)}}% <small>accuracy · sens {{'%.1f'%(100*cnn.sens)}}% · spec {{'%.1f'%(100*cnn.spec)}}%</small></div>
+<p class="small mut">35 PhysioNet records, leave-one-subject-out, {{'{:,}'.format(cnn.n)}} labelled minutes. Classical CVHR baseline: {{'%.1f'%(100*base.acc)}}%.</p>{% endif %}
+{% if ctrl.status=='complete' %}<div class="note">A controlled multi-seed re-evaluation without test-fold selection is on the <a href="/models">model comparison</a> page; use it, not the historical number, for the unbiased estimate.</div>
+{% else %}<div class="note">The 81.2% figure is historical: the CNN variant was picked among four using these same test folds. A clean multi-seed re-evaluation is still running.</div>{% endif %}
+</div>
+<div class="card"><span class="pill p-warn">Exploratory · in-house · 1 volunteer, 7 holds</span><h2 style="margin-top:8px">Our own SensorTile recordings</h2>
+<p>Breath-holds are a safe apnea-like surrogate, not clinical apnea. In session 1 the chest-accelerometer breathing amplitude is below 0.8× its pre-hold level in the conservative (inner) hold window in {{n_ev_lt1}}/{{n_ev}} events, but event boundaries could not be detected automatically and the effect size is a range. A second session could <b>not</b> be aligned or reproduced.</p>
+<a class="btn sec" href="/inhouse">Signal audit &amp; findings →</a></div></div>
+
+<div class="card"><h2>Pipeline</h2><div class="flow">
+<div><b>1 · Sensor</b>SensorTile.box PRO: QVAR as chest ECG @ ~243 Hz + IMU</div><div><b>2 · ECG branch</b>R-peaks → RR + amplitude per minute → CNN (PhysioNet-trained)</div>
+<div><b>3 · Effort branch</b>Accelerometer → breathing band → envelope (signal processing, pilot heads)</div><div><b>4 · Fusion</b>Decision-level; validated only on MESA belts</div><div><b>5 · Report</b>Per-minute flags; no AHI/severity claim without SpO2</div></div></div>
+
+<div class="card"><h2>What we have, by task</h2><div class="scroll"><table><tr><th>Task / dataset</th><th>Modalities</th><th>Evaluation</th><th>Status</th><th></th></tr>
+<tr><td>Per-minute apnea · PhysioNet Apnea-ECG (35 records)</td><td>ECG</td><td>LOSO</td><td><span class="pill p-ok">validated</span></td><td><a href="/models">models</a></td></tr>
+<tr><td>Epoch apnea/hypopnea event · MESA (220 subjects)</td><td>ECG, belts, SpO2</td><td>grouped 5-fold</td><td><span class="pill p-ok">validated</span></td><td><a href="/mesa">mesa</a></td></tr>
+<tr><td>Breath-hold effort change · in-house session 1</td><td>IMU (+ECG for HR)</td><td>descriptive, n=7</td><td><span class="pill p-warn">exploratory</span></td><td><a href="/inhouse">in-house</a></td></tr>
+<tr><td>Belt → accelerometer transfer</td><td>MESA belts → IMU</td><td>pilot, n=7</td><td><span class="pill p-bad">negative result</span></td><td><a href="/methods">methods</a></td></tr>
+<tr><td>Upload &amp; inference · ECG recordings</td><td>QVAR-ECG (+IMU)</td><td>none (no labels)</td><td><span class="pill p-info">demo tool</span></td><td><a href="/detect">detect</a></td></tr></table></div></div>
+{% endblock %}

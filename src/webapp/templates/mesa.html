@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block body %}
+<h1>MESA multimodal analysis</h1>
+<p class="lead"><b>Task:</b> detect 30 s sleep epochs containing an apnea or hypopnea event (NSRR scoring) in the Multi-Ethnic Study of Atherosclerosis polysomnograms. All configurations use the same epochs and subject-independent folds; each picks its decision threshold on inner-validation subjects only.</p>
+{% if m.status!='complete' %}<div class="note bad">MESA head-to-head table not found (<code>results/mesa/canet/head_to_head.csv</code>).</div>{% else %}
+{% set h=m.cfg.get('headline',{}) %}
+<div class="card"><h2>Common protocol</h2><div class="grid3"><div><div class="kpi">{{h.get('n_subjects','?')}} <small>subjects</small></div></div><div><div class="kpi">{{'{:,}'.format(h.get('n_epochs',0))}} <small>epochs</small></div></div><div><div class="kpi">5 <small>subject-grouped folds, split seed {{h.get('split_seed','?')}}</small></div></div></div>
+<p class="small mut">Training: weighted BCE, ≤{{h.get('max_epochs','?')}} epochs, early stopping (patience {{h.get('patience','?')}}), one seed per fold, 150 s context (±2 neighbouring epochs). Missing data: epochs with &lt;10 detectable beats dropped (4.6%). Code asserts that every variant uses identical epoch sets and fold assignment.</p></div>
+<div class="card"><h2>AUROC by modality set</h2>
+{% set items=[] %}{% for r in m.rows %}{% set _=items.append(dict(label=r.label, value=(r.auroc if r.status=='complete' else none), cls=('c' if r.label in ('SpO2 only','ECG + SpO2','ECG + effort + SpO2') else 'a'))) %}{% endfor %}
+{{ C.hbars(items, xmin=0.5, xmax=0.85, ticks=(0.5,0.6,0.7,0.8)) }}
+<p class="small mut">Grey bars use SpO2, which our wearable does not have. Blue bars use only signals the wearable could in principle provide (ECG, chest-effort) — but note effort here is a clinical respiratory belt, not an accelerometer.</p>
+<div class="scroll"><table><tr><th>Configuration</th><th>Inputs</th><th class="n">AUROC</th><th class="n">AUPRC</th><th class="n">Sens</th><th class="n">Spec</th><th class="n">F1</th><th>Δ AUROC vs ECG-only (95% CI)</th><th>Origin</th></tr>
+{% for r in m.rows %}<tr><td>{{r.label}}</td><td>{{r.mods}}</td>{% if r.status=='complete' %}<td class="n">{{'%.3f'%r.auroc}}</td><td class="n">{{'%.3f'%r.auprc}}</td><td class="n">{{'%.2f'%r.sens_event}}</td><td class="n">{{'%.2f'%r.spec_normal}}</td><td class="n">{{'%.2f'%r.f1}}</td><td>{{('%+.3f'%r.d_auroc ~ ' ' ~ r.d_auroc_ci95) if r.d_auroc is not none else 'reference'}}</td>
+{% else %}<td colspan="6" class="mut">pending - not yet completed</td><td></td>{% endif %}<td class="small">{{r.origin}}</td></tr>{% endfor %}</table></div></div>
+<div class="card"><h2>Reading the ablation</h2><ul>
+<li>Respiratory effort carries most of the signal: ECG-only is the weakest configuration, and every configuration containing effort or SpO2 beats it by a wide margin.</li>
+<li>SpO2 alone is already competitive with ECG + effort on AUROC. That supports using an oximeter when one is available, but SpO2 is not measured by our device, so this result cannot be used to claim anything about our hardware.</li>
+<li>Adding SpO2 to ECG + effort gives the best AUROC; whether that increment is meaningful should be judged against the fold-to-fold SD (~0.015–0.023 AUROC).</li>
+<li>These are associations from ablations of one architecture family, single seed per fold. They do not establish that any modality is <i>causally</i> necessary, and ECG's contribution in the fused model is smaller than effort's.</li></ul>
+<p class="small mut">Files: <code>results/mesa/canet/head_to_head.csv</code> (current), <code>head_to_head.pre_expC.csv</code> (backup before the two new variants), per-variant <code>metrics.json</code>/<code>config.json</code> in <code>results/mesa/canet/&lt;variant&gt;/</code>. Origin "inherited" = produced by an earlier run and not re-trained here; "new" = trained in this session with the same code path.</p></div>
+{% endif %}{% endblock %}

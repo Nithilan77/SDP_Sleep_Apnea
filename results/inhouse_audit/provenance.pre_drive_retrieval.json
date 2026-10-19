@@ -1,0 +1,65 @@
+{
+ "generated": "2026-10-19T23:03:17",
+ "files": [
+  {
+   "session": "S1",
+   "tile": "ECG",
+   "name": "user_MukuBreathHold_ECG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 44454258,
+   "sha256": "92f280f20c805b0654d21c18b6f73c6a5d72b7e44453bc77d24228f011227f32"
+  },
+  {
+   "session": "S1",
+   "tile": "EMG",
+   "name": "user_MukuBreathHold_EMG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 43791269,
+   "sha256": "c934b2624153370d9d1f55bd0e50dd5af87f6d09d06fc360496b13f134d17cfa"
+  },
+  {
+   "session": "S1",
+   "tile": "EOG",
+   "name": "user_MukuBreathHold_EOG_07_10_2026.csv",
+   "location": "project: data/recordings/breath_hold/ (copied 2026-10-08; original acquisition path not recorded)",
+   "size_bytes": 42708977,
+   "sha256": "dabb123d30cc5f20cd088ad96983d3bfafc882207a84eba2456ae81752eca733"
+  },
+  {
+   "session": "S2",
+   "tile": "ECG",
+   "name": "user_MithinBreathHold_ECG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 37601280,
+   "sha256": "7bcf2fecfbbb764ab1cfcabb962557b2c47481760435a07d79b87e458e562ca2"
+  },
+  {
+   "session": "S2",
+   "tile": "EMG",
+   "name": "user_MithinBreathHold_EMG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 25067520,
+   "sha256": "081c0fe4a6b30877da2a2b4f11701be3001d99b506c5ea0d775da7cb34114a12"
+  },
+  {
+   "session": "S2",
+   "tile": "EOG",
+   "name": "user_MithinBreathHold_EOG_000.csv",
+   "location": "NOT in project: ~/Desktop/Mithin-BreathHold/ (read in place, unmodified)",
+   "size_bytes": 53329920,
+   "sha256": "7c01177f797cc381ea0aedbc1b596f0e398b7d375c5cd4d1d4e4562c76ed065c"
+  }
+ ],
+ "all_distinct": true,
+ "drive": {
+  "folder_id": "1wS9USehoXPs37GDOZKEbiNTCKUq29yo",
+  "status": "NOT RETRIEVED",
+  "detail": "gdown (unauthenticated) -> HTTP 404 (folder not public; editor sharing does not make it public). claude.ai Google Drive connector requires OAuth: run /mcp and authorise 'claude.ai Google Drive'. Until then it is unknown whether the Desktop 'Mithin' files are the Drive files.",
+  "checked": "2026-10-19"
+ },
+ "identity_notes": [
+  "File names suggest two different volunteers ('Muku' vs 'Mithin') - this is an inference from names only; no participant metadata exists in the files.",
+  "Each session has three independent SensorTile logs (ECG/EMG/EOG label = intended electrode wiring). Each tile has its own clock starting near 0 us; no shared timestamps.",
+  "Session-2 logs end in one truncated row each (dropped, <=5-row policy in src/ingest/sensortile.py). Raw files untouched."
+ ]
+}

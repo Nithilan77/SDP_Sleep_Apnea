@@ -46,6 +46,8 @@ VARIANTS = {  # name -> (streams, fusion)
     "ceiling_spo2": (("cardiac", "resp", "spo2"), "cross"),
     "resp_only": (("resp",), "concat"),
     "concat_fusion": (("cardiac", "resp"), "concat"),
+    "spo2_only": (("spo2",), "concat"),                       # Exp C: SpO2 alone (not on our wearable)
+    "ecg_spo2": (("cardiac", "spo2"), "cross"),               # Exp C: ECG + SpO2, no effort (not on our wearable)
 }
 D_MODEL, N_HEADS, N_TOKENS = 64, 4, 75
 STREAM_SPEC = {  # in_channels, stem stride (0 = none), pooling per block -> every stream ends at 75 tokens
@@ -222,7 +224,8 @@ def write_head_to_head(n_boot=200, seed=0):
     base = _load_preds(B.PRED_CACHE / "preds.npz")
     models = {"ECG-only baseline (CardiacCNN)": base}
     labels = {"headline": "CANet (ECG + effort)  [HEADLINE]", "concat_fusion": "ablation: ECG + effort, concat (no attention)",
-              "resp_only": "ablation: effort only", "ceiling_spo2": "CEILING: CANet + SpO2 (not on our wearable)"}
+              "resp_only": "ablation: effort only", "ceiling_spo2": "CEILING: CANet + SpO2 (not on our wearable)",
+              "spo2_only": "ablation C: SpO2 only (not on our wearable)", "ecg_spo2": "ablation C: ECG + SpO2, no effort (not on our wearable)"}
     for v in VARIANTS:
         p = CACHE / v / "preds.npz"
         if p.exists():
