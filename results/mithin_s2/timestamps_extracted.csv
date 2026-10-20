@@ -1,0 +1,18 @@
+lap,lap_time_mmss,lap_time_s,source,reading_confidence,note
+1,18:00.84,1080.84,directly observed (frame 14 of video),high,red = slowest lap (iOS colouring)
+2,01:29.18,89.18,directly observed (frame 14),high,
+3,00:30.13,30.13,directly observed (frames 10/14),high,
+4,01:29.86,89.86,directly observed,high,
+5,00:30.06,30.06,directly observed,high,
+6,01:29.87,89.87,directly observed,high,
+7,00:30.11,30.11,directly observed,high,
+8,01:29.86,89.86,directly observed (frame 10),high,
+9,00:30.14,30.14,directly observed,high,
+10,01:29.99,89.99,directly observed,high,
+11,00:29.98,29.98,directly observed,high,
+12,01:29.91,89.91,directly observed (frame 4),high,
+13,00:30.06,30.06,directly observed,high,
+14,01:30.01,90.01,directly observed,high,
+15,00:29.94,29.94,directly observed,high,green = fastest lap (iOS colouring)
+16,01:30.06,90.06,directly observed (frame 1),high,
+17,00:03.96,3.96,directly observed (frame 1),high,partial lap: running lap when the stopwatch was stopped

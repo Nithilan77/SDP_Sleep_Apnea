@@ -1,0 +1,18 @@
+event_id,role_inferred,stopwatch_start_s,stopwatch_end_s,duration_s,provenance,hold_no
+L01,setup_baseline,0.0,1080.84,1080.84,durations observed; start/end calculated by cumulative sum; role inferred,
+L02,rest,1080.84,1170.02,89.18,durations observed; start/end calculated by cumulative sum; role inferred,
+L03,hold,1170.02,1200.15,30.13,durations observed; start/end calculated by cumulative sum; role inferred,1.0
+L04,rest,1200.15,1290.01,89.86,durations observed; start/end calculated by cumulative sum; role inferred,
+L05,hold,1290.01,1320.07,30.06,durations observed; start/end calculated by cumulative sum; role inferred,2.0
+L06,rest,1320.07,1409.94,89.87,durations observed; start/end calculated by cumulative sum; role inferred,
+L07,hold,1409.94,1440.05,30.11,durations observed; start/end calculated by cumulative sum; role inferred,3.0
+L08,rest,1440.05,1529.91,89.86,durations observed; start/end calculated by cumulative sum; role inferred,
+L09,hold,1529.91,1560.05,30.14,durations observed; start/end calculated by cumulative sum; role inferred,4.0
+L10,rest,1560.05,1650.04,89.99,durations observed; start/end calculated by cumulative sum; role inferred,
+L11,hold,1650.04,1680.02,29.98,durations observed; start/end calculated by cumulative sum; role inferred,5.0
+L12,rest,1680.02,1769.93,89.91,durations observed; start/end calculated by cumulative sum; role inferred,
+L13,hold,1769.93,1799.99,30.06,durations observed; start/end calculated by cumulative sum; role inferred,6.0
+L14,rest,1799.99,1890.0,90.01,durations observed; start/end calculated by cumulative sum; role inferred,
+L15,hold,1890.0,1919.94,29.94,durations observed; start/end calculated by cumulative sum; role inferred,7.0
+L16,rest,1919.94,2010.0,90.06,durations observed; start/end calculated by cumulative sum; role inferred,
+L17,unknown_partial,2010.0,2013.96,3.96,durations observed; start/end calculated by cumulative sum; role inferred,

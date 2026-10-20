@@ -18,7 +18,7 @@ The scientific claim to prove is that **fusing heart + breathing signals beats u
 
 **The core constraint that shapes everything:** our own test subjects (2 students) are healthy 19–20 year-olds who essentially don't have apnea. So:
 - Training data must be **public, expert-labelled clinical data** — the only place real apnea exists for us.
-- Our own SensorTile recordings are for **validation only** — voluntary breath-holds (awake, timestamped) as safe labelled apnea-like events, plus healthy overnight recordings as negative controls. **We never train on our own data.**
+- Our own SensorTile recordings: voluntary breath-holds (awake, timestamped) are labelled `voluntary_breath_hold` events (apnea-*like*, never clinical apnea labels) and healthy overnight recordings serve as negative controls. **Policy revised 2026-10-20 (`CLAUDE.md` §4): in-house data may be used for training, fine-tuning, augmentation and synthetic generation with strict train/validation/test separation, reported separately from the public results.** Everything in §1–§7h below was produced under the earlier validation-only rule and is reported as it was made.
 
 **Architecture — two branches, decision-level fusion** (not one end-to-end model, because the two branches train on completely different data and decision-level fusion keeps each branch's output interpretable):
 
@@ -397,7 +397,7 @@ RR-interval transfers cleanly — the 17% mean gap is healthy-young vs older-cli
 
 ## 7b. Track B — MESA public data and CANet (ECG + respiratory effort)
 
-**Scope and constraint.** MESA (NSRR, expert-scored PSG) is the *training* distribution for the fusion model; our own recordings stay validation-only (CLAUDE.md §4). All numbers below are **subject-independent** (grouped 5-fold CV over subjects, no subject in train and test of a fold), on **30 s sleep epochs**, target = **respiratory event (apnea or hypopnea) vs normal** (event prevalence 25.4%). Obstructive-vs-central is descriptive only (central is 0.05% of apnea epochs / zero in 123 of 220 subjects: not learnable).
+**Scope and constraint.** MESA (NSRR, expert-scored PSG) is the *training* distribution for the fusion model; at the time of writing our own recordings stayed validation-only (CLAUDE.md §4, since revised 2026-10-20). All numbers below are **subject-independent** (grouped 5-fold CV over subjects, no subject in train and test of a fold), on **30 s sleep epochs**, target = **respiratory event (apnea or hypopnea) vs normal** (event prevalence 25.4%). Obstructive-vs-central is descriptive only (central is 0.05% of apnea epochs / zero in 123 of 220 subjects: not learnable).
 
 **Audit** (`results/mesa/audit/`, code `src/ingest/mesa*.py`). 250 subjects downloaded (EDF + NSRR XML + Profusion XML, 0 failures); 220 usable under the strict funnel (4 signals present, sleep >= 4 h, both belts alive and showing breathing in >= 50% of epochs, >= 1 scored event). Native rates: EKG 256 Hz, Thor/Abdo belts 32 Hz, SpO2 1 Hz. Class balance on usable subjects (sleep epochs): 74.9% normal / 19.6% hypopnea-only / 5.5% apnea (89.5% of apnea epochs obstructive, 10.5% central, mixed ~0). Per-subject medians [IQR]: obstructive 8 [2-26], central 0 [0-2], hypopnea 107 [57-153]. AHI is rule-dependent (median 11 under NSRR 4% vs 20 under 3%/arousal vs 21 scoring every event). Committed outputs are anonymised (`subjects_anon.csv`; mesaids never in git).
 
@@ -581,6 +581,8 @@ Visual verdict per event (all 7 plots read): OK = 2, 4, 6; FAIL = 1 (fell back; 
 ---
 
 ## 7f. Supervised transfer: frozen MESA CANet features vs hand-crafted effort features, trained on our own breath-hold labels
+
+> **Policy note (2026-10-20):** the 'scoped exception' below is superseded by the revised in-house data-use policy (`CLAUDE.md` §4); the experiment and its numbers are unchanged.
 
 **Headline (read this first).** The frozen MESA-trained CANet features do **not** beat a simple hand-crafted baseline at this data scale. Under identical leave-one-event-out CV, a linear head on the frozen 256-d features and a linear head on 8 hand-crafted effort features tie on pooled AUROC (**0.83 vs 0.83**; 95% event-bootstrap CIs 0.58–1.00 and 0.71–0.97). The hand-crafted head is the more consistent detector: per-fold AUROC min **0.78 vs 0.16**, and **0.5% vs 24%** false positives on the held-out baseline period. A shuffled-training-label control collapses both heads to chance (frozen 0.48 ± 0.10, hand-crafted 0.45 ± 0.09), so the pipeline is not leaking labels. **Caveat that applies to this headline and every comparison below:** the two feature sets are *not* apples-to-apples. The frozen features see a 150 s window (cardiac + effort, cross-attention) whereas the hand-crafted features see only the 30 s effort centre epoch. Scope of the claim: the shuffled-label control rules out label leakage; it does not make a 7-event result statistically firm (the CIs above span 0.58 to 1.00), so the supportable statement is "no demonstrated benefit of the frozen features, and worse consistency", not a proven ranking. One subject, one session, n = 7 events: **a pilot, not a validated accuracy.** Voluntary awake holds are also not apnea; nothing here is an apnea accuracy.
 
@@ -775,6 +777,26 @@ The earlier single-page upload app (`docs/WORKLOG_48H.md` §3) was replaced (the
 
 ---
 
+---
+
+## 7i. 2026-10-20 work session — policy revision, Mithin session 2, ensembles, simulator/augmentation, in-house breath-hold track, dashboard
+
+*All numbers below are produced by scripts in the repository and stored under the named result directories; nothing in §1–§7h was rewritten. Manifest and audit: `docs/EXPERIMENT_MANIFEST_2026-10-20.md`.*
+
+**Policy.** `CLAUDE.md` §4 was rewritten: in-house recordings may now be used for training, fine-tuning, augmentation, SSL, synthetic generation and calibration, with strict train/validation/test separation, fixed label semantics (voluntary breath-hold ≠ clinical apnea) and separate reporting (Track A public / Track B in-house). The old text is quoted in the History block of §4. Everything before this section was produced under the earlier validation-only rule (plus the §7f exception).
+
+**Dashboard fix.** Root cause of `FileNotFoundError: data\mesa\cache\final_models\headline.pt`: loaders used a CWD-relative path and `data/mesa/` is gitignored, so a fresh clone (or one made before commit a184d56, which force-added the file) lacked it. Now `src/deploy/checkpoints.py` resolves paths against the project root, verifies SHA-256 against `docs/checkpoints.json`, and raises an actionable `CheckpointError`; no substitution. New pages: `/breathhold` (task-labelled upload → real model output, window counts, original-vs-augmented comparison, report), `/expansion`, `/status`. `tests/e2e_webapp.py`: 37 cases incl. missing/altered checkpoints (`results/webapp_e2e/test_table.v3.md`); `tests/test_inhouse_policy_flow.py`: 15 unit tests.
+
+**Mithin session 2** (`results/breath_hold_s2/mithin/REPORT.md`): the "timestamp screenshots" are a phone-stopwatch screen recording (17 laps, total 33:34.04; holds inferred = the seven ~30 s laps). No tile aligns to it (shuffle-null p = 0.49–0.95); protocol v2 was not followed. No labels are derived from session 2.
+
+**Ensembles** (`results/ensemble/README.md`): over saved OOF predictions no ensemble beats the HGB (all paired CIs contain 0); GRU/LSTM add nothing; MESA ensembles no better than CANet without SpO2. **Recommendation: single HGB for ECG-only; no ensemble.**
+
+**Simulator / augmentation** (`docs/SYNTHETIC_DATA.md`, `results/synth/README.md`): validated SensorTile-format generator (pilot 20, medium 100, large 400 recordings; 93% / 94% valid), QC shows real-vs-synthetic domain-classifier AUROC 0.95 (not realistic enough to claim indistinguishability). ECG expanded-data matrix on real held-out records: augmentation ±0 (best +0.010 acc, CI includes 0), simulator data degrades monotonically (1:1 −0.011 … 1:10 −0.178 acc), fine-tuning and combined configs no gain, apparent ensemble gain = seed averaging. **Not recommended for the apnea classifier.**
+
+**In-house breath-hold track** (`results/inhouse_bh/README.md`): annotation file with `baseline_reference / voluntary_breath_hold / recovery / uncertain` (S1: 7 holds, ±5 s boundary bands; S2 unusable); 237 labelled windows; leave-one-event-out AUROC 0.77–0.83 across 11 configurations with no demonstrable winner; simulator windows raise false flags; SSL+linear head best AUROC (0.828 vs 0.777 CNN from scratch) — a hypothesis. Whole-recording scan of the deployed real-only ensemble: 4/7 holds, 6 extra segments (≈ 12/h). Feasibility only; one volunteer.
+
+**Not done / blocked.** Independent-subject breath-hold evaluation (needs ≥ 3 subjects with sync); a quantitative synthetic stress test of the effort detector; signal-quality classifier; real-browser upload automation (headless Chrome screenshot of a rendered result page only: `results/webapp_e2e/screenshot_bh_demo_result.png`); `pytest` is not installed (tests use `unittest`/HTTP).
+
 ## 8. Current status and what's next
 
 | Phase | Status |
@@ -819,7 +841,7 @@ apnea/
                                       .dat/.hea/.apn/.qrs — plus x01-x35 (withheld, no labels).
     recordings/
       inhouse_ecg/                   15 in-house SensorTile QVAR-ECG+IMU .txt recordings (§7);
-                                      validation-only, gitignored, never committed.
+                                      gitignored, never committed (validation-only when written; policy revised 2026-10-20).
 
   src/
     ingest/

@@ -1,0 +1,51 @@
+{
+ "n": 100,
+ "valid": 93,
+ "scenarios": {
+  "holds": 40,
+  "baseline": 31,
+  "apnea": 29
+ },
+ "tiles": {
+  "ECG": 67,
+  "EOG": 17,
+  "EMG": 16
+ },
+ "quality": {
+  "good": 55,
+  "poor_breathing": 27,
+  "noisy": 18
+ },
+ "failed_required": {
+  "beat_count_vs_truth": 5,
+  "rr_plausible_frac": 2
+ },
+ "optional_failed": {
+  "hold_effort_drop": 7,
+  "breathing_freq_matches": 4
+ },
+ "n_events": 925,
+ "unique_head_hashes": 100,
+ "total_hours": 50.0,
+ "diversity": {
+  "n_compared": 40,
+  "min_pairwise_dist": 0.39372974374244935,
+  "median_nn_dist": 0.7246518029312596,
+  "near_duplicates_dist_lt_0p3": 0
+ },
+ "domain_classifier": {
+  "auroc_real_vs_synthetic": 0.9501881970260222,
+  "n_real_windows": 538,
+  "n_synth_windows": 800,
+  "perm_importance_auroc_drop": {
+   "qvar_sd": 0.010116171003717311,
+   "hf_noise": 0.04621282527881021,
+   "wander": 0.009716542750929147,
+   "breath_band_rms": 0.21075511152416337,
+   "grav_mag": -0.004969795539033539,
+   "acc_axis_sd": 0.04993029739776933,
+   "qvar_unique": 0.0280134758364311
+  },
+  "reading": "0.5 = indistinguishable; values near 1 mean the synthetic windows carry artificial cues a model could exploit"
+ }
+}

@@ -12,7 +12,7 @@
 
 **The constraint.** Our volunteers are healthy 19–20-year-olds who essentially do not have apnea. So:
 - the models can only be **trained on public, expert-labelled clinical data** (PhysioNet Apnea-ECG, MESA via NSRR);
-- our own recordings are **validation only**: healthy-night negative controls and voluntary awake **breath-holds** as safe, labelled apnea-*like* events;
+- our own recordings: healthy-night negative controls and voluntary awake **breath-holds** (`voluntary_breath_hold`, apnea-*like*, never clinical apnea) — usable for training/fine-tuning/augmentation under the policy revised 2026-10-20 (`CLAUDE.md` §4), with strict separation and a results track separate from the public datasets;
 - every headline number is **subject-independent** (never train and test on the same person). [CLAUDE.md §4, §8]
 - *One deliberate, scoped exception* (§6 below): linear heads on our own breath-hold labels, advisor-directed, recorded before results existed. [PROGRESS §7f]
 
@@ -163,3 +163,9 @@ One volunteer, one ~30 min session, chest SensorTile, **7 voluntary ~30 s holds*
 4. **QVAR-specific recalibration of the ECG amplitude channel**, and an ECG-domain signal-quality gate (IMU motion gating cannot see electrical artifacts). [PROGRESS §7]
 5. **Phases 6–7** on our hardware: decision-level fusion and a per-night report (events/hour, severity, no-SpO2 caveat) — blocked on a validated effort branch.
 6. Housekeeping already done (separate commits): §7f false-positive correction (`0679da6`), §7d erratum (`33c586c`), README/CLAUDE.md status notes (`5ebf3e3`). `docs/presentation_handoff/*` (the 2026-10-04 mentor-review deck material) still predates §7d–§7g and should not be reused as-is.
+
+
+---
+## Addendum 2026-10-20 (appended; earlier text unchanged)
+**What is new.** (1) *Policy:* in-house recordings may now be used for training/fine-tuning/augmentation (`CLAUDE.md` §4), with strict train/validation/test separation; voluntary holds stay `voluntary_breath_hold`, never clinical apnea; public and in-house results are reported separately. (2) *Best ECG-only model under one protocol:* gradient boosting on HRV/CVHR features, acc 0.802 / AUROC 0.839 (35-fold LOSO, 3 seeds); the 0.812 CNN number is a historical single run. (3) *Ensembles* (PhysioNet and MESA): none beats the best single model; every paired CI contains 0. (4) *Simulator/augmentation:* augmentation ±0 (best +0.010 acc, CI includes 0); simulator minutes degrade accuracy monotonically (1:1 −0.011 … 1:10 −0.178); a real-vs-synthetic classifier separates the data with AUROC 0.95, so the simulator is not claimed realistic. (5) *Breath-hold track (one volunteer, 7 events, feasibility only):* leave-one-event-out AUROC 0.77–0.83, no demonstrable winner; deployed real-only ensemble detects 4/7 holds with ≈ 12 extra segments/hour in a whole-recording scan. (6) *Mithin session 2:* the "timestamps" are a phone-stopwatch screen recording (17 laps); no sensor tile aligns to it (p = 0.49–0.95), so it yields no labels. (7) *Dashboard:* checkpoint-path bug fixed (project-root paths + SHA-256 pinning); new Breath-hold demo, Ensembles & expanded data, System status pages; 37/37 end-to-end and 15/15 unit tests pass.
+**Say out loud:** one volunteer, session-1 output is in-sample, breath-hold detection ≠ apnea detection, false flags on quiet breathing. Sources: `docs/PROGRESS.md` §7i, `results/{ensemble,synth,inhouse_bh,breath_hold_s2/mithin}/README.md|REPORT.md`.

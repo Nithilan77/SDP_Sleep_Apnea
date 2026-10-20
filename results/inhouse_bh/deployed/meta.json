@@ -1,0 +1,28 @@
+{
+ "task": "voluntary breath-hold-like low-effort windows (NOT sleep apnea)",
+ "config": "real",
+ "seed": 0,
+ "trained": "2026-10-20 15:10",
+ "training_data": {
+  "source_recording": "S1_ECGTILE (one volunteer, 2026-10-07; sha256 92f280f20c805b06)",
+  "original_windows": 237,
+  "original_hold": 40,
+  "original_nonhold": 197,
+  "augmented_windows": 0,
+  "synthetic_windows": 0,
+  "synthetic_qc": {
+   "recordings": 100,
+   "rejected_recordings": 82,
+   "rejected_windows": 17424
+  },
+  "rejected_windows": "uncertain-boundary windows are never created (see annotations.csv)",
+  "events": 7
+ },
+ "window_s": 10.0,
+ "stride_s": 2.0,
+ "thr": 0.5,
+ "in_sample_recordings": [
+  "user_MukuBreathHold_ECG_07_10_2026.csv"
+ ],
+ "caveat": "Trained on session 1: its outputs are in-sample. Out-of-sample estimate = leave-one-event-out (results/inhouse_bh/loeo_summary.csv), one volunteer, 7 events."
+}

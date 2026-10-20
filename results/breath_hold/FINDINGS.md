@@ -1,5 +1,8 @@
 # Breath-hold session — first analysis of real labelled in-house events
 
+> **Policy note (2026-10-20):** this report was written under the earlier validation-only rule. `CLAUDE.md` §4 now permits in-house data for training/fine-tuning/augmentation with strict separation; nothing in this report changed.
+
+
 **Recording:** 2026-10-07, chest SensorTile box (QVAR-ECG + accelerometer), one healthy volunteer, 7 voluntary ~30 s holds
 (stopwatch laps 2,4,…,14). Validation only; raw recording is not committed. Full write-up in `docs/PROGRESS.md` §7e.
 This file supersedes the earlier v1 write-up, whose numbers (mean ratio 0.648, "6/7 < 0.8") came from boundaries that

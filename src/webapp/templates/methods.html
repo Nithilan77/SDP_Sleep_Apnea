@@ -3,7 +3,7 @@
 <div class="grid2"><div class="card"><h2>Datasets &amp; provenance</h2><ul>
 <li><b>PhysioNet Apnea-ECG</b>: 35 labelled records (a01–a20, b01–b05, c01–c10), single-lead ECG at 100 Hz, per-minute expert apnea labels. Training and evaluation of the ECG models.</li>
 <li><b>MESA via NSRR</b>: 250 subjects downloaded, 220 pass the usable-signal funnel; ECG (256 Hz), thoracic/abdominal belts (32 Hz), SpO2 (1 Hz), event labels.</li>
-<li><b>In-house SensorTile.box PRO logs</b> (QVAR-ECG + IMU, ~243 Hz measured): healthy volunteers, validation only; raw files are never committed or trained on (one scoped exception: linear heads on 7 labelled holds of one session, documented in <code>docs/PROGRESS.md</code> §7f).</li></ul></div>
+<li><b>In-house SensorTile.box PRO logs</b> (QVAR-ECG + IMU, ~243 Hz measured): healthy volunteers; raw files are never committed. Under the policy revised 2026-10-20 they may be used for training/fine-tuning/augmentation with strict separation and are reported separately from the public results; before that date they were not trained on, except linear heads on 7 labelled holds of one session, documented in <code>docs/PROGRESS.md</code> §7f).</li></ul></div>
 <div class="card"><h2>Pipeline &amp; models</h2><ul>
 <li>ECG → R-peaks → per-minute RR-interval and R-amplitude sequence (60 steps) → 1D-CNN (3.4k params), LSTM/GRU, TCN, or tabular HRV/CVHR features.</li>
 <li>Effort: accelerometer → 0.08–0.6 Hz band → Hilbert envelope → hold-likelihood from two linear heads (pilot).</li>

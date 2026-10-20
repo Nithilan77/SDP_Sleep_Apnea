@@ -1,0 +1,1 @@
+{"config": "synth_only", "parsed": {"aug": [], "ratio": 2.0, "mode": "only"}, "generator": "synth-physio-1.0", "seeds": [0], "model": "cnn", "epochs": 40, "batch": 128, "lr": 0.001}

@@ -33,19 +33,20 @@ using either alone.
 - The seniors' prior work (Pinnacle Review-I) built a CNN-LSTM sleep-stage classifier on
   EEG/EOG/EMG (Sleep-EDF dataset). We reuse their fusion approach and evaluation discipline.
 
-## 4. THE CORE CONSTRAINT (this shapes everything — read twice)
+## 4. THE CORE CONSTRAINT AND THE IN-HOUSE DATA-USE POLICY (revised 2026-10-20; supersedes the earlier validation-only rule)
 
 **Our own test subjects are healthy 19–20 year olds. They essentially do not have apnea.**
 
 Consequences:
-- **Training data must be public, expert-labelled clinical data** — that's the only place
-  real apnea exists for us.
-- **Our own recordings are for VALIDATION ONLY. Never train on them.**
-- We validate using **voluntary breath-holds** (awake, timestamped) as safe, perfectly-
-  labelled apnea-like events, plus healthy overnight recordings as negative controls.
-- Any experiment that trains on our own recordings is wrong by design.
+- **Clinical sleep-apnea labels come only from public, expert-annotated data** (PhysioNet Apnea-ECG, MESA). Nothing recorded on our volunteers is a clinical apnea label.
+- **In-house recordings MAY be used for training, fine-tuning, transfer learning, self-supervised/representation learning, breath-hold classification and respiratory-cessation analysis, augmentation and synthetic-data generation, domain adaptation, robustness work, calibration and ensemble development**, whenever the labels are reliable and the experiment is technically justified.
+- **Label semantics are fixed.** Voluntary breath-holds are `voluntary_breath_hold` (with `baseline_reference`, `recovery`, `uncertain`). They are never relabelled `sleep_apnea`, `obstructive_apnea` or `central_apnea`; those labels are reserved for events with sleep-study annotations or other defensible reference evidence. A model trained on breath-holds is a breath-hold model, not an apnea model; the dashboard and every report must name the task.
+- **Separation is mandatory.** Any recording (or interval, or generator fit, or augmentation/threshold/calibration choice) used for training, fine-tuning, model selection, calibration or synthetic-data generation must NOT be presented as an independent held-out test for that experiment. With two subjects, in-house results are feasibility/training demonstrations unless a recording- or subject-grouped split holds one out; say which. Uncertain intervals are excluded from supervised training. Windows from one recording never straddle partitions; generated windows are not independent subjects or observations.
+- **Two reporting tracks, never merged:** Track A = public datasets (PhysioNet/MESA, subject-independent protocols, unchanged test sets: no in-house or synthetic data enters their test folds); Track B = in-house breath-hold feasibility with its own labels and metrics.
+- Healthy overnight recordings remain useful negative controls (false-flag rates), and the unlabelled in-house signals may be used for representation learning.
+- Privacy is unchanged: raw recordings and subject identifiers are never committed (§15).
 
-> **Scoped exception (recorded 2026-10-09 in `docs/PROGRESS.md` §7f, before any result existed; advisor-directed):** linear (L2 logistic-regression) heads on *frozen* MESA-trained CANet features and on hand-crafted effort features were fitted on the 7 labelled holds of one breath-hold session. No encoder/attention weights and no deep network are trained on in-house data; the ECG and MESA branches are unchanged. See the §7f paragraph for the full scope and why.
+> **History (kept for the record):** the earlier text of this section said "Our own recordings are for VALIDATION ONLY. Never train on them." and "Any experiment that trains on our own recordings is wrong by design." That rule, the 2026-10-09 scoped exception (linear heads on 7 holds, `docs/PROGRESS.md` §7f) and methodology rule 5 are superseded by the policy above. Results produced under the old rule remain valid and are reported as made.
 
 ## 5. Hardware
 
@@ -65,8 +66,8 @@ Consequences:
 | Source | Signals | Rate | Role |
 |---|---|---|---|
 | **PhysioNet Apnea-ECG** | single-lead ECG + per-minute apnea labels, 70 recordings | 100 Hz | **TRAIN** the ECG model |
-| **Our SensorTile recordings** | QVAR-ECG + IMU (accel/gyro/temp) | 240 Hz | **VALIDATE** only |
-| **MESA (via NSRR, gated)** | ECG + effort belts + SpO2 + EEG + event-type labels, ~2000 subj | varies | Track B (stretch) |
+| **Our SensorTile recordings** | QVAR-ECG + IMU (accel/gyro/temp) | 240 Hz | Breath-hold task, fine-tuning/augmentation, negative controls (policy §4; never clinical apnea labels) |
+| **MESA (via NSRR, gated)** | ECG + effort belts + SpO2 + EEG + event-type labels, ~2000 subj | varies | public multimodal data (Track A; stretch). *Note: older docs call MESA 'Track B'; since 2026-10-20 Track B means the in-house breath-hold track.* |
 
 PhysioNet Apnea-ECG record naming:
 - `a01`–`a20` = apnea group, `b01`–`b05` = borderline, `c01`–`c10` = control
@@ -81,7 +82,7 @@ that's the sister team's. Ours is Apnea-ECG (files a01.dat, c01.apn, etc.).
 
 **There is no public apnea dataset with IMU data.** This is why the effort branch is
 signal-processing (no training needed), not a trained model. MESA's respiratory effort
-belts are the closest labelled proxy for chest motion (Track B).
+belts are the closest labelled proxy for chest motion (public Track A).
 
 ## 7. Architecture — two branches, decision-level fusion
 
@@ -123,7 +124,7 @@ branch interpretable — we can always explain *why* an event was flagged.
    beat it or it adds nothing.
 4. **Start simple:** classical CVHR → 1D-CNN → (only if plateaued) CNN-LSTM. No Transformer
    to start.
-5. **Never train on our own recordings.**
+5. **In-house data may be used for training under the §4 policy** — with strict train/validation/test separation, fixed label semantics (breath-hold ≠ clinical apnea), and Track A (public) / Track B (in-house) reported separately.
 6. **Reconcile sample rates** before feature extraction: PhysioNet 100 Hz vs QVAR 240 Hz.
    Prefer working in TIME units (seconds) for RR features so rate differences cancel;
    resample to a common grid for the CNN.
@@ -222,13 +223,13 @@ IMMEDIATE NEXT STEPS (in order):
   Subject-disjoint validation.
 - **Phase 4 — Effort branch.** IMU → envelope → cessation detection. Signal-processing only,
   no training. (Needs our own recordings or synthetic test data.)
-- **Phase 5 — Breath-hold validation.** First result on our own hardware: does the pipeline
+- **Phase 5 — Breath-hold task (in-house, Track B).** First result on our own hardware: does the pipeline
   catch timestamped breath-holds? (Needs recordings + device sync.)
 - **Phase 6 — Decision-level fusion.** Show fused > ECG-only (the headline claim). Plus
   healthy-night negative control.
 - **Phase 7 — Per-night report.** Aggregate to events/hour + severity band. Name the no-SpO2
   hypopnea limitation in the output.
-- **Phase 8 — Track B (MESA).** After NSRR access: multimodal + SpO2 + obstructive/central.
+- **Phase 8 — MESA, public Track A.** After NSRR access: multimodal + SpO2 + obstructive/central.
 
 Phases 2–3 are pure software — do them now on the laptop. Phases 4–7 need our own
 recordings (hardware), which run in parallel once the SensorTile sessions happen.

@@ -1,0 +1,163 @@
+SYN-00100000: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437186, duration=1800.0s
+SYN-00100002: measured fs=238.13 Hz vs nominal 240 Hz (+0.78% diff), n_samples=428626, duration=1800.0s
+SYN-00100004: measured fs=242.98 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437367, duration=1800.0s
+SYN-00100006: measured fs=242.96 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437322, duration=1800.0s
+SYN-00100008: measured fs=238.07 Hz vs nominal 240 Hz (+0.80% diff), n_samples=428530, duration=1800.0s
+SYN-00100009: measured fs=242.94 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437300, duration=1800.0s
+SYN-00100010: measured fs=238.17 Hz vs nominal 240 Hz (+0.76% diff), n_samples=428702, duration=1800.0s
+SYN-00100011: measured fs=242.91 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437241, duration=1800.0s
+SYN-00100013: measured fs=238.09 Hz vs nominal 240 Hz (+0.80% diff), n_samples=428564, duration=1800.0s
+SYN-00100014: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437350, duration=1800.0s
+SYN-00100017: measured fs=242.89 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437197, duration=1800.0s
+SYN-00100018: measured fs=243.01 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437420, duration=1800.0s
+SYN-00100019: measured fs=242.79 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437015, duration=1800.0s
+SYN-00100020: measured fs=242.79 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437029, duration=1800.0s
+SYN-00100021: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437176, duration=1800.0s
+SYN-00100022: measured fs=242.90 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437222, duration=1800.0s
+SYN-00100023: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437191, duration=1800.0s
+SYN-00100024: measured fs=243.00 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437401, duration=1800.0s
+SYN-00100025: measured fs=242.65 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436769, duration=1800.0s
+SYN-00100026: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=436832, duration=1800.0s
+SYN-00100027: measured fs=242.75 Hz vs nominal 240 Hz (+1.15% diff), n_samples=436955, duration=1800.0s
+SYN-00100029: measured fs=242.96 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437331, duration=1800.0s
+SYN-00100030: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437344, duration=1800.0s
+SYN-00100031: measured fs=242.71 Hz vs nominal 240 Hz (+1.13% diff), n_samples=436886, duration=1800.0s
+SYN-00100033: measured fs=242.90 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437228, duration=1800.0s
+SYN-00100034: measured fs=242.93 Hz vs nominal 240 Hz (+1.22% diff), n_samples=437274, duration=1800.0s
+SYN-00100035: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437345, duration=1800.0s
+SYN-00100036: measured fs=242.62 Hz vs nominal 240 Hz (+1.09% diff), n_samples=436717, duration=1800.0s
+SYN-00100037: measured fs=242.67 Hz vs nominal 240 Hz (+1.11% diff), n_samples=436811, duration=1800.0s
+SYN-00100039: measured fs=242.85 Hz vs nominal 240 Hz (+1.19% diff), n_samples=437132, duration=1800.0s
+SYN-00100041: measured fs=242.72 Hz vs nominal 240 Hz (+1.13% diff), n_samples=436901, duration=1800.0s
+SYN-00100042: measured fs=242.82 Hz vs nominal 240 Hz (+1.18% diff), n_samples=437082, duration=1800.0s
+SYN-00100043: measured fs=238.04 Hz vs nominal 240 Hz (+0.81% diff), n_samples=428480, duration=1800.0s
+SYN-00100044: measured fs=242.63 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436734, duration=1800.0s
+SYN-00100045: measured fs=242.64 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436749, duration=1800.0s
+SYN-00100047: measured fs=243.00 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437402, duration=1800.0s
+SYN-00100048: measured fs=242.78 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437009, duration=1800.0s
+SYN-00100049: measured fs=242.87 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437168, duration=1800.0s
+SYN-00100052: measured fs=242.99 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437390, duration=1800.0s
+SYN-00100053: measured fs=242.77 Hz vs nominal 240 Hz (+1.15% diff), n_samples=436981, duration=1800.0s
+user_0502-bala_ecg_000: measured fs=243.14 Hz vs nominal 240 Hz (+1.31% diff), n_samples=5032, duration=20.7s
+user_0502-bala_ecg_001: measured fs=243.14 Hz vs nominal 240 Hz (+1.31% diff), n_samples=4573, duration=18.8s
+user_0502-bala_ecg_002: measured fs=243.13 Hz vs nominal 240 Hz (+1.31% diff), n_samples=1364920, duration=5613.8s
+user_0802-anagesh_ecg_000: measured fs=238.08 Hz vs nominal 240 Hz (+0.80% diff), n_samples=6458546, duration=27127.8s
+user_1002-jayendran_ecg_000: measured fs=238.09 Hz vs nominal 240 Hz (+0.80% diff), n_samples=1585, duration=6.7s
+user_1002-jayendran_ecg_001: measured fs=238.07 Hz vs nominal 240 Hz (+0.80% diff), n_samples=3354598, duration=14090.6s
+user_1101hudson_ecg_000: measured fs=242.69 Hz vs nominal 240 Hz (+1.12% diff), n_samples=5048391, duration=20802.0s
+user_1510hudson_ecg_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=683592, duration=2816.8s
+user_1612bhavi_ecg_000: measured fs=243.16 Hz vs nominal 240 Hz (+1.32% diff), n_samples=320, duration=1.3s
+user_1612bhavi_ecg_001: measured fs=243.15 Hz vs nominal 240 Hz (+1.31% diff), n_samples=2457404, duration=10106.6s
+user_2406Hari(chest_chest & ecg_000: measured fs=243.08 Hz vs nominal 240 Hz (+1.29% diff), n_samples=962548, duration=3959.7s
+user_aadhithiyaa_ecg_000: measured fs=242.64 Hz vs nominal 240 Hz (+1.10% diff), n_samples=4573299, duration=18847.7s
+user_aniruth3103_ecg1_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=5093844, duration=20990.2s
+user_aniruth3103_ecg_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=7688, duration=31.7s
+user_kishor0404_ecg_000: measured fs=243.13 Hz vs nominal 240 Hz (+1.30% diff), n_samples=6020141, duration=24761.4s
+user_MukuBreathHold_ECG_07_10_2026: measured fs=243.10 Hz vs nominal 240 Hz (+1.29% diff), n_samples=436523, duration=1795.6s
+user_MithinBreathHold_ECG_000: measured fs=242.72 Hz vs nominal 240 Hz (+1.13% diff), n_samples=382156, duration=1574.5s
+user_MithinBreathHold_EMG_000: measured fs=242.98 Hz vs nominal 240 Hz (+1.24% diff), n_samples=254057, duration=1045.6s
+user_MithinBreathHold_EOG_000: measured fs=243.16 Hz vs nominal 240 Hz (+1.32% diff), n_samples=518413, duration=2131.9s
+user_Mithin10_ECG_000: measured fs=243.10 Hz vs nominal 240 Hz (+1.29% diff), n_samples=533444, duration=2194.3s
+SYN-00100000: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437186, duration=1800.0s
+SYN-00100002: measured fs=238.13 Hz vs nominal 240 Hz (+0.78% diff), n_samples=428626, duration=1800.0s
+SYN-00100004: measured fs=242.98 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437367, duration=1800.0s
+SYN-00100006: measured fs=242.96 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437322, duration=1800.0s
+SYN-00100008: measured fs=238.07 Hz vs nominal 240 Hz (+0.80% diff), n_samples=428530, duration=1800.0s
+SYN-00100009: measured fs=242.94 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437300, duration=1800.0s
+SYN-00100010: measured fs=238.17 Hz vs nominal 240 Hz (+0.76% diff), n_samples=428702, duration=1800.0s
+SYN-00100011: measured fs=242.91 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437241, duration=1800.0s
+SYN-00100013: measured fs=238.09 Hz vs nominal 240 Hz (+0.80% diff), n_samples=428564, duration=1800.0s
+SYN-00100014: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437350, duration=1800.0s
+SYN-00100017: measured fs=242.89 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437197, duration=1800.0s
+SYN-00100018: measured fs=243.01 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437420, duration=1800.0s
+SYN-00100019: measured fs=242.79 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437015, duration=1800.0s
+SYN-00100020: measured fs=242.79 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437029, duration=1800.0s
+SYN-00100021: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437176, duration=1800.0s
+SYN-00100022: measured fs=242.90 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437222, duration=1800.0s
+SYN-00100023: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437191, duration=1800.0s
+SYN-00100024: measured fs=243.00 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437401, duration=1800.0s
+SYN-00100025: measured fs=242.65 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436769, duration=1800.0s
+SYN-00100026: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=436832, duration=1800.0s
+SYN-00100027: measured fs=242.75 Hz vs nominal 240 Hz (+1.15% diff), n_samples=436955, duration=1800.0s
+SYN-00100029: measured fs=242.96 Hz vs nominal 240 Hz (+1.23% diff), n_samples=437331, duration=1800.0s
+SYN-00100030: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437344, duration=1800.0s
+SYN-00100031: measured fs=242.71 Hz vs nominal 240 Hz (+1.13% diff), n_samples=436886, duration=1800.0s
+SYN-00100033: measured fs=242.90 Hz vs nominal 240 Hz (+1.21% diff), n_samples=437228, duration=1800.0s
+SYN-00100034: measured fs=242.93 Hz vs nominal 240 Hz (+1.22% diff), n_samples=437274, duration=1800.0s
+SYN-00100035: measured fs=242.97 Hz vs nominal 240 Hz (+1.24% diff), n_samples=437345, duration=1800.0s
+SYN-00100036: measured fs=242.62 Hz vs nominal 240 Hz (+1.09% diff), n_samples=436717, duration=1800.0s
+SYN-00100037: measured fs=242.67 Hz vs nominal 240 Hz (+1.11% diff), n_samples=436811, duration=1800.0s
+SYN-00100039: measured fs=242.85 Hz vs nominal 240 Hz (+1.19% diff), n_samples=437132, duration=1800.0s
+SYN-00100041: measured fs=242.72 Hz vs nominal 240 Hz (+1.13% diff), n_samples=436901, duration=1800.0s
+SYN-00100042: measured fs=242.82 Hz vs nominal 240 Hz (+1.18% diff), n_samples=437082, duration=1800.0s
+SYN-00100043: measured fs=238.04 Hz vs nominal 240 Hz (+0.81% diff), n_samples=428480, duration=1800.0s
+SYN-00100044: measured fs=242.63 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436734, duration=1800.0s
+SYN-00100045: measured fs=242.64 Hz vs nominal 240 Hz (+1.10% diff), n_samples=436749, duration=1800.0s
+SYN-00100047: measured fs=243.00 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437402, duration=1800.0s
+SYN-00100048: measured fs=242.78 Hz vs nominal 240 Hz (+1.16% diff), n_samples=437009, duration=1800.0s
+SYN-00100049: measured fs=242.87 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437168, duration=1800.0s
+SYN-00100052: measured fs=242.99 Hz vs nominal 240 Hz (+1.25% diff), n_samples=437390, duration=1800.0s
+SYN-00100053: measured fs=242.77 Hz vs nominal 240 Hz (+1.15% diff), n_samples=436981, duration=1800.0s
+user_MukuBreathHold_ECG_07_10_2026: measured fs=243.10 Hz vs nominal 240 Hz (+1.29% diff), n_samples=436523, duration=1795.6s
+SYN-00100000: measured fs=242.88 Hz vs nominal 240 Hz (+1.20% diff), n_samples=437186, duration=1800.0s
+{
+ "n": 100,
+ "valid": 93,
+ "scenarios": {
+  "holds": 40,
+  "baseline": 31,
+  "apnea": 29
+ },
+ "tiles": {
+  "ECG": 67,
+  "EOG": 17,
+  "EMG": 16
+ },
+ "quality": {
+  "good": 55,
+  "poor_breathing": 27,
+  "noisy": 18
+ },
+ "failed_required": {
+  "beat_count_vs_truth": 5,
+  "rr_plausible_frac": 2
+ },
+ "optional_failed": {
+  "hold_effort_drop": 7,
+  "breathing_freq_matches": 4
+ },
+ "n_events": 925,
+ "unique_head_hashes": 100,
+ "total_hours": 50.0,
+ "diversity": {
+  "n_compared": 40,
+  "min_pairwise_dist": 0.39372974374244935,
+  "median_nn_dist": 0.7246518029312596,
+  "near_duplicates_dist_lt_0p3": 0
+ },
+ "domain_classifier": {
+  "auroc_real_vs_synthetic": 0.9501881970260222,
+  "n_real_windows": 538,
+  "n_synth_windows": 800,
+  "perm_importance_auroc_drop": {
+   "qvar_sd": 0.010116171003717311,
+   "hf_noise": 0.04621282527881021,
+   "wander": 0.009716542750929147,
+   "breath_band_rms": 0.21075511152416337,
+   "grav_mag": -0.004969795539033539,
+   "acc_axis_sd": 0.04993029739776933,
+   "qvar_unique": 0.0280134758364311
+  },
+  "reading": "0.5 = indistinguishable; values near 1 mean the synthetic windows carry artificial cues a model could exploit"
+ }
+}
+                    feature  real_p5  real_median  real_p95  synth_p5  synth_median  synth_p95  frac_synth_inside_real_range  ks_stat  ks_p  n_real  n_synth
+0                   qvar_sd   114.12       248.98    459.58     61.48        178.68     321.41                          0.70     0.42  0.06      12       40
+1           hf_noise_sd_lsb    13.00        20.69     58.15     12.96         32.14      78.70                          0.59     0.36  0.22      12       22
+2             wander_sd_lsb    39.68       135.34    379.89     33.29         77.37     238.83                          0.91     0.30  0.41      12       22
+3                    hr_bpm    47.58        57.88     79.08     55.39         63.06      81.85                          0.77     0.36  0.20      12       22
+4        breath_band_rms_mg     0.15         0.84      2.74      0.36          0.57       1.35                          1.00     0.34  0.19      12       40
+5  acc_noise_rms_mg_20_60hz     1.53         2.79      5.44      1.56          3.45       5.55                          0.90     0.20  0.79      12       40
+6               grav_mag_mg   990.65       996.72   1005.68    986.22        992.75    1003.15                          0.55     0.38  0.12      12       40
+7               qrs_fwhm_ms    10.63        16.64     27.99     12.79         28.82      33.57                          0.36     0.64  0.00      12       22
+8         template_peak_lsb    51.20       628.00   1613.40     70.20        408.00    1637.00                          0.91     0.22  0.76      12       22

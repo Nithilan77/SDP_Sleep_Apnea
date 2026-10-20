@@ -1,0 +1,29 @@
+{
+  "L": 20,
+  "batch_chunks": 32,
+  "max_epochs": 40,
+  "patience": 6,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.3,
+  "spo2_drop": 0.1,
+  "clip": 1.0,
+  "variant": "ecg_resp_spo2_lstm",
+  "streams": [
+    "cardiac",
+    "resp",
+    "spo2"
+  ],
+  "n_params": 342745,
+  "d_emb": 32,
+  "d_fuse": 128,
+  "lstm_hidden": 64,
+  "n_subjects": 220,
+  "n_epochs": 156826,
+  "split_seed": 0,
+  "inner_val_frac": 0.15,
+  "loss": "BCEWithLogits pos_weight=n_neg/n_pos, masked to scored sleep epochs",
+  "threshold": "Youden J on inner-val subjects",
+  "torch": "2.13.0+cu130",
+  "device": "cuda"
+}

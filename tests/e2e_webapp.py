@@ -24,8 +24,9 @@ def req(path, method="GET", fname=None, data=None, timeout=900):
     except urllib.error.HTTPError as e: return e.code, e.read().decode("utf-8", "replace"), dict(e.headers)
 
 
-def start():
-    p = subprocess.Popen([sys.executable, "-c", f"from src.webapp.app import app; app.run(port={PORT})"], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+def start(env=None):
+    import os
+    p = subprocess.Popen([sys.executable, "-c", f"from src.webapp.app import app; app.run(port={PORT})"], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=dict(os.environ, **(env or {})))
     for _ in range(80):
         try: urllib.request.urlopen(URL, timeout=1); return p
         except Exception: time.sleep(.5)
@@ -68,6 +69,10 @@ try:
     case("P4 MESA", "200; six configurations listed", page("/mesa", "ECG only", "SpO2 only", "ECG + SpO2", "Effort only", "ECG + effort (CANet)", "ECG + effort + SpO2"))
     case("P5 Methods", "200; leakage + limitations + checkpoint hashes", page("/methods", "leakage prevention", "Negative / limiting results", "SHA-256"))
     case("P6 Detect form", "200; upload form", page("/detect", "Upload", "EMG/EOG-wired tiles"))
+    case("P9 Breath-hold page", "200; task banner says NOT sleep apnea", page("/breathhold", "voluntary breath-hold-like", "does not screen for sleep apnea", "Upload"))
+    case("P10 System status", "200; all artifacts verified", page("/status", "System status", "all required artifacts present and verified", "headline.pt"))
+    case("P11 Detect page names its task", "200; sleep-apnea screening banner", page("/detect", "Task: sleep-apnea screening", "not evidence that apnea is absent"))
+    case("P12 Ensembles & expanded data page", "200; three result families, tables read from result files", page("/expansion", "Ensembles vs the strongest single model", "synthR10", "Events detected", "never pooled"))
     case("P7 Unknown page", "HTTP 404 with message", lambda: ((r := req("/nope"))[0] == 404, f"HTTP {r[0]}"))
     case("P8 Artifact whitelist", "png under results/inhouse_audit ok (200); traversal and non-png refused (404)",
          lambda: ((a := req("/artifact/inhouse_audit/figs/S1_tiles.png"))[0] == 200 and req("/artifact/../CLAUDE.md")[0] == 404 and req("/artifact/inhouse_audit/audit.json")[0] == 404,
@@ -102,6 +107,28 @@ try:
         if f.exists(): case(label, "HTTP 400 'no clear cardiac rhythm' (not accepted as ECG)", lambda f=f: ((r := req("/analyze", "POST", f.name, f.read_bytes()))[0] == 400 and "no clear cardiac rhythm" in r[1] and "No prediction was produced" in r[1], f"HTTP {r[0]}: {txt(r[1])[txt(r[1]).find('Could not'):][:120]}"))
     case("E8 IMU-only log (QVAR flat)", "HTTP 400, flat QVAR rejected", lambda: ((r := req("/analyze", "POST", "imu_only.csv", (TMP / "imu_only.csv").read_bytes()))[0] == 400 and "flat" in r[1], f"HTTP {r[0]}: {txt(r[1])[txt(r[1]).find('Could not'):][:120]}"))
     case("E9 QVAR = noise (no cardiac rhythm)", "HTTP 400, cardiac-rhythm gate", lambda: ((r := req("/analyze", "POST", "noise_qvar.csv", (TMP / "noise_qvar.csv").read_bytes()))[0] == 400 and "no clear cardiac rhythm" in r[1], f"HTTP {r[0]}"))
+    bh = {}
+    def bhup(path, key, dur):
+        def f():
+            st, h, _ = req("/breathhold/analyze", "POST", path.name, path.read_bytes()); t = txt(h); rep = re.search(r"/breathhold/report/([0-9a-f]{12})", h)
+            if rep: bh[key] = rep.group(1)
+            ok = st == 200 and h.count("data:image/png;base64") >= 2 and f"{dur} s" in t and "Window counts" in t and "Original vs augmented" in t and "not" in t and bool(rep)
+            return ok, f"HTTP {st}; plots={h.count('data:image/png;base64')}; duration {dur}s shown={f'{dur} s' in t}; counts table={'Window counts' in t}; aug section={'Original vs augmented' in t}; report={bool(rep)}; summary={t[t.find('Result')+7:t.find('Result')+110]}"
+        return f
+    case("B1 breath-hold upload (session 1, in-sample)", "200; plots, window counts, augmented comparison, in-sample banner, report link", bhup(S1, "b1", 1796))
+    case("B1b in-sample banner shown for the training recording", "banner present", lambda: ("In-sample" in req("/breathhold/analyze", "POST", S1.name, S1.read_bytes())[1], "checked"))
+    if S2.exists(): case("B2 breath-hold upload (session 2, out-of-sample)", "200; 1574 s; no in-sample banner", lambda: (lambda r: (r[0] == 200 and "In-sample" not in r[1] and "1574 s" in txt(r[1]), f"HTTP {r[0]}; in-sample banner absent={'In-sample' not in r[1]}"))(req("/breathhold/analyze", "POST", S2.name, S2.read_bytes())))
+    case("B3 breath-hold report", "200 attachment; task disclaimer, model config, limitations", lambda: ((r := req(f"/breathhold/report/{bh['b1']}"))[0] == 200 and "attachment" in r[2].get("Content-Disposition", "") and "a sleep-apnea screening" in r[1] and "Limitations" in r[1] and "in-sample" in r[1].lower(), f"HTTP {r[0]}"))
+    case("B4 breath-hold invalid inputs", "400 each: pdf, garbage, empty, no file, too short",
+         lambda: (all(req("/breathhold/analyze", "POST", n, d)[0] == 400 for n, d in (("x.pdf", b"%PDF"), ("g.csv", b"a,b\n1,2\n"), ("e.csv", b""))) and req("/breathhold/analyze", "POST", "short.csv", short.read_bytes())[0] in (200, 400), "400 x3"))
+    srv.send_signal(signal.SIGTERM); srv.wait(10)
+    import json as _j, os as _o
+    man = _j.loads((ROOT / "docs/checkpoints.json").read_text()); man["headline.pt"]["path"] = "data/mesa/cache/final_models/MISSING.pt"; man["bh_cnn"]["sha256"] = "0" * 64
+    mf = TMP / "bad_manifest.json"; mf.write_text(_j.dumps(man)); srv = start({"APNEA_CHECKPOINT_MANIFEST": str(mf)})
+    case("C1 status page reports unavailable artifacts", "200; UNAVAILABLE + fix text", page("/status", "UNAVAILABLE", "file not found", "sha256 differs", "Fix:"))
+    case("C2 breath-hold with altered checkpoint: explicit error, no prediction", "400 'models unavailable', no result section", lambda: ((r := req("/breathhold/analyze", "POST", S1.name, S1.read_bytes()))[0] == 400 and "models unavailable" in r[1] and "Window counts" not in r[1], f"HTTP {r[0]}"))
+    case("C3 sleep-apnea upload with missing headline.pt: ECG branch runs, effort branch explains", "200; warning mentions headline.pt missing; no effort section",
+         lambda: ((r := req("/analyze", "POST", S1.name, S1.read_bytes()))[0] == 200 and "Effort branch unavailable" in r[1] and "headline.pt" in r[1] and "4 · Effort branch" not in r[1], f"HTTP {r[0]}"))
     srv.send_signal(signal.SIGTERM); srv.wait(10); srv = start()
     case("R1 restart server (documented command) + GET /", "HTTP 200 after restart", page("/", "Overview"))
     case("R2 report from before restart is gone (in-memory)", "HTTP 404 (documented behaviour)", lambda: ((r := req(f"/report/{state['s1']}"))[0] == 404, f"HTTP {r[0]}"))
@@ -109,5 +136,5 @@ try:
 finally:
     srv.terminate()
 out = ROOT / "results/webapp_e2e"; out.mkdir(parents=True, exist_ok=True)
-(out / "test_table.v2.md").write_text("| Test | Expected | Actual | Status |\n|---|---|---|---|\n" + "\n".join(f"| {a} | {b} | {c} | {d} |" for a, b, c, d in rows) + "\n")
+(out / "test_table.v3.md").write_text("| Test | Expected | Actual | Status |\n|---|---|---|---|\n" + "\n".join(f"| {a} | {b} | {c} | {d} |" for a, b, c, d in rows) + "\n")
 print("\n".join(f"{r[3]} {r[0]}" for r in rows)); sys.exit(0 if all(r[3] == "PASS" for r in rows) else 1)

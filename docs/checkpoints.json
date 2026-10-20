@@ -1,0 +1,51 @@
+{
+ "headline.pt": {
+  "path": "data/mesa/cache/final_models/headline.pt",
+  "sha256": "92b4c034f25e6c77dafb0644f5914018be46d60f80790ccb872d4ffcbf0ba558",
+  "bytes": 707959,
+  "required_for": "effort branch (frozen MESA-trained CANet features) in the dashboard and src.deploy.predict_session",
+  "fix": "git pull (tracked since commit a184d56) or `git checkout a184d56 -- data/mesa/cache/final_models/headline.pt`; regenerating needs MESA/NSRR access: python3 -m src.mesa.train_final"
+ },
+ "deployed_heads.joblib": {
+  "path": "results/transfer/deployed_heads.joblib",
+  "sha256": "3123d2e31d27d782ea6b50862c8225323497aac9c3547f736f87cab8e492217c",
+  "bytes": 9840,
+  "required_for": "hold-detection heads of the effort branch",
+  "fix": "git pull; or python3 -m src.transfer.train_heads (needs headline.pt and the session-1 recording)"
+ },
+ "cnn_adopted": {
+  "path": "results/phase3_cnn/deployable/model_state_dict.pt",
+  "sha256": "ee1391e82ae1fa972e67c72d0c5293b008e3f32a0bd9ec8bd8c904b5e8f1ed2e",
+  "bytes": 20741,
+  "required_for": "ECG branch 1D-CNN",
+  "fix": "git pull; or python3 -m src.ecg.train_deployable_model"
+ },
+ "rnn_primary": {
+  "path": "results/phase3_rnn_lstm/deployable_rnn/model_state_dict.pt",
+  "sha256": "9b53869b9043373aaa4492db43886fe7370238c5d5c511563857b7acd904f6c1",
+  "bytes": 10507,
+  "required_for": "ECG branch GRU/RNN comparison model",
+  "fix": "python3 -m src.ecg.rnn_lstm --final"
+ },
+ "lstm_primary": {
+  "path": "results/phase3_rnn_lstm/deployable_lstm/model_state_dict.pt",
+  "sha256": "015db1418f49bdb59d737171103c0324c2b5f49e885aaba45e8870464b0d53ac",
+  "bytes": 24331,
+  "required_for": "ECG branch LSTM comparison model",
+  "fix": "python3 -m src.ecg.rnn_lstm --final"
+ },
+ "bh_sklearn": {
+  "path": "results/inhouse_bh/deployed/sklearn_models.joblib",
+  "sha256": "623047fb79809606a2624c3ada075142d2552538856f00807e750b306b2e8ae6",
+  "bytes": 119057,
+  "required_for": "breath-hold detector (LR/HGB)",
+  "fix": "python3 -m src.inhouse_bh.train_final (needs data/recordings/breath_hold/\u2026 session-1 file)"
+ },
+ "bh_cnn": {
+  "path": "results/inhouse_bh/deployed/cnn.pt",
+  "sha256": "2d1fca08b0cd72d237c805ab4931522194ff6af09a35b01a80bcf09c843514ea",
+  "bytes": 40213,
+  "required_for": "breath-hold detector (CNN)",
+  "fix": "python3 -m src.inhouse_bh.train_final (needs data/recordings/breath_hold/\u2026 session-1 file)"
+ }
+}

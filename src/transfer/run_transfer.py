@@ -23,6 +23,7 @@ from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from src.deploy import checkpoints as CK  # noqa: E402
 from src.inhouse import streams as S  # noqa: E402
 from src.inhouse.run_canet import epoch_features  # noqa: E402
 from src.mesa import canet as N  # noqa: E402
@@ -31,7 +32,7 @@ from src.transfer import windows as W_  # noqa: E402
 
 OUT = Path("results/transfer")
 CACHE = Path("data/recordings/cache/transfer_feats.npz")     # gitignored (data/recordings/)
-MODEL = Path("data/mesa/cache/final_models/headline.pt")
+MODEL = CK.ROOT / "data/mesa/cache/final_models/headline.pt"   # absolute (project-root anchored); loading goes through CK.require
 C_PRIMARY = 0.01          # strong L2, fixed a priori (not tuned); sensitivity to C reported separately
 DEV = "cuda" if torch.cuda.is_available() else "cpu"
 PAD_TEST_S = 40.0         # padding-control: zero the last 40 s of the 150 s input (Event 7 has up to 40 s)
@@ -65,7 +66,7 @@ def build_inputs(s: S.InhouseStreams, c: np.ndarray, tail_pad_s: float = 0.0):
 
 @torch.no_grad()
 def frozen_features(card: np.ndarray, eff: np.ndarray, bs: int = 64):
-    ck = torch.load(MODEL, map_location=DEV, weights_only=False)
+    ck = torch.load(CK.require("headline.pt"), map_location=DEV, weights_only=False)
     m = N.CANet(ck["streams"], ck["fusion"]).to(DEV); m.load_state_dict(ck["state"]); m.eval()
     for p in m.parameters():
         p.requires_grad_(False)

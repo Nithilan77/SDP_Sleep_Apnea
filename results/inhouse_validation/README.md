@@ -1,5 +1,8 @@
 # In-house SensorTile QVAR-ECG quality report
 
+> **Policy note (2026-10-20):** this report was written under the earlier validation-only rule. `CLAUDE.md` §4 now permits in-house data for training/fine-tuning/augmentation with strict separation; nothing in this report changed.
+
+
 **Scope: signal quality / plausibility only. No apnea labels exist for this data
 (healthy 19-20yo subjects, validation-only per CLAUDE.md Sec.4). This report
 cannot and does not produce a sensitivity/accuracy number.**

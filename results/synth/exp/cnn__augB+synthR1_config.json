@@ -1,0 +1,1 @@
+{"config": "augB+synthR1", "parsed": {"aug": ["gain", "drift", "noise_amp", "noise_rr", "ectopic", "warp", "dropout"], "ratio": 1.0, "mode": "mix"}, "generator": "synth-physio-1.0", "seeds": [0], "model": "cnn", "epochs": 40, "batch": 128, "lr": 0.001}

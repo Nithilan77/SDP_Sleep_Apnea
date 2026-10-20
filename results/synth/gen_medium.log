@@ -1,0 +1,73 @@
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+10/100 8s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+20/100 13s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+30/100 19s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+40/100 26s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+50/100 31s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+60/100 38s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+70/100 44s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+80/100 50s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+90/100 57s
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+/home/admin/apnea/src/synth/physio.py:126: RuntimeWarning: invalid value encountered in subtract
+  D = np.maximum(e_ - s_, 1e-3); u = np.clip((t - s_) / D, 0, 1)
+100/100 62s
+valid: 93 / 100

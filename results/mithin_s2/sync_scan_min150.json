@@ -1,0 +1,35 @@
+{
+ "ECG": {
+  "duration_s": 1574.0,
+  "fs": 242.71626389867697,
+  "best_offset_s": -1321.0,
+  "best_score": 0.3899008329471275,
+  "null_max_p95": 0.6967975206519411,
+  "null_max_mean": 0.545093402789314,
+  "p_value_max_stat": 0.99,
+  "hold_seconds_overlapping_at_best": 150,
+  "n_candidate_offsets": 3348
+ },
+ "EMG": {
+  "duration_s": 1045.0,
+  "fs": 242.9779663257994,
+  "best_offset_s": -725.0,
+  "best_score": 0.8827693727166653,
+  "null_max_p95": 1.1583008719063155,
+  "null_max_mean": 0.7413344363043205,
+  "p_value_max_stat": 0.25,
+  "hold_seconds_overlapping_at_best": 150,
+  "n_candidate_offsets": 2819
+ },
+ "EOG": {
+  "duration_s": 2131.0,
+  "fs": 243.16439660914423,
+  "best_offset_s": 385.0,
+  "best_score": 0.6254135416834823,
+  "null_max_p95": 0.7119778190578119,
+  "null_max_mean": 0.5685784966396125,
+  "p_value_max_stat": 0.235,
+  "hold_seconds_overlapping_at_best": 150,
+  "n_candidate_offsets": 3905
+ }
+}

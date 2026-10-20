@@ -1,0 +1,25 @@
+user_0502-bala_ecg_000: measured fs=243.14 Hz vs nominal 240 Hz (+1.31% diff), n_samples=5032, duration=20.7s
+user_0502-bala_ecg_001: measured fs=243.14 Hz vs nominal 240 Hz (+1.31% diff), n_samples=4573, duration=18.8s
+user_0502-bala_ecg_002: measured fs=243.13 Hz vs nominal 240 Hz (+1.31% diff), n_samples=1364920, duration=5613.8s
+{'code': 'H03', 'hours': 1.56, 'windows': 2802, 'rejected': 22, 'flagged_pct': 0.21, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_0802-anagesh_ecg_000: measured fs=238.08 Hz vs nominal 240 Hz (+0.80% diff), n_samples=6458546, duration=27127.8s
+{'code': 'H04', 'hours': 7.54, 'windows': 13559, 'rejected': 13058, 'flagged_pct': 0.18, 'segments': 2, 'segments_per_hour': 0.27, 'note': ''}
+user_1002-jayendran_ecg_000: measured fs=238.09 Hz vs nominal 240 Hz (+0.80% diff), n_samples=1585, duration=6.7s
+user_1002-jayendran_ecg_001: measured fs=238.07 Hz vs nominal 240 Hz (+0.80% diff), n_samples=3354598, duration=14090.6s
+{'code': 'H06', 'hours': 3.91, 'windows': 7041, 'rejected': 5818, 'flagged_pct': 0.09, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_1101hudson_ecg_000: measured fs=242.69 Hz vs nominal 240 Hz (+1.12% diff), n_samples=5048391, duration=20802.0s
+{'code': 'H07', 'hours': 5.78, 'windows': 10396, 'rejected': 10018, 'flagged_pct': 0.04, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_1510hudson_ecg_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=683592, duration=2816.8s
+{'code': 'H08', 'hours': 0.78, 'windows': 1404, 'rejected': 6, 'flagged_pct': 0.0, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_1612bhavi_ecg_000: measured fs=243.16 Hz vs nominal 240 Hz (+1.32% diff), n_samples=320, duration=1.3s
+user_1612bhavi_ecg_001: measured fs=243.15 Hz vs nominal 240 Hz (+1.31% diff), n_samples=2457404, duration=10106.6s
+{'code': 'H10', 'hours': 2.81, 'windows': 5049, 'rejected': 79, 'flagged_pct': 0.02, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_2406Hari(chest_chest & ecg_000: measured fs=243.08 Hz vs nominal 240 Hz (+1.29% diff), n_samples=962548, duration=3959.7s
+{'code': 'H11', 'hours': 1.1, 'windows': 1975, 'rejected': 8, 'flagged_pct': 0.05, 'segments': 0, 'segments_per_hour': 0.0, 'note': ''}
+user_aadhithiyaa_ecg_000: measured fs=242.64 Hz vs nominal 240 Hz (+1.10% diff), n_samples=4573299, duration=18847.7s
+{'code': 'H12', 'hours': 5.24, 'windows': 9419, 'rejected': 8833, 'flagged_pct': 0.93, 'segments': 6, 'segments_per_hour': 1.15, 'note': ''}
+user_aniruth3103_ecg1_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=5093844, duration=20990.2s
+{'code': 'H13', 'hours': 5.83, 'windows': 10491, 'rejected': 230, 'flagged_pct': 0.13, 'segments': 1, 'segments_per_hour': 0.17, 'note': ''}
+user_aniruth3103_ecg_000: measured fs=242.68 Hz vs nominal 240 Hz (+1.12% diff), n_samples=7688, duration=31.7s
+user_kishor0404_ecg_000: measured fs=243.13 Hz vs nominal 240 Hz (+1.30% diff), n_samples=6020141, duration=24761.4s
+{'code': 'H15', 'hours': 6.88, 'windows': 12376, 'rejected': 9309, 'flagged_pct': 0.61, 'segments': 3, 'segments_per_hour': 0.44, 'note': ''}

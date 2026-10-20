@@ -1,6 +1,6 @@
 # Slide outline — 15 slides, ~15–18 min
 
-One idea per slide. Figures refer to files in `figures/`. Numbers are from `content.md` (section in brackets). Keep "healthy volunteers / validation only" visible wherever our own hardware appears.
+One idea per slide. Figures refer to files in `figures/`. Numbers are from `content.md` (section in brackets). Keep "healthy volunteers / in-house feasibility track" visible wherever our own hardware appears.
 
 ## 1. Title
 - Wearable sleep-apnea screening from ECG + breathing effort (one chest sensor). Names, guides, ST Microelectronics collaboration, "Pinnacle" programme.
@@ -16,7 +16,7 @@ One idea per slide. Figures refer to files in `figures/`. Numbers are from `cont
 - Figure: architecture diagram (draw from the §1 pipeline; no file).
 
 ## 4. The core constraint [§3]
-- Our volunteers are healthy 19–20-year-olds → train on public clinical data; our own recordings are validation only, never trained on. Safe validation = voluntary breath-holds + healthy negative controls.
+- Our volunteers are healthy 19–20-year-olds → clinical apnea labels come from public data; our own recordings are usable for breath-hold training/fine-tuning/augmentation (policy revised 2026-10-20) with strict separation and separate reporting. Safe task = voluntary breath-holds + healthy negative controls.
 - Rule on every result: subject-independent evaluation.
 - Figure: none (simple two-column graphic: "train: public clinical" / "validate: our hardware").
 
@@ -67,3 +67,11 @@ One idea per slide. Figures refer to files in `figures/`. Numbers are from `cont
 
 ## Appendix (optional)
 - A1 Eight-method master table (§7). A2 Phase 3 ablation table (§6). A3 Full ablation + per-class table (§8.3–8.4). A4 MESA audit details: `mesa_audit_overview.png`. A5 PhysioNet-vs-QVAR domain-gap table (§9.1). A6 Glossary (§13).
+
+
+---
+## 2026-10-20 additional slides (appended)
+- **Policy slide:** in-house data now usable for training under strict separation; holds ≠ apnea; two reporting tracks.
+- **Negative-results slide:** ensembles, augmentation and simulator data do not beat the single HGB / real-only training (numbers in `content.md` §B of the 2026-10-20 additions).
+- **Breath-hold feasibility slide:** one volunteer, 7 holds, LOEO AUROC 0.77–0.83, 4/7 detected, false flags on quiet breathing; session 2 not alignable.
+- **Live demo slide:** Breath-hold demo page; keep "feasibility / in-sample" visible.

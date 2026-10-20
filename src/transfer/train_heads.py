@@ -23,7 +23,7 @@ from src.ingest.sensortile import load_sensortile  # noqa: E402
 from src.transfer import run_transfer as T  # noqa: E402
 from src.transfer import windows as W_  # noqa: E402
 
-OUT = Path("results/transfer")
+OUT = Path(__file__).resolve().parents[2] / "results/transfer"          # project-root anchored (not CWD-relative)
 HEADS = OUT / "deployed_heads.joblib"
 
 

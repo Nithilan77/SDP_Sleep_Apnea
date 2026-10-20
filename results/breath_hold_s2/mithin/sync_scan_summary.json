@@ -1,0 +1,47 @@
+{
+ "ECG": {
+  "duration_s": 1574.5,
+  "fs_hz": 242.72,
+  "rows": 382157,
+  "n_offsets": 1301,
+  "best_tau_s": -1324,
+  "best_score": -0.219,
+  "null_mean": 0.019,
+  "null_sd": 0.092,
+  "z_best_vs_shift_null": 2.59,
+  "frac_offsets_as_good": 0.0005,
+  "perm_n": 300,
+  "perm_p_best_score": 0.9037,
+  "perm_null_best_median": -0.277
+ },
+ "EMG": {
+  "duration_s": 1045.6,
+  "fs_hz": 242.98,
+  "rows": 254057,
+  "n_offsets": 772,
+  "best_tau_s": -725,
+  "best_score": -0.362,
+  "null_mean": 0.11,
+  "null_sd": 0.182,
+  "z_best_vs_shift_null": 2.59,
+  "frac_offsets_as_good": 0.0006,
+  "perm_n": 300,
+  "perm_p_best_score": 0.9535,
+  "perm_null_best_median": -0.565
+ },
+ "EOG": {
+  "duration_s": 2131.9,
+  "fs_hz": 243.16,
+  "rows": 518413,
+  "n_offsets": 1858,
+  "best_tau_s": 386,
+  "best_score": -0.263,
+  "null_mean": 0.051,
+  "null_sd": 0.178,
+  "z_best_vs_shift_null": 1.76,
+  "frac_offsets_as_good": 0.0004,
+  "perm_n": 300,
+  "perm_p_best_score": 0.485,
+  "perm_null_best_median": -0.261
+ }
+}

@@ -1,0 +1,99 @@
+cardiac stream on cuda: (2, 17059200) fp16 (0.07 GB)
+spo2 stream on cuda: (1, 8529600) fp16 (0.02 GB)
+variant ecg_spo2_lstm | streams ('cardiac', 'spo2') | L=20 | 220 subjects | 156826 scored epochs | params 296129 | device cuda
+fold 0: train/val/test subjects 150/26/44
+    ep  0 val AUPRC 0.4419
+    ep  1 val AUPRC 0.4469
+    ep  2 val AUPRC 0.4635
+    ep  3 val AUPRC 0.4688
+    ep  4 val AUPRC 0.4817
+    ep  5 val AUPRC 0.4581
+    ep  6 val AUPRC 0.4785
+    ep  7 val AUPRC 0.4648
+    ep  8 val AUPRC 0.4822
+    ep  9 val AUPRC 0.4722
+    ep 10 val AUPRC 0.4855
+    ep 11 val AUPRC 0.4826
+    ep 12 val AUPRC 0.4868
+    ep 13 val AUPRC 0.4692
+    ep 14 val AUPRC 0.4863
+    ep 15 val AUPRC 0.4888
+    ep 16 val AUPRC 0.4880
+    ep 17 val AUPRC 0.4867
+    ep 18 val AUPRC 0.4753
+    ep 19 val AUPRC 0.4794
+    ep 20 val AUPRC 0.4817
+    ep 21 val AUPRC 0.4474
+  fold 0 TEST: sens 0.779 spec 0.661 AUROC 0.775 AUPRC 0.493 F1 0.562 (thr 0.447)
+fold 1: train/val/test subjects 150/26/44
+    ep  0 val AUPRC 0.4376
+    ep  1 val AUPRC 0.4584
+    ep  2 val AUPRC 0.4662
+    ep  3 val AUPRC 0.4740
+    ep  4 val AUPRC 0.4679
+    ep  5 val AUPRC 0.4724
+    ep  6 val AUPRC 0.4687
+    ep  7 val AUPRC 0.4636
+    ep  8 val AUPRC 0.4676
+    ep  9 val AUPRC 0.4663
+  fold 1 TEST: sens 0.883 spec 0.596 AUROC 0.803 AUPRC 0.528 F1 0.597 (thr 0.466)
+fold 2: train/val/test subjects 150/26/44
+    ep  0 val AUPRC 0.4936
+    ep  1 val AUPRC 0.5265
+    ep  2 val AUPRC 0.5105
+    ep  3 val AUPRC 0.5258
+    ep  4 val AUPRC 0.5420
+    ep  5 val AUPRC 0.5309
+    ep  6 val AUPRC 0.5511
+    ep  7 val AUPRC 0.5665
+    ep  8 val AUPRC 0.5474
+    ep  9 val AUPRC 0.5579
+    ep 10 val AUPRC 0.5275
+    ep 11 val AUPRC 0.5500
+    ep 12 val AUPRC 0.5636
+    ep 13 val AUPRC 0.5745
+    ep 14 val AUPRC 0.5472
+    ep 15 val AUPRC 0.5665
+    ep 16 val AUPRC 0.5642
+    ep 17 val AUPRC 0.5653
+    ep 18 val AUPRC 0.5615
+    ep 19 val AUPRC 0.5136
+  fold 2 TEST: sens 0.729 spec 0.702 AUROC 0.780 AUPRC 0.448 F1 0.535 (thr 0.424)
+fold 3: train/val/test subjects 150/26/44
+    ep  0 val AUPRC 0.4390
+    ep  1 val AUPRC 0.4024
+    ep  2 val AUPRC 0.4221
+    ep  3 val AUPRC 0.4304
+    ep  4 val AUPRC 0.4305
+    ep  5 val AUPRC 0.4237
+    ep  6 val AUPRC 0.4121
+  fold 3 TEST: sens 0.755 spec 0.610 AUROC 0.738 AUPRC 0.469 F1 0.542 (thr 0.511)
+fold 4: train/val/test subjects 150/26/44
+    ep  0 val AUPRC 0.4784
+    ep  1 val AUPRC 0.4974
+    ep  2 val AUPRC 0.4982
+    ep  3 val AUPRC 0.5159
+    ep  4 val AUPRC 0.5236
+    ep  5 val AUPRC 0.5197
+    ep  6 val AUPRC 0.5314
+    ep  7 val AUPRC 0.5197
+    ep  8 val AUPRC 0.5432
+    ep  9 val AUPRC 0.5393
+    ep 10 val AUPRC 0.5364
+    ep 11 val AUPRC 0.5433
+    ep 12 val AUPRC 0.5526
+    ep 13 val AUPRC 0.5372
+    ep 14 val AUPRC 0.5342
+    ep 15 val AUPRC 0.5421
+    ep 16 val AUPRC 0.5420
+    ep 17 val AUPRC 0.5509
+    ep 18 val AUPRC 0.5411
+  fold 4 TEST: sens 0.770 spec 0.624 AUROC 0.749 AUPRC 0.416 F1 0.516 (thr 0.482)
+POOLED ecg_spo2_lstm: sens 0.786 spec 0.639 AUROC 0.766 AUPRC 0.465 F1 0.552 | per-fold AUROC 0.769 +/- 0.026
+  with SpO2 masked at test: AUROC 0.598 AUPRC 0.330
+AHI corr (pred_rate vs a0h3 / a0h4): r=0.870 / 0.816
+                             model     auroc     auprc      sens      spec        f1 d_auroc_vs_baseline d_auprc_vs_baseline
+0   ECG-only baseline (CardiacCNN)  0.608824  0.334860  0.622312  0.535180  0.416395                                        
+1                 CANet ECG+effort  0.780100  0.489742  0.821633  0.613274  0.555393    [+0.151, +0.191]    [+0.132, +0.184]
+2  CANet ECG+effort+SpO2 (ceiling)  0.812718  0.540885  0.852789  0.641216  0.586565    [+0.183, +0.224]    [+0.181, +0.227]
+3           CNN-LSTM ecg_spo2_lstm  0.766179  0.464915  0.785829  0.638747  0.551839    [+0.135, +0.178]    [+0.099, +0.159]

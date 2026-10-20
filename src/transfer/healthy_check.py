@@ -1,6 +1,6 @@
 """Held-out check of the deployed heads on the healthy in-house nights (the ONLY out-of-sample test available).
 
-These recordings contain NO labelled holds and are never trained on, so every window is treated as 'not a hold' and the flag
+These recordings contain NO labelled holds (and are not used for training in this script), so every window is treated as 'not a hold' and the flag
 rate is a false-positive-rate proxy. CAVEATS (stated, not hidden): (1) sleep state/posture unknown and different from the
 awake supine breath-hold session, so quiet sleep breathing may genuinely look hold-like (the §7c domain shift); (2) a healthy
 person can have brief true pauses, so the proxy is an upper bound on FPR; (3) 10 nights, no labels -> specificity-only.

@@ -1,6 +1,6 @@
 """Build CANet's two input streams from an in-house SensorTile recording (QVAR-ECG + IMU).
 
-VALIDATION ONLY: nothing here is ever used to fit a model; healthy 19-20 y/o, no apnea, no labels.
+Policy (CLAUDE.md §4, revised 2026-10-20): in-house data may be used for training/fine-tuning/augmentation with strict train/validation/test separation. THIS module only builds streams (fits nothing); the recordings it reads are healthy 19-20 y/o with no clinical apnea labels, so any model trained on them is a breath-hold / feasibility model, never an apnea model.
 
 cardiac : QVAR -> src/ecg/rpeaks.detect_rpeaks -> (RR s, R amplitude) -> the SAME grid / per-night
           normalisation as the MESA cardiac stream (src/mesa/cardiac_stream: 2 Hz, RR relative to the

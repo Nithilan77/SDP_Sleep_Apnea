@@ -1,0 +1,59 @@
+{
+ "source_file": "data/recordings/drive_2026-10-19/MithinBreathHold-TimeStamps.mp4",
+ "video": {
+  "duration_s": 13.6,
+  "fps": 53.98,
+  "frames": 735,
+  "size": "384x832"
+ },
+ "what_the_video_shows": "iPhone Stopwatch screen recording, stopwatch STOPPED at 33:34.04; the lap list is scrolled from Lap 17 to Lap 1. Phone status-bar clock 12:55 (the time the video was filmed, not a session clock). Battery 98%->97%. No sensor data, taps or hold labels are visible.",
+ "directly_observed": {
+  "laps_s": [
+   1080.84,
+   89.18,
+   30.13,
+   89.86,
+   30.06,
+   89.87,
+   30.11,
+   89.86,
+   30.14,
+   89.99,
+   29.98,
+   89.91,
+   30.06,
+   90.01,
+   29.94,
+   90.06,
+   3.96
+  ],
+  "stopwatch_total_s": 2014.04,
+  "slowest_lap": 1,
+  "fastest_lap": 15
+ },
+ "calculated": {
+  "sum_of_laps_s": 2013.96,
+  "total_minus_sum_s": 0.08,
+  "note": "0.08 s: total display vs lap sum; consistent with rounding / running lap 17 captured before the stop."
+ },
+ "inferred_NOT_in_video": {
+  "hold_laps": [
+   3,
+   5,
+   7,
+   9,
+   11,
+   13,
+   15
+  ],
+  "basis": "seven laps of ~30 s alternate with ~90 s laps; the same 30 s/90 s structure as session 1 (v1 protocol), but session 1 labelled laps 2,4,..14 as holds because its lap 1 was a short lead-in. Here lap 1 is 18:00.84, so lap parity is shifted. Which laps are holds is an assumption until a signal check supports it.",
+  "protocol_v2_followed": false,
+  "protocol_v2_evidence": "v2 specifies 9 holds (5-60 s) and 20 laps with Lap 1 = sync taps; the video has 17 laps, 7 equal holds -> v1-style schedule"
+ },
+ "unknowns": [
+  "stopwatch start time vs sensor start (no sync taps found in ECG tile)",
+  "clock/timezone of the stopwatch",
+  "what lap 1 (18 min) was spent on",
+  "whether the 3.96 s lap 17 is real data or a stop-lag"
+ ]
+}

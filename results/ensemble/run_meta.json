@@ -1,0 +1,1 @@
+{"runtime_s": 140.3652093410492, "prespecified_combos": ["cnn+tcn", "cnn+hgb", "tcn+hgb", "cnn+tcn+hgb", "cnn+tcn+gru+lstm", "hgb+logreg", "cnn+tcn+hgb+logreg", "cnn+tcn+gru+lstm+hgb+logreg"], "strategies": ["hard_vote", "soft_avg", "weighted_avg", "calibrated_avg", "stacking"]}

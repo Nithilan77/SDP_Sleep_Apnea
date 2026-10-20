@@ -1,0 +1,148 @@
+{
+ "n_recordings_analysed": 15,
+ "n_with_clean_ecg": 12,
+ "MEASURED": {
+  "fs_hz": {
+   "p5": 238.07707396614097,
+   "median": 242.9779663257994,
+   "p95": 243.15387986885904,
+   "n": 15
+  },
+  "dt_us_median": {
+   "p5": 4112.7,
+   "median": 4116.0,
+   "p95": 4200.0,
+   "n": 15
+  },
+  "dt_us_sd": {
+   "p5": 0.26120524339381335,
+   "median": 0.4836340596518632,
+   "p95": 0.5219974461888971,
+   "n": 15
+  },
+  "hr_bpm": {
+   "p5": 47.58470900169405,
+   "median": 57.88112699391224,
+   "p95": 79.08176734175534,
+   "n": 12
+  },
+  "sdnn_ms": {
+   "p5": 70.23961950614803,
+   "median": 146.9341917022747,
+   "p95": 328.7671098247565,
+   "n": 12
+  },
+  "rmssd_ms": {
+   "p5": 63.42169156495249,
+   "median": 121.60023991181819,
+   "p95": 439.46090404750635,
+   "n": 12
+  },
+  "r_amp_lsb": {
+   "p5": 4.260181939662911,
+   "median": 109.45955381434149,
+   "p95": 1229.2334513487522,
+   "n": 12
+  },
+  "r_amp_cv": {
+   "p5": 0.16553478764067842,
+   "median": 1.9942190683715957,
+   "p95": 13.250520712613465,
+   "n": 12
+  },
+  "wander_sd_lsb": {
+   "p5": 39.68463644024799,
+   "median": 135.33602775236446,
+   "p95": 379.88767181425465,
+   "n": 12
+  },
+  "hf_noise_sd_lsb": {
+   "p5": 12.998597877882718,
+   "median": 20.692414748783023,
+   "p95": 58.15355687558616,
+   "n": 12
+  },
+  "qrs_fwhm_ms": {
+   "p5": 10.631684301588237,
+   "median": 16.643283581709277,
+   "p95": 27.989448468045875,
+   "n": 12
+  },
+  "qvar_sd_lsb": {
+   "p5": 114.12057691796394,
+   "median": 248.98012948662,
+   "p95": 459.58334758895234,
+   "n": 12
+  },
+  "grav_mag_mg": {
+   "p5": 984.494437027487,
+   "median": 995.6039275284122,
+   "p95": 1005.2148601746168,
+   "n": 15
+  },
+  "breath_band_rms_mg": {
+   "p5": 0.1282037394748615,
+   "median": 0.8005429007045317,
+   "p95": 2.361576796213448,
+   "n": 15
+  },
+  "acc_noise_rms_mg": {
+   "p5": 1.553735194993848,
+   "median": 2.411239098596961,
+   "p95": 5.382473810587615,
+   "n": 15
+  },
+  "breath_hz_median": {
+   "p5": 0.18000396668755306,
+   "median": 0.3167093181028118,
+   "p95": 0.45336015801217167,
+   "n": 9
+  },
+  "breath_windows_frac": {
+   "p5": 0.0,
+   "median": 0.006369426751592357,
+   "p95": 0.37665158371040697,
+   "n": 15
+  },
+  "temp_c": {
+   "min": 22.676,
+   "max": 40.121
+  }
+ },
+ "FILE_FORMAT": {
+  "delimiter": ",",
+  "header": [
+   "time[us]",
+   "acc_x[LSB]",
+   "acc_y[LSB]",
+   "acc_z[LSB]",
+   "acc_x[mg]",
+   "acc_y[mg]",
+   "acc_z[mg]",
+   "gyro_x[LSB]",
+   "gyro_y[LSB]",
+   "gyro_z[LSB]",
+   "gyro_x[dsp]",
+   "gyro_y[dsp]",
+   "gyro_z[dsp]",
+   "temp[LSB]",
+   "temp[C]",
+   "ah_qvar[LSB]"
+  ],
+  "dtypes": "time int \u00b5s; LSB columns int; physical columns float (3 decimals); temp[C] 3 decimals",
+  "conversions_from_files": {
+   "acc_mg_per_lsb": 0.061,
+   "gyro_dps_per_lsb": 0.004375,
+   "temp_c": "25 + temp[LSB]/256"
+  },
+  "truncated_last_row_in_s2_logs": true
+ },
+ "ASSUMED_BY_SIMULATOR (not measured)": [
+  "respiratory modulation of ECG amplitude (EDR) depth",
+  "hold pause kinematics (ramp-down/up time constants)",
+  "motion-artefact burst statistics",
+  "EMG and EOG tile QVAR content (real EMG/EOG-labelled tiles show no recognisable biosignal; simulated as flat/clipped per the audit)",
+  "gyroscope breathing coupling",
+  "inter-recording variation of electrode placement/orientation (only 1 session per subject available)"
+ ]
+}

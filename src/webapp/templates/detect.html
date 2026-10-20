@@ -1,5 +1,6 @@
 {% extends "base.html" %}{% block body %}
-<h1>Apnea detection · upload &amp; inference</h1>
+<h1>Sleep-apnea screening · upload &amp; inference</h1>
+<div class="note"><b>Task: sleep-apnea screening (PhysioNet-trained ECG models + pilot effort heads).</b> For the voluntary breath-hold demonstration use the <a href="/breathhold">Breath-hold demo</a> page. Flags here are model outputs on a recording without reference labels; "no events flagged" is not evidence that apnea is absent.</div>
 <p class="lead">Upload a SensorTile.box PRO log whose QVAR channel is wired as chest ECG. The server validates it, detects R-peaks, and runs the PhysioNet-trained ECG models and the pilot accelerometer effort heads. No labels exist for your file, so outputs are <b>flag rates, not accuracy</b>.</p>
 <div class="card"><form class="up" method="post" enctype="multipart/form-data" action="/analyze" onsubmit="document.getElementById('busy').style.display='block'">
 <input type="file" name="recording" accept=".csv,.txt" required> <button>Upload &amp; analyse</button>

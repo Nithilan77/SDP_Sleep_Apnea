@@ -1,0 +1,53 @@
+recording_id,event_no,start_s,end_s,label,confidence,annotation_source,verification_status,time_base,notes
+S1_ECGTILE,1.0,871.21,976.21,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,1.0,986.21,996.21,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,1.0,996.21,1015.6,voluntary_breath_hold,medium,stopwatch lap times inset by 5 s,nominal_stopwatch_inset_only,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,1.0,1015.6,1025.6,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,1.0,1025.6,1045.6,recovery,medium,20 s after the end boundary band,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,2.0,1050.6,1095.95,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,2.0,1105.95,1115.95,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,2.0,1115.95,1135.56,voluntary_breath_hold,high,stopwatch lap times inset by 5 s,boundaries_visually_checked,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,2.0,1135.56,1145.56,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,2.0,1145.56,1165.56,recovery,medium,20 s after the end boundary band,boundaries_visually_checked,recording,
+S1_ECGTILE,3.0,1170.56,1216.07,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,3.0,1226.07,1236.07,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,3.0,1236.07,1256.61,voluntary_breath_hold,medium,stopwatch lap times inset by 5 s,nominal_stopwatch_inset_only,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,3.0,1256.61,1266.61,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,3.0,1266.61,1286.61,recovery,medium,20 s after the end boundary band,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,4.0,1291.61,1337.5,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,4.0,1347.5,1357.5,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,4.0,1357.5,1378.34,voluntary_breath_hold,high,stopwatch lap times inset by 5 s,boundaries_visually_checked,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,4.0,1378.34,1388.34,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,4.0,1388.34,1408.34,recovery,medium,20 s after the end boundary band,boundaries_visually_checked,recording,
+S1_ECGTILE,5.0,1413.34,1455.63,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,5.0,1465.63,1475.63,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,5.0,1475.63,1496.41,voluntary_breath_hold,medium,stopwatch lap times inset by 5 s,nominal_stopwatch_inset_only,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,5.0,1496.41,1506.41,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,5.0,1506.41,1526.41,recovery,medium,20 s after the end boundary band,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,6.0,1531.41,1577.01,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,6.0,1587.01,1597.01,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,6.0,1597.01,1617.55,voluntary_breath_hold,high,stopwatch lap times inset by 5 s,boundaries_visually_checked,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,6.0,1617.55,1627.55,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,6.0,1627.55,1647.55,recovery,medium,20 s after the end boundary band,boundaries_visually_checked,recording,
+S1_ECGTILE,7.0,1652.55,1698.18,baseline_reference,medium,protocol rest between holds (stopwatch laps) + margins,nominal_stopwatch_inset_only,recording,
+S1_ECGTILE,7.0,1708.18,1718.18,uncertain,low,"boundary band (+-5 s: stopwatch lag 4.8 s, detector offsets up to 7.5 s)",unresolved,recording,
+S1_ECGTILE,7.0,1718.18,1738.79,voluntary_breath_hold,medium,stopwatch lap times inset by 5 s,nominal_stopwatch_inset_only,recording,voluntary hold; NOT a clinical apnea event
+S1_ECGTILE,7.0,1738.79,1748.79,uncertain,low,boundary band,unresolved,recording,
+S1_ECGTILE,7.0,1748.79,1768.79,recovery,medium,20 s after the end boundary band,nominal_stopwatch_inset_only,recording,
+S2_STOPWATCH_ONLY,,0.0,1080.84,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1080.84,1170.02,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,1.0,1170.02,1200.15,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1200.15,1290.01,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,2.0,1290.01,1320.07,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1320.07,1409.94,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,3.0,1409.94,1440.05,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1440.05,1529.91,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,4.0,1529.91,1560.05,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1560.05,1650.04,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,5.0,1650.04,1680.02,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1680.02,1769.93,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,6.0,1769.93,1799.99,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1799.99,1890.0,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,7.0,1890.0,1919.94,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred voluntary hold (30 s lap); no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,1919.94,2010.0,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use
+S2_STOPWATCH_ONLY,,2010.0,2013.96,uncertain,none,stopwatch video lap list (calculated cumulative times),unaligned_to_any_tile,stopwatch,inferred rest/lead-in; no sensor alignment established -> excluded from supervised use

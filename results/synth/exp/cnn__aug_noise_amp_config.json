@@ -1,0 +1,1 @@
+{"config": "aug_noise_amp", "parsed": {"aug": ["noise_amp"], "ratio": 0.0, "mode": "mix"}, "generator": "synth-physio-1.0", "seeds": [0, 1, 2], "model": "cnn", "epochs": 40, "batch": 128, "lr": 0.001}

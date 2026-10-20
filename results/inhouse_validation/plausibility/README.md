@@ -1,5 +1,8 @@
 # Frozen-model plausibility test (negative control) on in-house QVAR data
 
+> **Policy note (2026-10-20):** this report was written under the earlier validation-only rule. `CLAUDE.md` §4 now permits in-house data for training/fine-tuning/augmentation with strict separation; nothing in this report changed.
+
+
 **Not an accuracy measurement.** These are healthy 19-20yo subjects with no
 apnea labels (validation-only per CLAUDE.md Sec.4). The frozen deployable model
 (`results/phase3_cnn/deployable/`, trained ONLY on PhysioNet) is run here purely

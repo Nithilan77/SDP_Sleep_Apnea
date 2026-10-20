@@ -28,3 +28,4 @@ button.sec,.btn.sec{background:transparent;color:var(--acc);border:1px solid var
 #busy{display:none}.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:s 1s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes s{to{transform:rotate(360deg)}}
 footer{max-width:1180px;margin:0 auto;padding:0 20px 30px;color:var(--mut);font-size:12.5px}code{font-size:12.5px;background:var(--bg);padding:1px 5px;border-radius:4px}
 @media(max-width:640px){main{padding:16px 16px 50px}.bar-in{padding:0 16px}h1{font-size:22px}.hero .big{font-size:32px}}
+span.ok{color:var(--ok,#2E7D32);font-weight:600}span.bad{color:var(--bad,#C62828);font-weight:600}

@@ -35,7 +35,7 @@
 - Our own volunteers are **healthy 19–20-year-olds who essentially do not have apnea**.
 - Therefore:
   - **Training data must be public, expert-labelled clinical data** — the only place real apnea exists for us.
-  - **Our own recordings are validation-only. We never train on them.** (Any experiment training on them would be wrong by design.)
+  - **Our own recordings may be used for training/fine-tuning/augmentation (policy revised 2026-10-20), with strict train/validation/test separation; breath-holds are labelled as voluntary breath-holds, never clinical apnea; public and in-house results are reported separately.** (Earlier results below were produced under the previous validation-only rule.)
   - Validation plan on our hardware: **voluntary breath-holds** (awake, timestamped) as safe, perfectly-labelled apnea-like events, plus healthy overnight recordings as negative controls.
 - Methodology rules followed: subject-independent evaluation always; per-minute and per-recording reported separately; classical baseline is the floor the CNN must beat; start simple (classical → 1D-CNN → only then anything larger); any suspiciously perfect number (>0.95 accuracy) is treated as a bug and checked for subject leakage first; sample rates verified empirically.
 
@@ -76,10 +76,10 @@
 - Mismatch to state: MESA is old (≈70), our volunteers are 19–20.
 - Figures: `mesa_audit_overview.png`, `mesa_usable_funnel.png`.
 
-### 4.3 Our own SensorTile recordings (validation only)
+### 4.3 Our own SensorTile recordings (in-house breath-hold track)
 *Source: docs/PROGRESS.md §7 and §7c; results/inhouse_validation, results/inhouse_canet.*
 - **15 recordings** (≈9 volunteers; healthy, 19–20 y, no apnea labels). QVAR-ECG + IMU at ~240 Hz.
-- **Never trained on, never committed to git** (data/recordings/ is gitignored). Volunteers are anonymised as S01… in all outputs.
+- **Never committed to git** (data/recordings/ is gitignored); results in this section were produced before the 2026-10-20 policy change, when they were not trained on. Volunteers are anonymised as S01… in all outputs.
 - Data quality (inhouse_validation): 14/15 files plausible (mean HR 44.7–90.0 bpm; implausible-RR ≤ 0.23%), one aborted 1.3 s capture, one noisier file (1.09% implausible RR).
 - **Empirically measured sample rate: 238.1–243.2 Hz**, a consistent ~1–1.3% offset from the nominal 240 Hz — real across every file, which is why RR features are kept in time units (seconds) rather than sample counts.
 - The accelerometer channel is present and non-flat in all 15 files.
@@ -219,7 +219,7 @@
 ## 9. In-house hardware test: does MESA-trained CANet work on our device?
 *Source: results/inhouse_canet/ (README.md, deployability/, domain_gap/, negative_control/), docs/PROGRESS.md §7 and §7c.*
 
-**Framing: this is a TRANSFER finding, NOT an apnea result.** The cohort is healthy, unlabelled, validation-only, never trained on, never committed. No apnea accuracy is claimed anywhere in this section. Sleep state is unknown (no staging); rates are per recorded hour; 10 of 15 recordings usable, 0.8–7.5 h each.
+**Framing: this is a TRANSFER finding, NOT an apnea result.** The cohort is healthy, unlabelled, never committed, and was not trained on in this experiment (the 2026-10-20 policy now permits training under strict separation). No apnea accuracy is claimed anywhere in this section. Sleep state is unknown (no staging); rates are per recorded hour; 10 of 15 recordings usable, 0.8–7.5 h each.
 
 ### 9.1 Earlier in-house checks (ECG branch, PhysioNet-trained CNN)
 *Source: docs/PROGRESS.md §7 (results/inhouse_validation).*
@@ -382,3 +382,21 @@ Fraction of epochs flagged (median over 10 nights) at the MESA operating thresho
 | **Motion mask** | A quality gate flagging gross body movement. |
 | **Sample rate (Hz)** | Samples per second (PhysioNet 100 Hz, MESA ECG 256 Hz, belts 32 Hz, SensorTile ≈240 Hz). |
 | **Breath-hold** | Voluntary pause in breathing; our safe stand-in for apnea. |
+
+
+---
+## 2026-10-20 additions (appended; earlier sections unchanged)
+### A. In-house data-use policy (replaces the "never train" statements above)
+In-house recordings may be used for training, fine-tuning, augmentation, SSL, synthetic generation and calibration with strict separation; breath-holds are labelled `voluntary_breath_hold` (+ `baseline_reference`, `recovery`, `uncertain`), never clinical apnea; Track A (public) and Track B (in-house) are never merged. `CLAUDE.md` §4.
+### B. Numbers for slides (all from result files)
+| Item | Value | Source |
+|---|---|---|
+| Best ECG-only model (consistent protocol) | HGB on HRV/CVHR: acc 0.802, AUROC 0.839 | `results/expA_multiseed/` |
+| Ensembles vs HGB | none better; ΔAUROC CIs include 0 (primary cnn+tcn+hgb: +0.005 [−0.012, 0.022]) | `results/ensemble/` |
+| Simulator data (ECG) | 1:1 −0.011, 1:2 −0.045, 1:5 −0.064, 1:10 −0.178 accuracy vs real-only | `results/synth/README.md` |
+| Best augmentation | amplitude gain +0.010 acc [−0.003, 0.023] | same |
+| Real vs synthetic windows | domain-classifier AUROC 0.95 | `results/synth/qc_medium/` |
+| Breath-hold LOEO (1 volunteer, 7 events) | AUROC 0.77–0.83; deployed ensemble 4/7 holds, ≈12 extra segments/h | `results/inhouse_bh/README.md` |
+| Mithin session 2 | stopwatch video, 17 laps; no alignment to any tile (p 0.49–0.95) | `results/breath_hold_s2/mithin/REPORT.md` |
+### C. Dashboard demo flow
+Breath-hold demo page → upload → validation, window counts (original / augmented / rejected), original-vs-augmented outputs, report download. Sleep-apnea screening is a separate page. Disclose: feasibility, one volunteer, session-1 output in-sample.

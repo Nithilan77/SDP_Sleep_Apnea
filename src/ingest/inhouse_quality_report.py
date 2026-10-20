@@ -10,7 +10,7 @@ every file in data/recordings/inhouse_ecg/ and reports, per file:
       to PhysioNet)
 
 IMPORTANT: this is a signal-QUALITY / PLAUSIBILITY check only. There are no
-apnea labels in this data (healthy subjects, validation-only per CLAUDE.md).
+apnea labels in this data (healthy subjects; this report is descriptive and trains nothing).
 It cannot and must not be read as an accuracy or sensitivity number.
 
 Usage:
@@ -142,7 +142,7 @@ def _write_readme(df: pd.DataFrame, path: Path) -> None:
         "# In-house SensorTile QVAR-ECG quality report",
         "",
         "**Scope: signal quality / plausibility only. No apnea labels exist for this data",
-        "(healthy 19-20yo subjects, validation-only per CLAUDE.md Sec.4). This report",
+        "(healthy 19-20yo subjects, no clinical apnea labels). This report",
         "cannot and does not produce a sensitivity/accuracy number.**",
         "",
         f"Files scanned: {len(df)}",
@@ -173,7 +173,7 @@ def _write_readme(df: pd.DataFrame, path: Path) -> None:
         "  same files.",
         "- It does NOT tell us anything about apnea detection accuracy/sensitivity on our",
         "  hardware -- these are healthy subjects with no per-minute apnea labels, and per",
-        "  CLAUDE.md this data is validation-only and is never used for training.",
+        "  CLAUDE.md Sec.4 (revised 2026-10-20) this data may be used for training under strict separation; this report trains nothing.",
     ]
     path.write_text("\n".join(lines) + "\n")
     print(f"Saved {path}")

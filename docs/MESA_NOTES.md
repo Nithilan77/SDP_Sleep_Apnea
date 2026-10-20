@@ -44,3 +44,8 @@
   subfolder names by listing the tree — edfs/ and annotations-events-*/).
 - Subject key = mesaid.
 - data/mesa/ is human-subject data: gitignored, NEVER committed (same rule as data/recordings/).
+
+
+---
+## 2026-10-20 note (appended)
+Saved subject-grouped out-of-fold predictions exist for all MESA models (`data/mesa/cache/*/preds.npz`, same 220 subjects / 156,826 epochs). `src/ensemble/mesa_ensemble.py` evaluated ensembles on them (`results/ensemble/mesa_ensemble_*.csv`): without SpO2 no ensemble beats CANet (AUROC 0.780); with SpO2 +0.006 (CI [0.003, 0.009]), clinically negligible. Policy reminder: MESA stays public Track A; in-house data never enters its test folds.

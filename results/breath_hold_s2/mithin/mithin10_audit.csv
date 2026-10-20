@@ -1,0 +1,4 @@
+file,bytes,rows,duration_s,fs_hz,gaps,qvar_sd_lsb,beats,mean_bpm,note
+user_Mithin10_ECG_000.csv,53575680,533444.0,2194.3,243.1,0.0,299.6,2058.0,54.4,no timestamps/annotations exist for this recording; separate from the breath-hold session
+user_Mithin10_EOG_000.csv,70434816,695127.0,2864.2,242.7,0.0,59.5,,,no timestamps/annotations exist for this recording; separate from the breath-hold session
+user_Mithin10_EMG_000.csv,0,,,,,,,,EMPTY file (0 bytes)

@@ -43,3 +43,8 @@ Used the only candidate found locally: `~/Desktop/Mithin-BreathHold/user_MithinB
 - **§3 (web app).** The page described there was replaced by a multi-page dashboard (`docs/PROGRESS.md` §7h.6). The 9/9 table `results/webapp_e2e/test_table.md` belongs to the old app; the new suite `tests/e2e_webapp.py` was subsequently run: 25/25 PASS (`results/webapp_e2e/test_table.v2.md`; `docs/PROGRESS.md` §7h.6).
 - **§2 (RNN/LSTM).** A controlled multi-seed comparison of CNN/LSTM/GRU/TCN replaced the single-seed numbers as the reference (`docs/PROGRESS.md` §7h.1): CNN 0.753, TCN 0.760, GRU 0.717, LSTM 0.692 accuracy at threshold 0.5; the CNN remains primary. Keep §2's table as history.
 
+
+
+---
+## 2026-10-20 session log (appended)
+Policy revised (`CLAUDE.md` §4) · other parallel sessions stopped on request · timestamps video decoded (opencv installed with `pip --user`) · session-2 sync audit (negative) · ensembles re-verified and extended (MESA included) · SensorTile-format simulator, validator, pilot/medium/large datasets, QC (domain-classifier AUROC 0.95) · ECG expanded-data matrix (no gain) · in-house breath-hold annotations, windows, augmentation, SSL, LOEO matrix, operating-point analysis · checkpoint-path fix + pinned manifest · dashboard pages and tests (37/37 e2e, 15/15 unit). Pitfalls: `pkill -f`/`pgrep -f` patterns match the invoking shell (killed it twice); first simulator version missed the 4-LSB QVAR quantisation. Full record: `docs/PROGRESS.md` §7i.

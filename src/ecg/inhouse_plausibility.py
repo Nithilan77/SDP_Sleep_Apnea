@@ -14,7 +14,7 @@ implausible result comes from the untransferable amplitude channel
 (see results/inhouse_validation/domain_gap/) vs the RR channel alone.
 
 There are no per-minute apnea labels for this data -- per CLAUDE.md this data
-is validation-only and was never used to train anything. A high predicted
+has no clinical apnea labels; this script only evaluates a frozen model on it (nothing is trained here). A high predicted
 apnea rate here is a signal to investigate the amplitude-channel domain gap,
 NOT a result to report as the model's real-world performance.
 
@@ -158,7 +158,7 @@ def _write_readme(df: pd.DataFrame, path: Path) -> None:
         "# Frozen-model plausibility test (negative control) on in-house QVAR data",
         "",
         "**Not an accuracy measurement.** These are healthy 19-20yo subjects with no",
-        "apnea labels (validation-only per CLAUDE.md Sec.4). The frozen deployable model",
+        "apnea labels (healthy volunteers; this script evaluates only). The frozen deployable model",
         "(`results/phase3_cnn/deployable/`, trained ONLY on PhysioNet) is run here purely",
         "as a negative control: a model that transfers should report a LOW apnea-minute",
         "rate on healthy subjects. A high rate is a red flag to investigate -- most likely",

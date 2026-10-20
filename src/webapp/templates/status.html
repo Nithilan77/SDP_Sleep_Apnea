@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}
+<h1>System status</h1>
+<div class="card"><p>Checks every model artifact the upload page needs against the pinned SHA-256 in <code>docs/checkpoints.json</code>. Paths are resolved against the project root <code>{{root}}</code>, not the working directory. If an artifact is missing or altered, the dependent branch is disabled with the message below; no other model is substituted.</p>
+<p><b>Overall: {% if ok %}<span class="ok">all required artifacts present and verified</span>{% else %}<span class="bad">one or more artifacts unavailable</span>{% endif %}</b></p>
+<div class="scroll"><table><tr><th>Artifact</th><th>Status</th><th>Path</th><th>Needed for</th><th>Problem / fix</th></tr>
+{% for r in rows %}<tr><td><code>{{r.name}}</code></td><td>{% if r.ok %}<span class="ok">verified</span>{% else %}<span class="bad">UNAVAILABLE</span>{% endif %}</td><td><code>{{r.path}}</code></td><td>{{r.required_for}}</td><td>{% if not r.ok %}{{r.problem}}<br><b>Fix:</b> {{r.fix}}{% else %}—{% endif %}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

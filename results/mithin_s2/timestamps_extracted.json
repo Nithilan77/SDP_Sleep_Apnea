@@ -1,0 +1,28 @@
+{
+ "source_file": "data/recordings/drive_2026-10-19/MithinBreathHold-TimeStamps.mp4",
+ "container": "13.62 s, 384x832 H.264 60 fps + silent AAC; iPhone screen recording of the Clock app > Stopwatch (lap list scrolled from Lap 17 down to Lap 1)",
+ "directly_observed": {
+  "stopwatch_total_display": "33:34.04 (frozen in every frame: stopwatch was stopped before recording)",
+  "phone_clock_status_bar": "12:55 (minute resolution only; no date, no time zone; the first frame shows a screen-recording indicator instead of a time)",
+  "battery_status_bar": "98% -> 97% during the video",
+  "laps": "see timestamps_extracted.csv (17 rows)"
+ },
+ "calculated": {
+  "stopwatch_total_s": 2014.04,
+  "sum_laps_1_to_17_s": 2013.96,
+  "residual_s": 0.08,
+  "residual_note": "display total minus the sum of the displayed laps. Each lap is displayed rounded to 10 ms, so 17 laps can differ from the total by up to 17 x 5 ms = 0.085 s: a 0.08 s residual is consistent with display rounding, no misreading is indicated.",
+  "cumulative_end_of_lap_s": "see event_table.csv"
+ },
+ "inferred_not_observed": {
+  "lap_roles": "Laps 3,5,...,15 (about 30 s) are interpreted as breath-holds and laps 2,4,...,16 (about 90 s) as rests, and lap 1 (18 min) as pre-protocol set-up/baseline. The video does not label them; the interpretation rests on the 30 s/90 s pattern, the protocol's 3:1 rest rule and session 1 (7 x 30 s holds).",
+  "number_of_holds": 7,
+  "lap_17": "3.96 s; role unknown (could be the beginning of an 8th hold, a final rest or the stop press)"
+ },
+ "not_available": [
+  "stopwatch start time on any device clock",
+  "any shared event (tap, light, sound) between the stopwatch and the SensorTile logs",
+  "date/time-zone for the 12:55 reading",
+  "which tile (ECG/EMG/EOG) was worn where during the holds"
+ ]
+}

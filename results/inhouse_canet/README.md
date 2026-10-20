@@ -1,5 +1,8 @@
 # In-house hardware track for CANet -- characterization, plausibility, deployability
 
+> **Policy note (2026-10-20):** this report was written under the earlier validation-only rule. `CLAUDE.md` §4 now permits in-house data for training/fine-tuning/augmentation with strict separation; nothing in this report changed.
+
+
 **This is NOT an apnea-detection accuracy result.** The cohort is healthy 19-20 y/o with no apnea and no labels
 (validation-only, never trained on, never committed). It tells us (1) whether our wearable can drive the pipeline
 end to end, (2) how far accelerometer effort is from the belt signal CANet was trained on, (3) whether a healthy

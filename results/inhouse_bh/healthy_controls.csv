@@ -1,0 +1,16 @@
+code,note,hours,windows,rejected,flagged_pct,segments,segments_per_hour
+H01,skipped: Recording is 21 s; at least 120 s is needed for a breath-hol,,,,,,
+H02,skipped: Recording is 19 s; at least 120 s is needed for a breath-hol,,,,,,
+H03,,1.56,2802.0,22.0,0.21,0.0,0.0
+H04,,7.54,13559.0,13058.0,0.18,2.0,0.27
+H05,skipped: Recording is 7 s; at least 120 s is needed for a breath-hold,,,,,,
+H06,,3.91,7041.0,5818.0,0.09,0.0,0.0
+H07,,5.78,10396.0,10018.0,0.04,0.0,0.0
+H08,,0.78,1404.0,6.0,0.0,0.0,0.0
+H09,skipped: Recording is 1 s; at least 120 s is needed for a breath-hold,,,,,,
+H10,,2.81,5049.0,79.0,0.02,0.0,0.0
+H11,,1.1,1975.0,8.0,0.05,0.0,0.0
+H12,,5.24,9419.0,8833.0,0.93,6.0,1.15
+H13,,5.83,10491.0,230.0,0.13,1.0,0.17
+H14,skipped: Recording is 32 s; at least 120 s is needed for a breath-hol,,,,,,
+H15,,6.88,12376.0,9309.0,0.61,3.0,0.44

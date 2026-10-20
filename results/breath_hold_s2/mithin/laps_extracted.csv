@@ -1,0 +1,18 @@
+lap,lap_time_s_observed,start_s_calculated,end_s_calculated,inferred_role,source
+1,1080.84,0.0,1080.84,lead-in (18 min; role not stated),video frames; stopwatch lap list
+2,89.18,1080.84,1170.02,rest (inferred),video frames; stopwatch lap list
+3,30.13,1170.02,1200.15,HOLD 1 (inferred),video frames; stopwatch lap list
+4,89.86,1200.15,1290.01,rest (inferred),video frames; stopwatch lap list
+5,30.06,1290.01,1320.07,HOLD 2 (inferred),video frames; stopwatch lap list
+6,89.87,1320.07,1409.94,rest (inferred),video frames; stopwatch lap list
+7,30.11,1409.94,1440.05,HOLD 3 (inferred),video frames; stopwatch lap list
+8,89.86,1440.05,1529.91,rest (inferred),video frames; stopwatch lap list
+9,30.14,1529.91,1560.05,HOLD 4 (inferred),video frames; stopwatch lap list
+10,89.99,1560.05,1650.04,rest (inferred),video frames; stopwatch lap list
+11,29.98,1650.04,1680.02,HOLD 5 (inferred),video frames; stopwatch lap list
+12,89.91,1680.02,1769.93,rest (inferred),video frames; stopwatch lap list
+13,30.06,1769.93,1799.99,HOLD 6 (inferred),video frames; stopwatch lap list
+14,90.01,1799.99,1890.0,rest (inferred),video frames; stopwatch lap list
+15,29.94,1890.0,1919.94,HOLD 7 (inferred),video frames; stopwatch lap list
+16,90.06,1919.94,2010.0,rest (inferred),video frames; stopwatch lap list
+17,3.96,2010.0,2013.96,trailing partial lap,video frames; stopwatch lap list
