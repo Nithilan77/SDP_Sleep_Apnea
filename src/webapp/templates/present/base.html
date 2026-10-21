@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sleep-apnea screening — project overview</title><link rel="stylesheet" href="/static/style.css">
+<style>
+html{scroll-behavior:smooth}.sec{padding-top:6px;margin-bottom:34px;scroll-margin-top:70px}.sec>h1{font-size:28px;margin:0 0 4px}.num{display:inline-block;background:var(--acc);color:#fff;border-radius:50%;width:30px;height:30px;text-align:center;line-height:30px;font-size:15px;margin-right:8px;vertical-align:middle}
+.sub{color:var(--mut);max-width:78ch;margin:0 0 14px;font-size:16px}.big{font-size:17px}.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;margin:12px 0}.flow .st{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px}.flow .st b{display:block;margin-bottom:3px}.flow .ar{align-self:center;color:var(--mut);font-size:22px}
+.bars{margin:8px 0}.bar{display:grid;grid-template-columns:minmax(190px,32%) 1fr 64px;gap:10px;align-items:center;margin:6px 0;font-size:14px}.bar .t{height:16px;background:var(--line);border-radius:8px;overflow:hidden;position:relative}.bar .f{height:100%;background:var(--acc)}.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.bar .tag{font-size:11px;color:var(--warn);border:1px solid var(--warn);border-radius:6px;padding:0 5px;margin-left:6px;white-space:nowrap}.bar.b2 .f{background:var(--acc2)}
+.axis{font-size:12px;color:var(--mut);margin:0 0 6px}.gl{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 2px}.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.stat{font-size:30px;font-weight:700;line-height:1.1}.stat small{display:block;font-size:13px;font-weight:400;color:var(--mut);margin-top:2px}.pillrow span{margin-right:6px}
+table.s{width:100%;border-collapse:collapse;font-size:14px}table.s th,table.s td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}table.s td.n,table.s th.n{text-align:right;font-variant-numeric:tabular-nums}
+.foot{color:var(--mut);font-size:13px;margin-top:30px}.mini{font-size:13px;color:var(--mut)}
+</style></head><body>
+<header class="top"><div class="bar-in"><div class="brand">Sleep-apnea screening<small>Chest sensor · ECG + breathing motion · research prototype</small></div>
+<nav>{% for k,h,l in NAV %}<a href="{{h}}" class="{{'on' if page==k}}">{{l}}</a>{% endfor %}</nav></div></header>
+<main>{% block body %}{% endblock %}
+<p class="foot">Research prototype, not a diagnostic device and not clinically validated. Public-dataset results (PhysioNet, MESA) and our own recordings are different kinds of evidence and are shown separately. Every number is read from a saved result file or computed from the file you upload. <a href="/">Detailed technical dashboard</a>.</p></main></body></html>

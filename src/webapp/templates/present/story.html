@@ -1,0 +1,72 @@
+{% extends "present/base.html" %}{% import "present/macros.html" as m %}{% block body %}
+
+<section class="sec" id="project">
+<h1>What is this project?</h1>
+<p class="sub big">Sleep apnea means repeated pauses in breathing during sleep. It is common and mostly undiagnosed, because the standard test is an overnight stay in a sleep lab. We are testing whether <b>one small chest sensor</b> could flag people who should get that test.</p>
+<div class="flow"><div class="st"><b>1 · One chest sensor</b>ST SensorTile.box PRO: records the heart signal (ECG) and chest movement.</div><div class="ar">→</div>
+<div class="st"><b>2 · Two signals</b>Heartbeat timing changes during apnea. Chest motion shows whether breathing stops.</div><div class="ar">→</div>
+<div class="st"><b>3 · Models</b>Trained on public sleep-study datasets with expert labels.</div><div class="ar">→</div>
+<div class="st"><b>4 · A flag</b>“This stretch looks like breathing pauses.” A screening hint, not a diagnosis.</div></div>
+<div class="two"><div class="card"><h2>What we are trying to show</h2><p>Heart and breathing signals <b>together</b> tell more than the heart alone, and the sensor can be made to work on our own hardware.</p></div>
+<div class="card"><h2>The catch</h2><p>Our volunteers are healthy, so we cannot train on our own apnea. The learning has to come from public clinical datasets, and then be adapted to our sensor.</p></div></div>
+</section>
+
+<section class="sec" id="physionet">
+<h1><span class="num">1</span>Starting point: ECG only (PhysioNet)</h1>
+<p class="sub">PhysioNet Apnea-ECG: {{pn.n_records}} overnight recordings with a doctor's label for every minute ({{'{:,}'.format(pn.n_minutes)}} minutes). Every test below is on people the model never saw (leave-one-person-out).</p>
+<div class="two"><div class="card"><h2>What we tried</h2><ul><li><b>Classical rules</b> on heart-rate swings (the textbook “cyclic variation of heart rate” pattern).</li><li><b>Neural networks</b> (CNN, TCN, GRU, LSTM) on the beat-to-beat interval series.</li><li><b>Feature-based models</b> (gradient boosting, logistic regression) on heart-rate-variability measures.</li></ul>
+<p class="mini">Each study used its own protocol, so we show all of them side by side.</p></div>
+<div class="card"><h2>Accuracy per minute (share of minutes labelled correctly)</h2>
+{{ m.bars([dict(name='Classical heart-rate rules (first study)',acc=pn.cvhr), dict(name='Neural net (1D-CNN), earlier single run',acc=pn.cnn_hist)], key='acc', fmt='%.2f') }}
+<p class="gl">Controlled comparison — same protocol, 3 random seeds</p>
+{{ m.bars(pn.controlled, key='acc', fmt='%.2f', cls='b2') }}
+<p class="mini">Several of these are statistically tied; the earlier single CNN run was chosen on its own test folds, so it is optimistic.</p></div></div>
+<div class="note"><b>What this told us:</b> ECG alone reaches roughly 70–80% per minute. It also has no breathing signal, so it cannot tell a blocked airway from breathing that simply stopped.</div>
+</section>
+
+<section class="sec" id="why-mesa">
+<h1><span class="num">2</span>Why we moved to MESA</h1>
+<div class="two"><div class="card"><h2>What PhysioNet could not give us</h2><ul><li>Only a single ECG lead: <b>no breathing signal</b>.</li><li>No oxygen (SpO2) and no event types (obstructive / central / hypopnea).</li><li>Our sensor records chest motion too, so we needed data with a breathing-effort signal.</li></ul></div>
+<div class="card"><h2>What MESA gives us</h2><ul><li>Full overnight sleep studies with <b>ECG + chest/abdomen effort belts + SpO2</b>.</li><li>Expert-scored events with type labels.</li><li>220 usable subjects ({{'{:,}'.format(156826)}} half-minute epochs) after our quality checks.</li></ul></div></div>
+</section>
+
+<section class="sec" id="mesa">
+<h1><span class="num">3</span>What we did with MESA</h1>
+<p class="sub">We built a two-stream network (<b>CANet</b>): one stream reads ECG, one reads breathing effort, and they exchange information through cross-attention. We then compared it with using each signal alone, a simpler way of joining them, and versions that also use SpO2.</p>
+<div class="card"><h2>How well each version separated apnea epochs from normal ones (AUROC)</h2>
+<p class="axis">AUROC: 0.5 = coin flip, 1.0 = perfect. 5-fold, tested on subjects the model never saw. “needs SpO2” = not available on our wearable.</p>
+{% for g in ['Single signal','Combined','Recurrent variants'] %}<p class="gl">{{g}}</p>{{ m.bars(mesa|selectattr('group','equalto',g)|list, fmt='%.3f') }}{% endfor %}
+<p class="mini">Reading it: adding breathing effort to ECG raises AUROC from {{'%.2f'%mesa[0].auroc}} (ECG only) to {{'%.2f'%mesa[4].auroc}}. SpO2 adds more but our sensor has none. The effort here came from chest belts, not an accelerometer.</p></div>
+</section>
+
+<section class="sec" id="data">
+<h1><span class="num">4</span>Our own data</h1>
+<div class="two"><div class="card"><h2>Overnight recordings</h2><div class="stat">10<small>usable healthy recordings, 0.8 to 7.5 hours each (about 9 volunteers)</small></div><p>ECG plus accelerometer from our SensorTile. No apnea labels, so they act as <b>negative controls</b>: a good model should flag little.</p></div>
+<div class="card"><h2>Breath-hold sessions</h2><div class="stat">7<small>voluntary ~30-second breath-holds, one volunteer</small></div><p>A safe stand-in for “breathing stops”, timed with a stopwatch. A voluntary hold is <b>not</b> an apnea event and is never labelled as one.</p></div></div>
+<div class="card"><h2>The problem we found: a domain gap</h2><p>The MESA-trained network was designed for chest <b>belts</b>. Fed our <b>accelerometer</b> signal from healthy sleepers, it raised an alarm on most of the night:</p>
+{{ m.bars([dict(name='MESA people with low apnea (reference)',v=dg.mesa_ref,txt='%.0f%%'%(100*dg.mesa_ref)), dict(name='Our healthy overnight recordings (median of %d nights)'%dg.nights,v=dg.ours,txt='%.0f%%'%(100*dg.ours))], key='v') }}
+<p class="mini">Share of the night flagged. The two sensors measure breathing differently, and four domain-adaptation attempts did not close the gap.</p></div>
+</section>
+
+<section class="sec" id="transfer">
+<h1><span class="num">5</span>Transfer learning to our sensor</h1>
+<p class="sub">Idea: keep what the MESA network learned, and only teach a small final layer what <b>our</b> sensor's breath-holds look like.</p>
+<div class="two"><div class="card"><h2>How</h2><ol><li>Freeze the MESA-trained network (nothing inside it changes).</li><li>Build two kinds of input from our recordings: <b>deep features</b> (256 numbers from the frozen network) or <b>8 simple breathing-motion measures</b> (size, spikiness, breathing rate, regularity…).</li><li>Train a small, heavily regularised linear classifier on the 7 labelled holds.</li><li>Test leave-one-event-out: train on 6 holds, test on the 7th, repeat. Windows overlapping the held-out hold are removed.</li></ol></div>
+<div class="card"><h2>Results on breath-holds</h2><table class="s"><tr><th></th><th class="n">Deep features (A)</th><th class="n">8 simple measures (B)</th></tr>
+<tr><td>AUROC</td><td class="n">{{'%.2f'%tr.frozen.auroc}}</td><td class="n">{{'%.2f'%tr.hand.auroc}}</td></tr>
+<tr><td>95% interval</td><td class="n">{{'%.2f'%tr.frozen.ci[0]}}–{{'%.2f'%tr.frozen.ci[1]}}</td><td class="n">{{'%.2f'%tr.hand.ci[0]}}–{{'%.2f'%tr.hand.ci[1]}}</td></tr>
+<tr><td>Holds caught / rest correct (at 0.5)</td><td class="n">{{'%.0f'%(100*tr.frozen.sens)}}% / {{'%.0f'%(100*tr.frozen.spec)}}%</td><td class="n">{{'%.0f'%(100*tr.hand.sens)}}% / {{'%.0f'%(100*tr.hand.spec)}}%</td></tr>
+<tr><td>Weakest single held-out hold (AUROC)</td><td class="n">{{'%.2f'%tr.frozen.fold_min}}</td><td class="n">{{'%.2f'%tr.hand.fold_min}}</td></tr>
+<tr><td>False alarms in resting baseline</td><td class="n">{{'%.1f'%(100*tr.frozen.fpr)}}%</td><td class="n">{{'%.1f'%(100*tr.hand.fpr)}}%</td></tr></table>
+<p class="mini">Both reach similar AUROC; they differ in how they fail. With only 7 holds from one volunteer, the intervals are wide and we do not rank them.</p></div></div>
+<div class="card"><h2>Check on healthy overnight recordings (they were not used for training)</h2>
+<div class="two"><div><div class="stat">{{'%.0f'%(100*dg.ours)}}% → {{'%.1f'%(100*tr.pooled_frozen)}}% / {{'%.1f'%(100*tr.pooled_hand)}}%<small>share of healthy nights flagged: before adaptation → after (A / B), pooled over {{tr.n_nights}} nights, {{'%.0f'%tr.hours_total}} hours</small></div>
+<p class="mini">Healthy sleepers should be flagged rarely, and now they are. This is a false-alarm check only: it does not show that real apnea would be caught.</p></div>
+<div><p class="gl">Share of each night flagged (A / B)</p><table class="s"><tr><th>Recording</th><th class="n">Hours</th><th class="n">A</th><th class="n">B</th></tr>{% for n in tr.nights %}<tr><td>{{n.night}}</td><td class="n">{{'%.1f'%n.hours}}</td><td class="n">{{'%.1f'%(100*n.frozen)}}%</td><td class="n">{{'%.1f'%(100*n.hand)}}%</td></tr>{% endfor %}</table></div></div></div></div>
+<div class="note"><b>Honest limits:</b> one volunteer, 7 breath-holds; the heads were trained on that session, so results on it are not independent. Voluntary holds are not clinical apnea. No clinical accuracy is claimed.</div>
+</section>
+
+<section class="sec" id="try"><h1><span class="num">6</span>Try it on a recording</h1>
+<p class="sub">Upload an overnight SensorTile recording (ECG + accelerometer, at least 10 minutes) and see heart rate, breathing motion and where the two transfer-adapted heads see pause-like patterns.</p>
+<p><a class="btn" href="/present/try" style="text-decoration:none">Open the upload page →</a></p></section>
+{% endblock %}

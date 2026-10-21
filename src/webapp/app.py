@@ -11,7 +11,7 @@ from pathlib import Path
 from flask import Flask, abort, make_response, render_template, request, send_from_directory
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from src.webapp import artifacts as A, charts as C, pipeline as P, pipeline_bh as PB  # noqa: E402
+from src.webapp import artifacts as A, charts as C, pipeline as P, pipeline_bh as PB, present as PR  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 app = Flask(__name__)
@@ -197,6 +197,8 @@ def artifact(p):
 def _404(e):
     return render_template("message.html", page="", title="Not found", msg=getattr(e, "description", "Page not found.")), 404
 
+
+PR.register(app)
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=False)
